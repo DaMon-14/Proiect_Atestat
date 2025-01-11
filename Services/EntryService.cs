@@ -34,7 +34,8 @@ namespace Prezenta_API.Services
             var addentry = new Entry()
             {
                 UserId = entry.UserId,
-                ScanTime = entry.ScanTime
+                ScanTime = entry.ScanTime,
+                ScannerId = entry.ScannerId,
             };
             _db.Add(addentry);
             var result = await _db.SaveChangesAsync();
@@ -48,6 +49,7 @@ namespace Prezenta_API.Services
             {
                 Entry.UserId = entryinfo.UserId;
                 Entry.ScanTime = entryinfo.ScanTime;
+                Entry.ScannerId = entryinfo.ScannerId;
                 var result = await _db.SaveChangesAsync();
                 return result >= 0 ? Entry : null;
             }

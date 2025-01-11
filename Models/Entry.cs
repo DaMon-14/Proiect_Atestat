@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        
         public DateTime ScanTime { get; set; }
+        public int ScannerId { get; set; }
     }
 }
