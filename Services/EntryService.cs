@@ -1,4 +1,6 @@
-﻿using Prezenta_API.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Prezenta_API.Entity;
+using Prezenta_API.Models;
 using System.Diagnostics.Contracts;
 using System.Diagnostics.Eventing.Reader;
 
@@ -6,64 +8,55 @@ namespace Prezenta_API.Services
 {
     public class EntryService : IEntry
     {
-        private readonly List<Entry> _entries;
-        public EntryService()
+        private readonly EntryContext _db;
+        public EntryService(EntryContext db)
         {
-            _entries = new List<Entry>()
+            _db = db;
+        }
+
+        public async Task<List<Entry>> GetAllEntries()
+        {
+            return await _db.Entries.ToListAsync();
+        }
+
+        public async Task<Entry> GetEntryByUserId(int id)
+        {
+            return await _db.Entries.FirstOrDefaultAsync(entry => entry.Id == id);
+        }
+
+        public async Task<Entry> AddEntry(UpdateEntry entry) 
+        {
+            var addentry = new Entry()
             {
-                new Entry()
-                {
-                    Id = 1,
-                    ScanTime = DateTime.Now
-                }
-            };
-        }
-
-        public List<Entry> GetAllEntries()
-        {
-            return _entries;
-        }
-
-        public Entry GetEntryByUserId(int id)
-        {
-            return _entries.FirstOrDefault(entry => entry.Id == id);
-        }
-
-        public Entry AddEntry(UpdateEntry entry) 
-        {
-            Entry addentry = new Entry()
-            {
-                Id = _entries.Max(entry => entry.Id) + 1,
                 ScanTime = entry.ScanTime
             };
-            _entries.Add(addentry);
-            return addentry;
+            _db.Add(addentry);
+            var result = await _db.SaveChangesAsync();
+            return result >= 0 ? addentry : null;
         }
 
-        public Entry UpdateEntry(int id, UpdateEntry entryinfo)
+        public async Task<Entry> UpdateEntry(int id, UpdateEntry entryinfo)
         { 
-            int EntryIndex = _entries.FindIndex(entry => entry.Id == id);
-            if (EntryIndex > 0) 
+            var Entry = await _db.Entries.FirstOrDefaultAsync(index => index.Id == id);
+            if (Entry != null) 
             {
-                Entry entry = _entries[EntryIndex];
-                entry.ScanTime = entryinfo.ScanTime;
-                _entries[EntryIndex] = entry;
-                return entry;
+                Entry.ScanTime = entryinfo.ScanTime;
+                var result = await _db.SaveChangesAsync();
+                return result >= 0 ? Entry : null;
             }
-            else
-            {
                 return null;
-            }
         }
 
-        public bool DeleteEntry(int id) 
+        public async Task<bool> DeleteEntry(int id) 
         { 
-            int EntryIndex = _entries.FindIndex(_entry => _entry.Id == id);
-            if (EntryIndex > 0)
-            { 
-                _entries.RemoveAt(EntryIndex);
+            var Entry = await _db.Entries.FirstOrDefaultAsync(index => index.Id == id);
+            if (Entry != null)
+            {
+                _db.Entries.Remove(Entry);
+                var result = await _db.SaveChangesAsync();
+                return result >= 0;
             }
-            return EntryIndex >= 0;
+            return false;
         }
 
     }

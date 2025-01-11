@@ -17,16 +17,16 @@ namespace Prezenta_API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_entries.GetAllEntries());
+            return Ok(await _entries.GetAllEntries());
         }
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            Entry entry = _entries.GetEntryByUserId(id);
+            var entry = await _entries.GetEntryByUserId(id);
             if (entry == null)
             {
                 return NotFound();
@@ -35,9 +35,9 @@ namespace Prezenta_API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] UpdateEntry addentry)
+        public async Task<IActionResult> Post([FromBody] UpdateEntry addentry)
         {
-            Entry entry = _entries.AddEntry(addentry);
+            var entry = await _entries.AddEntry(addentry);
             if (entry == null)
             {
                 return BadRequest();
@@ -52,9 +52,9 @@ namespace Prezenta_API.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Put([FromRoute] int id, [FromBody] UpdateEntry addentry)
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] UpdateEntry addentry)
         {
-            Entry entry = _entries.UpdateEntry(id, addentry);
+            var entry = await _entries.UpdateEntry(id, addentry);
             if (entry == null)
             {
                 return NotFound();
@@ -69,9 +69,9 @@ namespace Prezenta_API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult Delete([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            if(_entries.DeleteEntry(id) == false)
+            if(await _entries.DeleteEntry(id) == false)
             {
                 return NotFound();
             }

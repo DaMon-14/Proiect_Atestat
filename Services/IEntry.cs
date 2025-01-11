@@ -4,10 +4,10 @@ namespace Prezenta_API.Services
 {
     public interface IEntry
     {
-        List<Entry> GetAllEntries();
-        Entry GetEntryByUserId(int userId);
-        Entry AddEntry(UpdateEntry entry);
-        Entry UpdateEntry(int id, UpdateEntry entry);
-        bool DeleteEntry(int id);
+        Task<List<Entry>> GetAllEntries();
+        Task<Entry> GetEntryByUserId(int userId);
+        Task<Entry> AddEntry(UpdateEntry entry);
+        Task<Entry> UpdateEntry(int id, UpdateEntry entry);
+        Task<bool> DeleteEntry(int id);
     }
 }
