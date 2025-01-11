@@ -16,18 +16,24 @@ namespace Prezenta_API.Services
 
         public async Task<List<Entry>> GetAllEntries()
         {
-            return await _db.Entries.ToListAsync();
+            return await _db.Entries.Where(x=>x.Id >0).ToListAsync();
         }
 
-        public async Task<Entry> GetEntryByUserId(int id)
+        public async Task<Entry> GetEntryById(uint id)
         {
             return await _db.Entries.FirstOrDefaultAsync(entry => entry.Id == id);
+        }
+
+        public async Task<Entry> GetEntryByUserId(uint id)
+        {
+            return await _db.Entries.FirstOrDefaultAsync(entry => entry.UserId == id);
         }
 
         public async Task<Entry> AddEntry(UpdateEntry entry) 
         {
             var addentry = new Entry()
             {
+                UserId = entry.UserId,
                 ScanTime = entry.ScanTime
             };
             _db.Add(addentry);
@@ -35,11 +41,12 @@ namespace Prezenta_API.Services
             return result >= 0 ? addentry : null;
         }
 
-        public async Task<Entry> UpdateEntry(int id, UpdateEntry entryinfo)
+        public async Task<Entry> UpdateEntry(uint id, UpdateEntry entryinfo)
         { 
             var Entry = await _db.Entries.FirstOrDefaultAsync(index => index.Id == id);
             if (Entry != null) 
             {
+                Entry.UserId = entryinfo.UserId;
                 Entry.ScanTime = entryinfo.ScanTime;
                 var result = await _db.SaveChangesAsync();
                 return result >= 0 ? Entry : null;
@@ -47,7 +54,7 @@ namespace Prezenta_API.Services
                 return null;
         }
 
-        public async Task<bool> DeleteEntry(int id) 
+        public async Task<bool> DeleteEntry(uint id) 
         { 
             var Entry = await _db.Entries.FirstOrDefaultAsync(index => index.Id == id);
             if (Entry != null)
