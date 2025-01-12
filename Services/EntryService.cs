@@ -24,7 +24,7 @@ namespace Prezenta_API.Services
             return await _db.Entries.FirstOrDefaultAsync(entry => entry.Id == id);
         }
 
-        public async Task<Entry> GetEntryByUserId(uint id)
+        public async Task<Entry> GetEntryByUserCode(uint id)
         {
             return await _db.Entries.FirstOrDefaultAsync(entry => entry.UserCode == id);
         }

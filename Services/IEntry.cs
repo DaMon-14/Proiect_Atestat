@@ -6,7 +6,7 @@ namespace Prezenta_API.Services
     {
         Task<List<Entry>> GetAllEntries();
         Task<Entry> GetEntryById(uint Id);
-        Task<Entry> GetEntryByUserId(uint userId);
+        Task<Entry> GetEntryByUserCode(uint userCode);
         Task<Entry> AddEntry(UpdateEntry entry);
         Task<Entry> UpdateEntry(uint id, UpdateEntry entry);
         Task<bool> DeleteEntry(uint id);
