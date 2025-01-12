@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Prezenta_API.Entity;
+using Prezenta_API.EF;
 using Prezenta_API.Models;
 using System.Diagnostics.Contracts;
 using System.Diagnostics.Eventing.Reader;

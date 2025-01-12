@@ -12,8 +12,8 @@ using Prezenta_API.EF;
 namespace Prezenta_API.Migrations
 {
     [DbContext(typeof(EntryContext))]
-    [Migration("20250111190935_UserId_add")]
-    partial class UserId_add
+    [Migration("20250112145903_Mapper_table")]
+    partial class Mapper_table
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,10 @@ namespace Prezenta_API.Migrations
                     b.Property<DateTime>("ScanTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("ScannerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserCode")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -48,7 +51,35 @@ namespace Prezenta_API.Migrations
                         {
                             Id = -1,
                             ScanTime = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            UserId = -1
+                            ScannerId = -1,
+                            UserCode = -1
+                        });
+                });
+
+            modelBuilder.Entity("Prezenta_API.Models.Mapper", b =>
+                {
+                    b.Property<int>("UserCode")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserCode"));
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("UserCode");
+
+                    b.ToTable("Mappers");
+
+                    b.HasData(
+                        new
+                        {
+                            UserCode = -1,
+                            UserId = -1,
+                            isActive = false
                         });
                 });
 #pragma warning restore 612, 618

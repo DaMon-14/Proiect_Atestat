@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Prezenta_API.Services;
-using Prezenta_API.Entity;
+using Prezenta_API.EF;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //*********************** Add services to the container.***********************
 builder.Services.AddSingleton<IEntry, EntryService>();
+builder.Services.AddSingleton<IMapper, MapperService>();
 //*********************** Add services to the container end.***********************
 
 //*********************** Register DbContext and provide ConnectionString .***********************

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Prezenta_API.Entity;
+using Prezenta_API.EF;
 
 #nullable disable
 
@@ -50,6 +50,33 @@ namespace Prezenta_API.Migrations
                             ScanTime = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             ScannerId = -1,
                             UserCode = -1
+                        });
+                });
+
+            modelBuilder.Entity("Prezenta_API.Models.Mapper", b =>
+                {
+                    b.Property<int>("UserCode")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserCode"));
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("UserCode");
+
+                    b.ToTable("Mappers");
+
+                    b.HasData(
+                        new
+                        {
+                            UserCode = -1,
+                            UserId = -1,
+                            isActive = false
                         });
                 });
 #pragma warning restore 612, 618

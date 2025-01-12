@@ -7,11 +7,11 @@ namespace Prezenta_API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class PrezentaController : ControllerBase
+    public class EntriesController : ControllerBase
     {
         private readonly IEntry _entries;
 
-        public PrezentaController(IEntry entry)
+        public EntriesController(IEntry entry)
         {
             _entries = entry;
         }
@@ -93,6 +93,5 @@ namespace Prezenta_API.Controllers
                 id = id
             });
         }
-
     }
 }
