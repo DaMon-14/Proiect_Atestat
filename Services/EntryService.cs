@@ -26,14 +26,14 @@ namespace Prezenta_API.Services
 
         public async Task<Entry> GetEntryByUserId(uint id)
         {
-            return await _db.Entries.FirstOrDefaultAsync(entry => entry.UserId == id);
+            return await _db.Entries.FirstOrDefaultAsync(entry => entry.UserCode == id);
         }
 
         public async Task<Entry> AddEntry(UpdateEntry entry) 
         {
             var addentry = new Entry()
             {
-                UserId = entry.UserId,
+                UserCode = entry.UserCode,
                 ScanTime = entry.ScanTime,
                 ScannerId = entry.ScannerId,
             };
@@ -47,7 +47,7 @@ namespace Prezenta_API.Services
             var Entry = await _db.Entries.FirstOrDefaultAsync(index => index.Id == id);
             if (Entry != null) 
             {
-                Entry.UserId = entryinfo.UserId;
+                Entry.UserCode = entryinfo.UserCode;
                 Entry.ScanTime = entryinfo.ScanTime;
                 Entry.ScannerId = entryinfo.ScannerId;
                 var result = await _db.SaveChangesAsync();

@@ -26,7 +26,7 @@ namespace Prezenta_API.Entity
                 new Entry
                 {
                     Id = -1,
-                    UserId = -1,
+                    UserCode = -1,
                     ScanTime = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     ScannerId = -1
                 });
