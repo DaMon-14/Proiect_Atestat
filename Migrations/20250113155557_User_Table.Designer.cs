@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Prezenta_API.EF;
 
@@ -11,9 +12,11 @@ using Prezenta_API.EF;
 namespace Prezenta_API.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class EntryContextModelSnapshot : ModelSnapshot
+    [Migration("20250113155557_User_Table")]
+    partial class User_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

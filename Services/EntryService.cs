@@ -8,8 +8,8 @@ namespace Prezenta_API.Services
 {
     public class EntryService : IEntry
     {
-        private readonly EntryContext _db;
-        public EntryService(EntryContext db)
+        private readonly Context _db;
+        public EntryService(Context db)
         {
             _db = db;
         }

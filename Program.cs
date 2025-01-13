@@ -9,10 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 //*********************** Add services to the container.***********************
 builder.Services.AddSingleton<IEntry, EntryService>();
 builder.Services.AddSingleton<IMapper, MapperService>();
+builder.Services.AddSingleton<IUser, UserService>();
 //*********************** Add services to the container end.***********************
 
 //*********************** Register DbContext and provide ConnectionString .***********************
-builder.Services.AddDbContext<EntryContext>(db => db.UseSqlServer(builder.Configuration.GetConnectionString("PrezentaConnectionString")), ServiceLifetime.Singleton);
+builder.Services.AddDbContext<Context>(db => db.UseSqlServer(builder.Configuration.GetConnectionString("PrezentaConnectionString")), ServiceLifetime.Singleton);
 //*********************** Register DbContext end.***********************
 
 builder.Services.AddControllers();

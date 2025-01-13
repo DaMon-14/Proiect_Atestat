@@ -6,9 +6,9 @@ namespace Prezenta_API.Services
 {
     public class MapperService : IMapper
     {
-        private readonly EntryContext _db;
+        private readonly EF.Context _db;
 
-        public MapperService(EntryContext db)
+        public MapperService(EF.Context db)
         {
             _db = db;
         }

@@ -3,15 +3,16 @@ using Prezenta_API.Models;
 
 namespace Prezenta_API.EF
 {
-    public class EntryContext : DbContext
+    public class Context : DbContext
     {
-        public EntryContext(DbContextOptions<EntryContext> options) :base (options) 
+        public Context(DbContextOptions<Context> options) :base (options) 
         { 
         }
 
         //Registered DB model in EntryContext file
         public DbSet<Entry> Entries { get; set; }
         public DbSet<Mapper> Mappers { get; set; }
+        public DbSet<User> Users { get; set; }
 
         /*
          OnModelCreating mainly used to configured our EF model
@@ -22,6 +23,7 @@ namespace Prezenta_API.EF
             //Primary key
             modelBuilder.Entity<Entry>().HasKey(x => x.Id);
             modelBuilder.Entity<Mapper>().HasKey(x => x.UserCode);
+            modelBuilder.Entity<User>().HasKey(x => x.UserId);
 
             //Inserting record
             modelBuilder.Entity<Entry>().HasData(
@@ -38,6 +40,15 @@ namespace Prezenta_API.EF
                     UserId = -1,
                     UserCode = -1,
                     isActive = false
+                });
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    UserId = -1,
+                    FirstName = "First",
+                    LastName = "Last",
+                    Email = "test@mail.com",
+                    PhoneNumber = "1234567890",
                 });
         }
     }

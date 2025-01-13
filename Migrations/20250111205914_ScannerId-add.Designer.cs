@@ -11,7 +11,7 @@ using Prezenta_API.EF;
 
 namespace Prezenta_API.Migrations
 {
-    [DbContext(typeof(EntryContext))]
+    [DbContext(typeof(EF.Context))]
     [Migration("20250111205914_ScannerId-add")]
     partial class ScannerIdadd
     {
