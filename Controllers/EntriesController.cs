@@ -36,9 +36,9 @@ namespace Prezenta_API.Controllers
 
         [HttpGet]
         [Route("user/{userid}")]
-        public async Task<IActionResult> GetByUserId(uint userid)
+        public async Task<IActionResult> GetByUserCode(uint userid)
         {
-            var entry = await _entries.GetEntryByUserId(userid);
+            var entry = await _entries.GetEntryByUserCode(userid);
             if (entry == null)
             {
                 return NotFound();
