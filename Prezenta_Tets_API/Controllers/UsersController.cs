@@ -16,13 +16,13 @@ namespace Prezenta_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<User>>> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
             return Ok(await _users.GetAllUsers());
         }
 
         [HttpGet("userid/{id}")]
-        public async Task<ActionResult<User>> GetUserByUserId(uint id)
+        public async Task<IActionResult> GetUserByUserId(uint id)
         {
             var entry = await _users.GetUserByUserId(id);
             if (entry == null)
@@ -33,7 +33,7 @@ namespace Prezenta_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> AddUser(UpdateUser user)
+        public async Task<IActionResult> AddUser([FromBody] UpdateUser user)
         {
             var entry = await _users.AddUser(user);
             if (entry == null)
@@ -49,7 +49,7 @@ namespace Prezenta_API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<User>> UpdateUser(uint id, UpdateUser userinfo)
+        public async Task<IActionResult> UpdateUser([FromRoute] uint id, [FromBody] UpdateUser userinfo)
         {
             var entry = await _users.UpdateUser(id, userinfo);
             if (entry == null)
@@ -65,7 +65,7 @@ namespace Prezenta_API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<bool>> DeleteUser(uint id)
+        public async Task<IActionResult> DeleteUser(uint id)
         {
             if (await _users.DeleteUser(id) == false)
             {
