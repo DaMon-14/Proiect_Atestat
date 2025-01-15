@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<ICard, CardService>();
+builder.Services.AddSingleton<IClient, ClientService>();
 
 
 builder.Services.AddDbContext<AttendanceContext>(db => db.UseSqlServer(builder.Configuration.GetConnectionString("AttendanceDbConnectionString")),ServiceLifetime.Singleton);
