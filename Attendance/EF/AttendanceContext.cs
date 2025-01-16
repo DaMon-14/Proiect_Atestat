@@ -13,6 +13,7 @@ namespace Attendance.EF
         public DbSet<Card> Cards { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Course> Courses { get; set; }
+        public DbSet<Client_Course> Client_Courses { get; set; }
 
         /*
          OnModelCreating mainly used to configured our EF model
@@ -24,6 +25,7 @@ namespace Attendance.EF
             modelBuilder.Entity<Card>().HasKey(x => x.CardId);
             modelBuilder.Entity<Client>().HasKey(x => x.ClientId);
             modelBuilder.Entity<Course>().HasKey(x => x.CourseId);
+            modelBuilder.Entity<Client_Course>().HasKey(x => x.Id);
 
             modelBuilder.Entity<Card>().HasData(
                 new Card
@@ -49,6 +51,15 @@ namespace Attendance.EF
                     CourseName = "CourseName",
                     InstitutionId = -1,
                     CourseDescription = "CourseDescription"
+                });
+            modelBuilder.Entity<Client_Course>().HasData(
+                new Client_Course
+                {
+                    Id = -1,
+                    ClientId = -1,
+                    CourseId = -1,
+                    Points = -1,
+                    isEnrolled = false
                 });
         }
     }
