@@ -12,6 +12,7 @@ namespace Attendance.EF
         //Registered DB model in EntryContext file
         public DbSet<Card> Cards { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<Course> Courses { get; set; }
 
         /*
          OnModelCreating mainly used to configured our EF model
@@ -22,6 +23,7 @@ namespace Attendance.EF
             //Primary key
             modelBuilder.Entity<Card>().HasKey(x => x.CardId);
             modelBuilder.Entity<Client>().HasKey(x => x.ClientId);
+            modelBuilder.Entity<Course>().HasKey(x => x.CourseId);
 
             modelBuilder.Entity<Card>().HasData(
                 new Card
@@ -39,6 +41,14 @@ namespace Attendance.EF
                     Institutuion = "Instituion",
                     Email = "Email@email.com",
                     PhoneNumber = 1234567890
+                });
+            modelBuilder.Entity<Course>().HasData(
+                new Course
+                {
+                    CourseId = -1,
+                    CourseName = "CourseName",
+                    InstitutionId = -1,
+                    CourseDescription = "CourseDescription"
                 });
         }
     }

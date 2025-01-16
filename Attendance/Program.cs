@@ -7,9 +7,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddSingleton<ICard, CardService>();
 builder.Services.AddSingleton<IClient, ClientService>();
+builder.Services.AddSingleton<ICourse, CourseService>();
 
+if (Environment.MachineName == "DAMON-PC")
+{
+    builder.Services.AddDbContext<AttendanceContext>(db => db.UseSqlServer(builder.Configuration.GetConnectionString("LaptopAttendanceDbConnectionString")), ServiceLifetime.Singleton);
+}
+else
+{
+    builder.Services.AddDbContext<AttendanceContext>(db => db.UseSqlServer(builder.Configuration.GetConnectionString("PCAttendanceDbConnectionString")), ServiceLifetime.Singleton);
+}
 
-builder.Services.AddDbContext<AttendanceContext>(db => db.UseSqlServer(builder.Configuration.GetConnectionString("AttendanceDbConnectionString")),ServiceLifetime.Singleton);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
