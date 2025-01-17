@@ -8,23 +8,23 @@ namespace Attendance.Controllers
     [ApiController]
     public class ClientCourseController : ControllerBase
     {
-        private readonly IClient_Course _courses;
+        private readonly IClient_Course _client_Courses;
         public ClientCourseController(IClient_Course courseService)
         {
-            _courses = courseService;
+            _client_Courses = courseService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllCourses()
         {
-            return Ok(await _courses.GetClient_Courses());
+            return Ok(await _client_Courses.GetClient_Courses());
         }
 
         [HttpGet]
         [Route("get/{courseid}")]
         public async Task<IActionResult> GetCourse(uint courseid)
         {
-            var course = await _courses.GetClient_Course(courseid);
+            var course = await _client_Courses.GetClient_Course(courseid);
             if(course == null)
             {
                 return NotFound();
@@ -41,7 +41,7 @@ namespace Attendance.Controllers
                 return BadRequest();
             }
 
-            var updatedCourse = await _courses.UpdateClient_Course(id, course);
+            var updatedCourse = await _client_Courses.UpdateClient_Course(id, course);
             
             return Ok(new
             {
@@ -60,7 +60,7 @@ namespace Attendance.Controllers
             }
 
             //var updatedCourse = await _courses.UpdateClient_Course(courseid, course);
-            var updatedCourse = await _courses.AddClient_Course(clientid, courseid, course);
+            var updatedCourse = await _client_Courses.AddClient_Course(clientid, courseid, course);
             
             return Ok(new
             {
