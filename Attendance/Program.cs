@@ -9,6 +9,7 @@ builder.Services.AddSingleton<ICard, CardService>();
 builder.Services.AddSingleton<IClient, ClientService>();
 builder.Services.AddSingleton<ICourse, CourseService>();
 builder.Services.AddSingleton<IClient_Course, Client_CourseService>();
+builder.Services.AddSingleton<IScanner, ScannerService>();
 
 if (Environment.MachineName == "DAMON-PC")
 {
