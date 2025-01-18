@@ -18,9 +18,9 @@ namespace Attendance.Services
             return await _db.Client_Courses.Where(x => x.Id > 0).ToListAsync();
         }
 
-        public async Task<Client_Course> GetClient_Course(uint id)
+        public async Task<Client_Course> GetClient_courseByClientIdAndCourseId(int clientid, int courseid)
         {
-            return await _db.Client_Courses.FirstOrDefaultAsync(x => x.Id == id);
+            return await _db.Client_Courses.FirstOrDefaultAsync(x => x.ClientId == clientid && x.CourseId == courseid);
         }
 
         public async Task<Client_Course> UpdateClient_Course(uint id, UpdateClient_Course client_course)

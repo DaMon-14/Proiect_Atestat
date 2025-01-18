@@ -11,12 +11,15 @@ namespace Attendance.Controllers
         private readonly ICard _cards;
         private readonly IScanner_Course _scanner_courses;
         private readonly IEntry _entries;
+        private readonly IClient_Course _client_courses;
 
-        public ESP32Controller(ICard cardService, IScanner_Course scannercourseService, IEntry entryService)
+        public ESP32Controller(ICard cardService, IScanner_Course scannercourseService, IEntry entryService, IClient_Course client_courseService)
         {
             _cards = cardService;
             _scanner_courses = scannercourseService;
             _entries = entryService;
+            _client_courses = client_courseService;
+            
         }
 
         [HttpPost]
@@ -47,17 +50,40 @@ namespace Attendance.Controllers
                 });
             }
 
+            var client_course = await _client_courses.GetClient_courseByClientIdAndCourseId(card.ClientId, scanner_course.CourseId);
+            if(client_course == null) {
+                return NotFound(new
+                {
+                    message = "Client not enrolled"
+                });
+            }
+            if(!client_course.isEnrolled) {
+                return NotFound(new
+                {
+                    message = "Client not enrolled"
+                });
+            }
+            if (client_course.Points == 0)
+            {
+                return NotFound(new
+                {
+                    message = "Not Enough Points"
+                });
+            }
+
             var entry = await _entries.AddEntry(new UpdateEntry
             {
                 ClientId = card.ClientId,
                 CourseId = scanner_course.CourseId
             });
-            if(entry == null) {
+            if (entry == null)
+            {
                 return BadRequest(new
                 {
                     message = "Failed to add entry"
                 });
             }
+
             return Ok(new
             {
                 message = "Added Entry",
