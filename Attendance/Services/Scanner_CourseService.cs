@@ -18,9 +18,9 @@ namespace Attendance.Services
             return await _context.Scanner_Courses.Where(x => x.Id > 0).ToListAsync();
         }
 
-        public async Task<Scanner_Course> GetScanner_Course(uint id)
+        public async Task<Scanner_Course> GetScanner_CourseByScannerId(uint id)
         {
-            return await _context.Scanner_Courses.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Scanner_Courses.FirstOrDefaultAsync(x => x.ScannerId == id);
         }
 
         public async Task<Scanner_Course> AddScanner_Course(UpdateScanner_Course scanner_course)

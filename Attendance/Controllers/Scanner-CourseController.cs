@@ -22,9 +22,9 @@ namespace Attendance.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Scanner_Course>> GetScanner_Course(uint id)
+        public async Task<ActionResult<Scanner_Course>> GetScanner_CourseByScannerId(uint id)
         {
-            var scanner_course = await _scanner_Course.GetScanner_Course(id);
+            var scanner_course = await _scanner_Course.GetScanner_CourseByScannerId(id);
             if (scanner_course == null)
             {
                 return NotFound();

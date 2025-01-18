@@ -35,7 +35,7 @@ namespace Attendance.Controllers
                 });
             }
 
-            var scanner_course = await _scanner_courses.GetScanner_Course(esp32.ScannerId);
+            var scanner_course = await _scanner_courses.GetScanner_CourseByScannerId(esp32.ScannerId);
             if (scanner_course == null)
             {
                 return NotFound(new { message = "Scanner not found" });
