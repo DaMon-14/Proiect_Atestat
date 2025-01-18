@@ -29,7 +29,6 @@ namespace Attendance.Services
             {
                 ScannerId = scanner_course.ScannerId,
                 CourseId = scanner_course.CourseId,
-                isActive = scanner_course.isActive
             };
 
             _context.Scanner_Courses.Add(newScanner_Course);
@@ -41,15 +40,14 @@ namespace Attendance.Services
         public async Task<Scanner_Course> SetScanner_CourseStatus(uint id, bool isactive)
         {
             var scanner_course = await _context.Scanner_Courses.FirstOrDefaultAsync(x => x.Id == id);
-            if (scanner_course == null)
+            if (scanner_course != null)
             {
-                return null;
+                scanner_course.isActive = isactive;
+                await _context.SaveChangesAsync();
+                return scanner_course;
             }
 
-            scanner_course.isActive = isactive;
-            await _context.SaveChangesAsync();
-
-            return scanner_course;
+            return null;
         }
     }
 }

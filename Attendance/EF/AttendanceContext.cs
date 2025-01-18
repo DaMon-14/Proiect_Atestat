@@ -16,6 +16,7 @@ namespace Attendance.EF
         public DbSet<Client_Course> Client_Courses { get; set; }
         public DbSet<Scanner> Scanners { get; set; }
         public DbSet<Scanner_Course> Scanner_Courses { get; set; }
+        public DbSet<Entry> Entries { get; set; }
 
         /*
          OnModelCreating mainly used to configured our EF model
@@ -30,6 +31,7 @@ namespace Attendance.EF
             modelBuilder.Entity<Client_Course>().HasKey(x => x.Id);
             modelBuilder.Entity<Scanner>().HasKey(x => x.ScannerId);
             modelBuilder.Entity<Scanner_Course>().HasKey(x => x.Id);
+            modelBuilder.Entity<Entry>().HasKey(x => x.Id);
 
             modelBuilder.Entity<Card>().HasData(
                 new Card
@@ -79,6 +81,14 @@ namespace Attendance.EF
                     ScannerId = -1,
                     CourseId = -1,
                     isActive = false
+                });
+            modelBuilder.Entity<Entry>().HasData(
+                new Entry
+                {
+                    Id = -1,
+                    ClientId = -1,
+                    CourseId = -1,
+                    ScanTime = new DateTime(1,1,1,1,1,1,DateTimeKind.Utc)
                 });
         }
     }
