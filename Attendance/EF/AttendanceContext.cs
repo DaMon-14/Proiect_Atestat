@@ -11,7 +11,7 @@ namespace Attendance.EF
 
         //Registered DB model in EntryContext file
         public DbSet<Card> Cards { get; set; }
-        public DbSet<Client> Clients { get; set; }
+        public DbSet<Client> Clients { get; set; } = default!;
         public DbSet<Course> Courses { get; set; }
         public DbSet<Client_Course> Client_Courses { get; set; }
         public DbSet<Scanner> Scanners { get; set; }
@@ -46,7 +46,7 @@ namespace Attendance.EF
                     ClientId = -1,
                     FirstName = "FirstName",
                     LastName = "LastName",
-                    Institutuion = "Instituion",
+                    Institution = "Instituion",
                     Email = "Email@email.com",
                     PhoneNumber = 1234567890
                 });

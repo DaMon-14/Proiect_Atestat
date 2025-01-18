@@ -7,6 +7,7 @@ namespace Attendance.Services
         Task<List<Client>> GetAllClients();
         Task<Client> GetClient(uint clientid);
         Task<Client> AddClient(UpdateClient client);
-        Task<Client> UpdateClient(uint clientid, UpdateClient clientinfo);
+        Task<Client> UpdateClient(Client clientinfo);
+        Task<Client> DeleteClient(uint clientid);
     }
 }

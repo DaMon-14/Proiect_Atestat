@@ -28,7 +28,7 @@ namespace Attendance.Services
             {
                 FirstName = client.FirstName,
                 LastName = client.LastName,
-                Institutuion = client.Institutuion,
+                Institution = client.Institution,
                 Email = client.Email,
                 PhoneNumber = client.PhoneNumber
             };
@@ -37,16 +37,29 @@ namespace Attendance.Services
             return newClient;
         }
 
-        public async Task<Client> UpdateClient(uint clientid, UpdateClient clientinfo)
+        public async Task<Client> UpdateClient(Client clientinfo)
         {
-            var client = await _db.Clients.FirstOrDefaultAsync(x => x.ClientId == clientid);
+            var client = await _db.Clients.FirstOrDefaultAsync(x => x.ClientId == clientinfo.ClientId);
             if (client != null)
             {
                 client.FirstName = clientinfo.FirstName;
                 client.LastName = clientinfo.LastName;
+                client.Institution = clientinfo.Institution;
                 client.Email = clientinfo.Email;
                 client.PhoneNumber = clientinfo.PhoneNumber;
                 var results = await _db.SaveChangesAsync();
+                return client;
+            }
+            return null;
+        }
+
+        public async Task<Client> DeleteClient(uint clientid)
+        {
+            var client = await _db.Clients.FirstOrDefaultAsync(x => x.ClientId == clientid);
+            if (client != null)
+            {
+                _db.Clients.Remove(client);
+                await _db.SaveChangesAsync();
                 return client;
             }
             return null;
