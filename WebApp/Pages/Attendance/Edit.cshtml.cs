@@ -11,7 +11,7 @@ using Attendance.Models;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace WebApp.Pages.Clients
+namespace WebApp.Pages.Attendance
 {
     public class EditModel : PageModel
     {
@@ -27,7 +27,7 @@ namespace WebApp.Pages.Clients
         }
 
         [BindProperty]
-        public Client Client { get; set; } = default!;
+        public Entry Entry { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -36,12 +36,14 @@ namespace WebApp.Pages.Clients
                 return NotFound();
             }
 
-            var client =  await _context.Clients.FirstOrDefaultAsync(m => m.ClientId == id);
-            if (client == null)
+            using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
+            var entries = JsonConvert.DeserializeObject<List<Entry>>(await response.Content.ReadAsStringAsync());
+            var entry = entries.Where(x => x.Id == id).FirstOrDefault();
+            if (entry == null)
             {
                 return NotFound();
             }
-            Client = client;
+            Entry = entry;
             return Page();
         }
 
@@ -49,36 +51,15 @@ namespace WebApp.Pages.Clients
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-
-            
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            try
-            {
-                using HttpResponseMessage response = await httpClient.PutAsync("WebApp/clients", new StringContent(JsonConvert.SerializeObject(Client), Encoding.UTF8, "application/json"));
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ClientExists(Client.ClientId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            using HttpResponseMessage response = await httpClient.PutAsync("WebApp/entries", new StringContent(JsonConvert.SerializeObject(Entry), Encoding.UTF8, "application/json"));
+            var jsonResponse = await response.Content.ReadAsStringAsync();
 
             return RedirectToPage("./Index");
-        }
-
-        private bool ClientExists(int id)
-        {
-            return _context.Clients.Any(e => e.ClientId == id);
         }
     }
 }

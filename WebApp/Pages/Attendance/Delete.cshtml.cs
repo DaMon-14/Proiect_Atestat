@@ -7,16 +7,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Attendance.EF;
 using Attendance.Models;
-using Newtonsoft.Json;
-using System.Net.Http;
-using System.Text;
 
-namespace WebApp.Pages.Clients
+namespace WebApp.Pages.Attendance
 {
     public class DeleteModel : PageModel
     {
         private readonly AttendanceContext _context;
-        private readonly HttpClient httpClient = new HttpClient()
+        public readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
         };
@@ -27,7 +24,7 @@ namespace WebApp.Pages.Clients
         }
 
         [BindProperty]
-        public Client Client { get; set; } = default!;
+        public Entry Entry { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -36,15 +33,15 @@ namespace WebApp.Pages.Clients
                 return NotFound();
             }
 
-            var client = await _context.Clients.FirstOrDefaultAsync(m => m.ClientId == id);
+            var entry = await _context.Entries.FirstOrDefaultAsync(m => m.Id == id);
 
-            if (client == null)
+            if (entry == null)
             {
                 return NotFound();
             }
             else
             {
-                Client = client;
+                Entry = entry;
             }
             return Page();
         }
@@ -56,7 +53,7 @@ namespace WebApp.Pages.Clients
                 return NotFound();
             }
 
-            using HttpResponseMessage response = await httpClient.DeleteAsync("WebApp/clients/"+id.ToString());
+            using HttpResponseMessage response = await httpClient.DeleteAsync("WebApp/entries/" + id.ToString());
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
             return RedirectToPage("./Index");

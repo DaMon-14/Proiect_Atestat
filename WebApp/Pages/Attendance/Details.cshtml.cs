@@ -8,9 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Attendance.EF;
 using Attendance.Models;
 using Newtonsoft.Json;
-using System.Net.Http;
 
-namespace WebApp.Pages.Clients
+namespace WebApp.Pages.Attendance
 {
     public class DetailsModel : PageModel
     {
@@ -25,7 +24,7 @@ namespace WebApp.Pages.Clients
             _context = context;
         }
 
-        public Client Client { get; set; } = default!;
+        public Entry Entry { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -34,16 +33,16 @@ namespace WebApp.Pages.Clients
                 return NotFound();
             }
 
-            using HttpResponseMessage response = await httpClient.GetAsync("WebApp/clients");
-            var clients = JsonConvert.DeserializeObject<List<Client>>(await response.Content.ReadAsStringAsync());
-            var client = clients.Where(x => x.ClientId == id).FirstOrDefault();
-            if (client == null)
+            using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
+            var entries = JsonConvert.DeserializeObject<List<Entry>>(await response.Content.ReadAsStringAsync());
+            var entry = entries.Where(x => x.Id == id).FirstOrDefault();
+            if (entry == null)
             {
                 return NotFound();
             }
             else
             {
-                Client = client;
+                Entry = entry;
             }
             return Page();
         }

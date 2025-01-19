@@ -8,8 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Attendance.EF;
 using Attendance.Models;
 using Newtonsoft.Json;
+using System.Net.Http;
 
-namespace WebApp.Pages.Clients
+namespace WebApp.Pages.Attendance
 {
     public class IndexModel : PageModel
     {
@@ -22,15 +23,14 @@ namespace WebApp.Pages.Clients
         public IndexModel(AttendanceContext context)
         {
             _context = context;
-            
         }
 
-        public IList<Client> Client { get;set; } = default!;
+        public IList<Entry> Entry { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            using HttpResponseMessage response = await httpClient.GetAsync("WebApp/clients");
-            Client = JsonConvert.DeserializeObject<List<Client>>(await response.Content.ReadAsStringAsync());
+            using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
+            Entry = JsonConvert.DeserializeObject<List<Entry>>(await response.Content.ReadAsStringAsync());
         }
     }
 }

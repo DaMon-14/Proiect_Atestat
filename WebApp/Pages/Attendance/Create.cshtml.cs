@@ -10,12 +10,12 @@ using Attendance.Models;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace WebApp.Pages.Clients
+namespace WebApp.Pages.Attendance
 {
     public class CreateModel : PageModel
     {
         private readonly AttendanceContext _context;
-        private readonly HttpClient httpClient = new HttpClient()
+        public readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
         };
@@ -31,7 +31,7 @@ namespace WebApp.Pages.Clients
         }
 
         [BindProperty]
-        public UpdateClient Client { get; set; } = default!;
+        public Entry Entry { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -41,7 +41,7 @@ namespace WebApp.Pages.Clients
                 return Page();
             }
 
-            using HttpResponseMessage response = await httpClient.PostAsync("WebApp/clients", new StringContent(JsonConvert.SerializeObject(Client), Encoding.UTF8, "application/json"));
+            using HttpResponseMessage response = await httpClient.PostAsync("WebApp/entries", new StringContent(JsonConvert.SerializeObject(Entry), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
             return RedirectToPage("./Index");
