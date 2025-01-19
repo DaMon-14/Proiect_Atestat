@@ -1,11 +1,11 @@
 ﻿@page
-@model WebApp.Pages.Attendance.GetByClientIdModel
+@model WebApp.Pages.Attendance.GetByCourseIdModel
 
 @{
-    ViewData["Title"] = "GetByClientId";
+    ViewData["Title"] = "GetByCourseId";
 }
 
-<h1>Get By Client Id</h1>
+<h1>Get By Course Id</h1>
 
 <h4>Entry</h4>
 <hr />
@@ -14,9 +14,9 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Entry.ClientId" class="control-label"></label>
-                <input asp-for="Entry.ClientId"  type="number" class="form-control" />
-                <span asp-validation-for="Entry.ClientId" class="text-danger"></span>
+                <label asp-for="Entry.CourseId" class="control-label"></label>
+                <input asp-for="Entry.CourseId"  type="number" class="form-control" />
+                <span asp-validation-for="Entry.CourseId" class="text-danger"></span>
             </div>
         </form>
     </div>
