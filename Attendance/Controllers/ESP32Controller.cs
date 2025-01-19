@@ -1,8 +1,8 @@
-﻿using Attendance.Services;
+﻿using AttendanceAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Attendance.Models;
+using AttendanceAPI.Models;
 
-namespace Attendance.Controllers
+namespace AttendanceAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]

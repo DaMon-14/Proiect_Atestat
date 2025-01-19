@@ -1,6 +1,6 @@
-﻿using Attendance.Models;
+﻿using AttendanceAPI.Models;
 
-namespace Attendance.Services
+namespace AttendanceAPI.Services
 {
     public interface ICourse
     {

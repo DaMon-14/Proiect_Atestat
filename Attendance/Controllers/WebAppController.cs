@@ -1,5 +1,5 @@
-﻿using Attendance.Services;
-using Attendance.Models;
+﻿using AttendanceAPI.Services;
+using AttendanceAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceAPI.Controllers
@@ -10,10 +10,12 @@ namespace AttendanceAPI.Controllers
     {
         private readonly IClient _clients;
         private readonly IEntry _entries;
-        public WebAppController(IClient clientService, IEntry entryService)
+        private readonly IAdmin _admins;
+        public WebAppController(IClient clientService, IEntry entryService, IAdmin adminService)
         {
             _clients = clientService;
             _entries = entryService;
+            _admins = adminService;
         }
 
         [HttpGet]
@@ -148,6 +150,18 @@ namespace AttendanceAPI.Controllers
                 message = "Deleted Entry",
                 EntryId = id,
             });
+        }
+
+        [HttpPost]
+        [Route("Admin")]
+        public async Task<IActionResult> AdminExist([FromBody] GetAdmin admin, [FromHeader] string UID)
+        {
+            var adminExists = await _admins.AdminExists(admin, UID);
+            if (adminExists == false)
+            {
+                return NotFound();
+            }
+            return Ok();
         }
 
     }

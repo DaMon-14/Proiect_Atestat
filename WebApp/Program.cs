@@ -1,4 +1,4 @@
-using Attendance.EF;
+using AttendanceAPI.EF;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

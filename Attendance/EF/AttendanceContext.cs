@@ -1,7 +1,7 @@
-﻿using Attendance.Models;
+﻿using AttendanceAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Attendance.EF
+namespace AttendanceAPI.EF
 {
     public class AttendanceContext : DbContext
     {
@@ -17,6 +17,7 @@ namespace Attendance.EF
         public DbSet<Scanner> Scanners { get; set; }
         public DbSet<Scanner_Course> Scanner_Courses { get; set; }
         public DbSet<Entry> Entries { get; set; }
+        public DbSet<Admin> Admins { get; set; }
 
         /*
          OnModelCreating mainly used to configured our EF model
@@ -32,6 +33,7 @@ namespace Attendance.EF
             modelBuilder.Entity<Scanner>().HasKey(x => x.ScannerId);
             modelBuilder.Entity<Scanner_Course>().HasKey(x => x.Id);
             modelBuilder.Entity<Entry>().HasKey(x => x.Id);
+            modelBuilder.Entity<Admin>().HasKey(x => x.Id);
 
             modelBuilder.Entity<Card>().HasData(
                 new Card
@@ -89,6 +91,14 @@ namespace Attendance.EF
                     ClientId = -1,
                     CourseId = -1,
                     ScanTime = new DateTime(1,1,1,1,1,1,DateTimeKind.Utc)
+                });
+            modelBuilder.Entity<Admin>().HasData(
+                new Admin
+                {
+                    Id = -1,
+                    Password = "Password",
+                    SecurityQuestion = "SecurityQuestion",
+                    SecurityAnswer = "SecurityAnswer"
                 });
         }
     }

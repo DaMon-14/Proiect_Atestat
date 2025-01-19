@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AttendanceAPI.Migrations
 {
     [DbContext(typeof(AttendanceContext))]
-    [Migration("20250118162546_typofix")]
-    partial class typofix
+    [Migration("20250119161335_AdminTable")]
+    partial class AdminTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,41 @@ namespace AttendanceAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Attendance.Models.Card", b =>
+            modelBuilder.Entity("AttendanceAPI.Models.Admin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecurityAnswer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecurityQuestion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Admins");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            Password = "Password",
+                            SecurityAnswer = "SecurityAnswer",
+                            SecurityQuestion = "SecurityQuestion"
+                        });
+                });
+
+            modelBuilder.Entity("AttendanceAPI.Models.Card", b =>
                 {
                     b.Property<int>("CardId")
                         .ValueGeneratedOnAdd()
@@ -52,7 +86,7 @@ namespace AttendanceAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Attendance.Models.Client", b =>
+            modelBuilder.Entity("AttendanceAPI.Models.Client", b =>
                 {
                     b.Property<int>("ClientId")
                         .ValueGeneratedOnAdd()
@@ -95,7 +129,7 @@ namespace AttendanceAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Attendance.Models.Client_Course", b =>
+            modelBuilder.Entity("AttendanceAPI.Models.Client_Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -130,7 +164,7 @@ namespace AttendanceAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Attendance.Models.Course", b =>
+            modelBuilder.Entity("AttendanceAPI.Models.Course", b =>
                 {
                     b.Property<int>("CourseId")
                         .ValueGeneratedOnAdd()
@@ -163,7 +197,7 @@ namespace AttendanceAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Attendance.Models.Entry", b =>
+            modelBuilder.Entity("AttendanceAPI.Models.Entry", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -194,7 +228,7 @@ namespace AttendanceAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Attendance.Models.Scanner", b =>
+            modelBuilder.Entity("AttendanceAPI.Models.Scanner", b =>
                 {
                     b.Property<int>("ScannerId")
                         .ValueGeneratedOnAdd()
@@ -222,7 +256,7 @@ namespace AttendanceAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Attendance.Models.Scanner_Course", b =>
+            modelBuilder.Entity("AttendanceAPI.Models.Scanner_Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

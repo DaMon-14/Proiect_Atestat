@@ -1,0 +1,65 @@
+﻿using AttendanceAPI.EF;
+using AttendanceAPI.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+
+namespace AttendanceAPI.Services
+{
+    public class AdminService : IAdmin
+    {
+        private readonly IConfiguration _configuration;
+        private readonly AttendanceContext _db;
+        public AdminService(AttendanceContext db, IConfiguration configuration)
+        {
+            _db = db;
+            _configuration = configuration;
+        }
+        public async Task<Admin> AddAdmin(UpdateAdmin addAdmin, string UID)
+        {
+            if(UID != _configuration.GetValue<string>("UID"))
+            {
+                return null;
+            }
+            Admin admin = new Admin
+            {
+                Password = addAdmin.Password,
+                SecurityQuestion = addAdmin.SecurityQuestion,
+                SecurityAnswer = addAdmin.SecurityAnswer
+            };
+            _db.Admins.Add(admin);
+            await _db.SaveChangesAsync();
+            return admin;
+        }
+
+        public async Task<Admin> UpdateAdmin(Admin updateadmin, string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return null;
+            }
+
+            var admin = _db.Admins.FirstOrDefault(x => x.Id == updateadmin.Id);
+            admin.SecurityAnswer = updateadmin.SecurityAnswer;
+            admin.SecurityQuestion = updateadmin.SecurityQuestion;
+            admin.Password = updateadmin.Password;
+
+            var results = await _db.SaveChangesAsync();
+            return admin;
+        }
+
+        public async Task<bool> AdminExists(GetAdmin admin, string UID)
+        {
+            var uid = _configuration.GetValue<string>("UID");
+            if (UID != uid)
+            {
+                return false;
+            }
+            Admin getadmin = await _db.Admins.FirstOrDefaultAsync(x => x.Id == admin.Id && x.Password == admin.Password);
+            if (getadmin == null)
+            {
+                return false;
+            }
+            return true;
+        }
+    }
+}

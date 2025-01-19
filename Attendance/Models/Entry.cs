@@ -1,4 +1,4 @@
-﻿namespace Attendance.Models
+﻿namespace AttendanceAPI.Models
 {
     public class Entry
     {

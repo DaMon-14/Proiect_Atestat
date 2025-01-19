@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Attendance.Models;
-using Attendance.EF;
+using AttendanceAPI.Models;
+using AttendanceAPI.EF;
 
-namespace Attendance.Services
+namespace AttendanceAPI.Services
 {
     public class CardService : ICard
     {

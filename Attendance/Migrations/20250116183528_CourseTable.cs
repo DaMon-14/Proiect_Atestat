@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Attendance.Migrations
+namespace AttendanceAPI.Migrations
 {
     /// <inheritdoc />
     public partial class CourseTable : Migration

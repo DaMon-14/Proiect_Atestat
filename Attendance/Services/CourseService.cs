@@ -1,8 +1,8 @@
-﻿using Attendance.EF;
-using Attendance.Models;
+﻿using AttendanceAPI.EF;
+using AttendanceAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Attendance.Services
+namespace AttendanceAPI.Services
 {
     public class CourseService : ICourse
     {

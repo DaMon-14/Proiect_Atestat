@@ -1,9 +1,9 @@
-﻿using Attendance.Models;
-using Attendance.Controllers;
-using Attendance.EF;
+﻿using AttendanceAPI.Models;
+using AttendanceAPI.Controllers;
+using AttendanceAPI.EF;
 using Microsoft.EntityFrameworkCore;
 
-namespace Attendance.Services
+namespace AttendanceAPI.Services
 {
     public class ScannerService : IScanner
     {

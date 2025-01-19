@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Attendance.EF;
-using Attendance.Models;
+using AttendanceAPI.EF;
+using AttendanceAPI.Models;
 using Newtonsoft.Json;
 using System.Text;
 

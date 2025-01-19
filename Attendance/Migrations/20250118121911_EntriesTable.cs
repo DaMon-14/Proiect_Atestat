@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Attendance.Migrations
+namespace AttendanceAPI.Migrations
 {
     /// <inheritdoc />
     public partial class EntriesTable : Migration
