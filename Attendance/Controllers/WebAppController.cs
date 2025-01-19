@@ -156,6 +156,7 @@ namespace AttendanceAPI.Controllers
         [Route("Admin")]
         public async Task<IActionResult> AdminExist([FromBody] GetAdmin admin, [FromHeader] string UID)
         {
+            //var x =Request.Headers["z"];
             var adminExists = await _admins.AdminExists(admin, UID);
             if (adminExists == false)
             {

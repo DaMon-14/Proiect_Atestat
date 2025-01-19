@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AttendanceAPI", "AttendanceAPI.csproj", "{E6E978AF-3A35-474C-893D-CE59B1AE352B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "..\WebApp\WebApp.csproj", "{B49E0651-89B6-4E0D-AC92-9624F34F83B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "..\WebApp\WebApp.csproj", "{B49E0651-89B6-4E0D-AC92-9624F34F83B1}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6E978AF-3A35-474C-893D-CE59B1AE352B} = {E6E978AF-3A35-474C-893D-CE59B1AE352B}
 	EndProjectSection
