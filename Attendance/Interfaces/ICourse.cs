@@ -1,6 +1,6 @@
 ﻿using AttendanceAPI.EF.DBO;
 
-namespace AttendanceAPI.Services
+namespace AttendanceAPI.Interfaces
 {
     public interface ICourse
     {

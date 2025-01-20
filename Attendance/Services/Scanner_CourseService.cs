@@ -2,6 +2,7 @@
 using AttendanceAPI.EF;
 using Microsoft.EntityFrameworkCore;
 using AttendanceAPI.EF.DBO;
+using AttendanceAPI.Interfaces;
 
 namespace AttendanceAPI.Services
 {

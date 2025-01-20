@@ -1,5 +1,6 @@
 ﻿using AttendanceAPI.EF;
 using AttendanceAPI.EF.DBO;
+using AttendanceAPI.Interfaces;
 using AttendanceAPI.Models;
 using Microsoft.EntityFrameworkCore;
 

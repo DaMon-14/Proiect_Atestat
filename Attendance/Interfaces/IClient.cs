@@ -1,7 +1,7 @@
 ﻿using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Models;
 
-namespace AttendanceAPI.Services
+namespace AttendanceAPI.Interfaces
 {
     public interface IClient
     {

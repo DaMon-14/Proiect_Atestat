@@ -1,7 +1,7 @@
-﻿using AttendanceAPI.Services;
-using AttendanceAPI.Models;
+﻿using AttendanceAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using AttendanceAPI.EF.DBO;
+using AttendanceAPI.Interfaces;
 
 namespace AttendanceAPI.Controllers
 {

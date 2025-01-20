@@ -2,6 +2,7 @@
 using AttendanceAPI.Models;
 using AttendanceAPI.EF;
 using AttendanceAPI.EF.DBO;
+using AttendanceAPI.Interfaces;
 
 namespace AttendanceAPI.Services
 {
