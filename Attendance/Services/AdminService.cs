@@ -9,8 +9,8 @@ namespace AttendanceAPI.Services
 {
     public class AdminService : IAdmin
     {
-        private readonly IConfiguration _configuration;
         private readonly AttendanceContext _db;
+        private readonly IConfiguration _configuration;
         public AdminService(AttendanceContext db, IConfiguration configuration)
         {
             _db = db;
@@ -18,15 +18,13 @@ namespace AttendanceAPI.Services
         }
         public async Task<AdminDBO> AddAdmin(Admin addAdmin, string UID)
         {
-            if(UID != _configuration.GetValue<string>("UID"))
+            if (UID != _configuration.GetValue<string>("UID"))
             {
                 return null;
             }
             AdminDBO admin = new AdminDBO
             {
                 Password = addAdmin.Password,
-                SecurityQuestion = addAdmin.SecurityQuestion,
-                SecurityAnswer = addAdmin.SecurityAnswer
             };
             _db.Admins.Add(admin);
             await _db.SaveChangesAsync();
@@ -41,8 +39,6 @@ namespace AttendanceAPI.Services
             }
 
             var admin = _db.Admins.FirstOrDefault(x => x.Id == updateadmin.Id);
-            admin.SecurityAnswer = updateadmin.SecurityAnswer;
-            admin.SecurityQuestion = updateadmin.SecurityQuestion;
             admin.Password = updateadmin.Password;
 
             var results = await _db.SaveChangesAsync();
@@ -51,8 +47,7 @@ namespace AttendanceAPI.Services
 
         public async Task<bool> AdminExists(GetAdmin admin, string UID)
         {
-            var uid = _configuration.GetValue<string>("UID");
-            if (UID != uid)
+            if (UID != _configuration.GetValue<string>("UID"))
             {
                 return false;
             }

@@ -1,4 +1,5 @@
 ﻿using AttendanceAPI.EF.DBO;
+using AttendanceAPI.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace AttendanceAPI.EF
@@ -96,9 +97,8 @@ namespace AttendanceAPI.EF
                 new AdminDBO
                 {
                     Id = -1,
-                    Password = "Password",
-                    SecurityQuestion = "SecurityQuestion",
-                    SecurityAnswer = "SecurityAnswer"
+                    Username = "Username",
+                    Password = "Password"
                 });
         }
     }
