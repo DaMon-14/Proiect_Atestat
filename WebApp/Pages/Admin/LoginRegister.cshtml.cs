@@ -9,6 +9,7 @@ using AttendanceAPI.EF;
 using AttendanceAPI.Models;
 using Newtonsoft.Json;
 using System.Text;
+using AttendanceAPI.EF.DBO;
 
 namespace WebApp.Pages.LoginRegister
 {
@@ -29,7 +30,7 @@ namespace WebApp.Pages.LoginRegister
         }
 
         [BindProperty]
-        public GetAdmin Admin { get; set; } = default!;
+        public AttendanceAPI.Models.Admin Admin { get; set; } = default!;
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -38,10 +39,16 @@ namespace WebApp.Pages.LoginRegister
                 return Page();
             }
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.PostAsync("WebApp/Admin", new StringContent(JsonConvert.SerializeObject(Admin), Encoding.UTF8, "application/json"));
+            using HttpResponseMessage response = await httpClient.PostAsync("WebApp/admin", new StringContent(JsonConvert.SerializeObject(Admin), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
-            return RedirectToPage("./AdminInterface");
+            if(response.ReasonPhrase == "OK")
+            {
+                return RedirectToPage("./AdminInterface");
+            }
+
+            ModelState.AddModelError(string.Empty, "Incorect username or password");
+            return Page();
         }
     }
 }

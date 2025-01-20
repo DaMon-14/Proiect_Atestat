@@ -154,10 +154,14 @@ namespace AttendanceAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Admin")]
-        public async Task<IActionResult> AdminExist([FromBody] GetAdmin admin, [FromHeader] string UID)
+        [Route("admin")]
+        public async Task<IActionResult> AdminExist([FromBody] Admin admin, [FromHeader] string UID)
         {
             //var x =Request.Headers["z"];
+            if(admin == null)
+            {
+                return BadRequest();
+            }
             var adminExists = await _admins.AdminExists(admin, UID);
             if (adminExists == false)
             {

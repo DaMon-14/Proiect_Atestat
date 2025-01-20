@@ -7,6 +7,6 @@ namespace AttendanceAPI.Interfaces
     {
         public Task<AdminDBO> AddAdmin(Admin addAdmin, string UID);
         public Task<AdminDBO> UpdateAdmin(AdminDBO admin, string UID);
-        public Task<bool> AdminExists(GetAdmin admin, string UID);
+        public Task<bool> AdminExists(Admin admin, string UID);
     }
 }

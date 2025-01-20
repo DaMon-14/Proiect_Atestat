@@ -45,13 +45,13 @@ namespace AttendanceAPI.Services
             return admin;
         }
 
-        public async Task<bool> AdminExists(GetAdmin admin, string UID)
+        public async Task<bool> AdminExists(Admin admin, string UID)
         {
             if (UID != _configuration.GetValue<string>("UID"))
             {
                 return false;
             }
-            AdminDBO getadmin = await _db.Admins.FirstOrDefaultAsync(x => x.Id == admin.Id && x.Password == admin.Password);
+            AdminDBO getadmin = await _db.Admins.FirstOrDefaultAsync(x => x.Username == admin.Username && x.Password == admin.Password);
             if (getadmin == null)
             {
                 return false;
