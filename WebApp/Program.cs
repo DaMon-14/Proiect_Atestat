@@ -6,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+builder.Services.AddSession();
+builder.Services.AddMvc();
+
 if (Environment.MachineName == "DAMON-PC")
 {
     builder.Services.AddDbContext<AttendanceContext>(db => db.UseSqlServer(builder.Configuration.GetConnectionString("LaptopAttendanceDbConnectionString")), ServiceLifetime.Singleton);
@@ -32,6 +35,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+//
+app.UseSession();
+//app.UseMvc();
 
 app.MapRazorPages();
 

@@ -26,13 +26,17 @@ namespace WebApp.Pages.LoginRegister
         };
         public IActionResult OnGet()
         {
+            if(HttpContext.Session.TryGetValue("Admin", out _))
+            {
+               return RedirectToPage("./AdminInterface");
+            }
             return Page();
         }
 
         [BindProperty]
         public AttendanceAPI.Models.Admin Admin { get; set; } = default!;
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostLogin()
         {
             if (!ModelState.IsValid)
             {
@@ -44,6 +48,7 @@ namespace WebApp.Pages.LoginRegister
 
             if(response.ReasonPhrase == "OK")
             {
+                HttpContext.Session.SetString("Admin", Admin.Username);
                 return RedirectToPage("./AdminInterface");
             }
 

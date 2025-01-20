@@ -12,9 +12,19 @@ namespace WebApp.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-
+            var reps = HttpContext.Session.TryGetValue("Admin", out _);
+            if (HttpContext.Session.TryGetValue("Admin", out _))
+            {
+                return Page();
+            }
+            return RedirectToPage("/Index");
+        }
+        public async Task<IActionResult> OnPostLogout()
+        {
+            HttpContext.Session.Remove("Admin");
+            return RedirectToPage("/Index");
         }
     }
 }
