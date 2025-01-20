@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AttendanceAPI.EF;
-using AttendanceAPI.Models;
 using Newtonsoft.Json;
 using System.Text;
+using AttendanceAPI.EF.DBO;
 
 namespace WebApp.Pages.Attendance
 {
@@ -27,7 +27,7 @@ namespace WebApp.Pages.Attendance
         }
 
         [BindProperty]
-        public Entry Entry { get; set; } = default!;
+        public AttendanceDBO Entry { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -37,7 +37,7 @@ namespace WebApp.Pages.Attendance
             }
 
             using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
-            var entries = JsonConvert.DeserializeObject<List<Entry>>(await response.Content.ReadAsStringAsync());
+            var entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
             var entry = entries.Where(x => x.Id == id).FirstOrDefault();
             if (entry == null)
             {

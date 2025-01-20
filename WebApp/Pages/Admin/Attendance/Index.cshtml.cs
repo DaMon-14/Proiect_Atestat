@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using AttendanceAPI.EF;
-using AttendanceAPI.Models;
 using Newtonsoft.Json;
 using System.Net.Http;
+using AttendanceAPI.EF.DBO;
 
 namespace WebApp.Pages.Attendance
 {
@@ -25,12 +25,12 @@ namespace WebApp.Pages.Attendance
             _context = context;
         }
 
-        public IList<Entry> Entry { get;set; } = default!;
+        public IList<AttendanceDBO> Entry { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
             using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
-            Entry = JsonConvert.DeserializeObject<List<Entry>>(await response.Content.ReadAsStringAsync());
+            Entry = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
         }
     }
 }

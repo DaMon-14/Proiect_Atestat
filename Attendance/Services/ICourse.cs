@@ -1,12 +1,12 @@
-﻿using AttendanceAPI.Models;
+﻿using AttendanceAPI.EF.DBO;
 
 namespace AttendanceAPI.Services
 {
     public interface ICourse
     {
         //Method to get all courses
-        Task<List<Course>> GetCourses();
+        Task<List<CourseDBO>> GetCourses();
         //Method to get course by id
-        Task<Course> GetCourse(uint id);
+        Task<CourseDBO> GetCourse(uint id);
     }
 }

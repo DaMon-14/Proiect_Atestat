@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AttendanceAPI.EF;
-using AttendanceAPI.Models;
 using Newtonsoft.Json;
 using System.Text;
+using AttendanceAPI.EF.DBO;
 
 namespace WebApp.Pages.Attendance
 {
@@ -26,15 +26,15 @@ namespace WebApp.Pages.Attendance
             _context = context;
         }
 
-        public IList<Entry> Entries { get; set; } = default!;
+        public IList<AttendanceDBO> Entries { get; set; } = default!;
         [BindProperty]
-        public Entry Entry { get; set; } = new Entry();
+        public AttendanceDBO Entry { get; set; } = new AttendanceDBO();
 
         public async Task<IActionResult> OnGetAsync()
         {
             Entry.ClientId = 0;
             using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
-            Entries = JsonConvert.DeserializeObject<List<Entry>>(await response.Content.ReadAsStringAsync());
+            Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
             return Page();
         }
 
@@ -46,7 +46,7 @@ namespace WebApp.Pages.Attendance
             }
 
             using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
-            Entries = JsonConvert.DeserializeObject<List<Entry>>(await response.Content.ReadAsStringAsync());//.Where(x=>x.ClientId == Entry.ClientId).ToList();
+            Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());//.Where(x=>x.ClientId == Entry.ClientId).ToList();
             Entries = Entries.Where(x => x.CourseId == Entry.CourseId).ToList();
 
             return Page();

@@ -1,13 +1,13 @@
-﻿using AttendanceAPI.Models;
+﻿using AttendanceAPI.EF.DBO;
+using AttendanceAPI.Models;
 
 namespace AttendanceAPI.Services
 {
     public interface IScanner
     {
-        Task<List<Scanner>> GetScanners();
-        Task<Scanner> GetScanner(uint id);
-        Task<Scanner> AddScanner(UpdateScanner scanner);
-        Task<Scanner> UpdateScanner(uint id, UpdateScanner scanner);
-        Task<Scanner> SetScannerStatus(uint id, bool isactive);
+        Task<ScannerDBO> GetScanner(uint id);
+        Task<ScannerDBO> AddScanner(Scanner scanner);
+        //Task<ScannerDBO> UpdateScanner(ScannerDBO scanner);
+        Task<ScannerDBO> SetScannerStatus(uint id, bool isactive);
     }
 }

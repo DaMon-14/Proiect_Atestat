@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using AttendanceAPI.EF;
-using AttendanceAPI.Models;
+using AttendanceAPI.EF.DBO;
 
 namespace WebApp.Pages.Attendance
 {
@@ -24,7 +24,7 @@ namespace WebApp.Pages.Attendance
         }
 
         [BindProperty]
-        public Entry Entry { get; set; } = default!;
+        public AttendanceDBO Entry { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

@@ -2,6 +2,7 @@
 using AttendanceAPI.Controllers;
 using AttendanceAPI.EF;
 using Microsoft.EntityFrameworkCore;
+using AttendanceAPI.EF.DBO;
 
 namespace AttendanceAPI.Services
 {
@@ -13,20 +14,14 @@ namespace AttendanceAPI.Services
         {
             _db = db;
         }
-
-        public async Task<List<Scanner>> GetScanners()
-        {
-            return await _db.Scanners.Where(x => x.ScannerId > 0).ToListAsync();
-        }
-
-        public async Task<Scanner> GetScanner(uint id)
+        public async Task<ScannerDBO> GetScanner(uint id)
         {
             return await _db.Scanners.FirstOrDefaultAsync(x => x.ScannerId == id);
         }
 
-        public async Task<Scanner> AddScanner(UpdateScanner addscanner)
+        public async Task<ScannerDBO> AddScanner(Scanner addscanner)
         {
-            var newScanner = new Scanner
+            var newScanner = new ScannerDBO
             {
                 ScannerName = addscanner.ScannerName,
                 isActive = addscanner.isActive
@@ -35,8 +30,8 @@ namespace AttendanceAPI.Services
             await _db.SaveChangesAsync();
             return newScanner;
         }
-
-        public async Task<Scanner> UpdateScanner(uint id, UpdateScanner scanner)
+        /*
+        public async Task<ScannerDBO> UpdateScanner(ScannerDBO scanner)
         {
             var scannerToUpdate = await _db.Scanners.FirstOrDefaultAsync(x => x.ScannerId == id);
             if (scannerToUpdate == null)
@@ -50,8 +45,8 @@ namespace AttendanceAPI.Services
             await _db.SaveChangesAsync();
             return scannerToUpdate;
         }
-
-        public async Task<Scanner> SetScannerStatus(uint id, bool isactive)
+        */
+        public async Task<ScannerDBO> SetScannerStatus(uint id, bool isactive)
         {
             var scannerToUpdate = await _db.Scanners.FirstOrDefaultAsync(x => x.ScannerId == id);
             if (scannerToUpdate == null)

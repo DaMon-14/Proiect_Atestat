@@ -1,4 +1,5 @@
 ﻿using AttendanceAPI.EF;
+using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,19 +14,19 @@ namespace AttendanceAPI.Services
             _db = db;
         }
 
-        public async Task<List<Client_Course>> GetClient_Courses()
+        public async Task<List<Client_CourseDBO>> GetClient_Courses()
         {
             return await _db.Client_Courses.Where(x => x.Id > 0).ToListAsync();
         }
 
-        public async Task<Client_Course> GetClient_courseByClientIdAndCourseId(int clientid, int courseid)
+        public async Task<Client_CourseDBO> GetClient_courseByClientIdAndCourseId(int clientid, int courseid)
         {
             return await _db.Client_Courses.FirstOrDefaultAsync(x => x.ClientId == clientid && x.CourseId == courseid);
         }
 
-        public async Task<Client_Course> UpdateClient_Course(uint id, UpdateClient_Course client_course)
+        public async Task<Client_CourseDBO> UpdateClient_Course(Client_CourseDBO client_course)
         {
-            var client_courseToUpdate = await _db.Client_Courses.FirstOrDefaultAsync(x => x.Id == id);
+            var client_courseToUpdate = await _db.Client_Courses.FirstOrDefaultAsync(x => x.Id == client_course.Id);
             if (client_courseToUpdate == null)
             {
                 return null;
@@ -36,7 +37,7 @@ namespace AttendanceAPI.Services
             return client_courseToUpdate;
         }
 
-        public async Task<Client_Course> AddClient_Course(int clientid, int courseid, UpdateClient_Course uclient_course)
+        public async Task<Client_CourseDBO> AddClient_Course(int clientid, int courseid, Client_Course uclient_course)
         {
             var client = await _db.Clients.FindAsync(clientid);
             var course = await _db.Courses.FindAsync(courseid);
@@ -44,7 +45,7 @@ namespace AttendanceAPI.Services
             {
                 return null;
             }
-            Client_Course client_course = new Client_Course();
+            Client_CourseDBO client_course = new Client_CourseDBO();
             client_course.ClientId = clientid;
             client_course.CourseId = courseid;
             client_course.Points = uclient_course.Points;

@@ -1,4 +1,5 @@
 ﻿using AttendanceAPI.EF;
+using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,13 +15,13 @@ namespace AttendanceAPI.Services
             _db = db;
             _configuration = configuration;
         }
-        public async Task<Admin> AddAdmin(UpdateAdmin addAdmin, string UID)
+        public async Task<AdminDBO> AddAdmin(Admin addAdmin, string UID)
         {
             if(UID != _configuration.GetValue<string>("UID"))
             {
                 return null;
             }
-            Admin admin = new Admin
+            AdminDBO admin = new AdminDBO
             {
                 Password = addAdmin.Password,
                 SecurityQuestion = addAdmin.SecurityQuestion,
@@ -31,7 +32,7 @@ namespace AttendanceAPI.Services
             return admin;
         }
 
-        public async Task<Admin> UpdateAdmin(Admin updateadmin, string UID)
+        public async Task<AdminDBO> UpdateAdmin(AdminDBO updateadmin, string UID)
         {
             if (UID != _configuration.GetValue<string>("UID"))
             {
@@ -54,7 +55,7 @@ namespace AttendanceAPI.Services
             {
                 return false;
             }
-            Admin getadmin = await _db.Admins.FirstOrDefaultAsync(x => x.Id == admin.Id && x.Password == admin.Password);
+            AdminDBO getadmin = await _db.Admins.FirstOrDefaultAsync(x => x.Id == admin.Id && x.Password == admin.Password);
             if (getadmin == null)
             {
                 return false;

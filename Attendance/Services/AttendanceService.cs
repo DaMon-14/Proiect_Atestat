@@ -1,21 +1,22 @@
 ﻿using AttendanceAPI.EF;
+using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AttendanceAPI.Services
 {
-    public class EntryService : IEntry
+    public class AttendanceService : IAttendance
     {
         private readonly AttendanceContext _db;
 
-        public EntryService(AttendanceContext db)
+        public AttendanceService(AttendanceContext db)
         {
             _db = db;
         }
 
-        public async Task<Entry> AddEntry(UpdateEntry addentry)
+        public async Task<AttendanceDBO> AddEntry(Attendance addentry)
         {
-            var newEntry = new Entry
+            var newEntry = new AttendanceDBO
             {
                 ClientId = addentry.ClientId,
                 CourseId = addentry.CourseId,
@@ -33,22 +34,22 @@ namespace AttendanceAPI.Services
             return newEntry;
         }
 
-        public async Task<List<Entry>> GetEntries()
+        public async Task<List<AttendanceDBO>> GetEntries()
         {
             return await _db.Entries.Where(x=>x.Id>0).ToListAsync();
         }
 
-        public async Task<List<Entry>> GetEntriesByClientId(uint clientId)
+        public async Task<List<AttendanceDBO>> GetEntriesByClientId(uint clientId)
         {
             return await _db.Entries.Where(x => x.ClientId == clientId && x.Id>0).ToListAsync();
         }
 
-        public async Task<List<Entry>> GetEntriesByCourseId(uint courseId)
+        public async Task<List<AttendanceDBO>> GetEntriesByCourseId(uint courseId)
         {
             return await _db.Entries.Where(x => x.CourseId == courseId && x.Id>0).ToListAsync();
         }
 
-        public async Task<Entry> UpdateEntry(Entry entry)
+        public async Task<AttendanceDBO> UpdateEntry(AttendanceDBO entry)
         {
             var updateEntry = await _db.Entries.FirstOrDefaultAsync(x => x.Id == entry.Id);
             if (updateEntry == null)

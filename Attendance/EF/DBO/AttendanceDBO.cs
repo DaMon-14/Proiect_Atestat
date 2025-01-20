@@ -1,6 +1,6 @@
-﻿namespace AttendanceAPI.Models
+﻿namespace AttendanceAPI.EF.DBO
 {
-    public class Entry
+    public class AttendanceDBO
     {
         public int Id { get; set; }
         public int ClientId { get; set; }

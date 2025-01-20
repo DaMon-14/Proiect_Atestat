@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AttendanceAPI.EF;
-using AttendanceAPI.Models;
 using Newtonsoft.Json;
 using System.Text;
+using AttendanceAPI.EF.DBO;
 
 namespace WebApp.Pages.Attendance
 {
@@ -31,7 +31,7 @@ namespace WebApp.Pages.Attendance
         }
 
         [BindProperty]
-        public Entry Entry { get; set; } = default!;
+        public AttendanceDBO Entry { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()

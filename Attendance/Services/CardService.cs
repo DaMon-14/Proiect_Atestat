@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AttendanceAPI.Models;
 using AttendanceAPI.EF;
+using AttendanceAPI.EF.DBO;
 
 namespace AttendanceAPI.Services
 {
@@ -12,19 +13,19 @@ namespace AttendanceAPI.Services
             _db = db;
         }
 
-        public async Task<List<Card>> GetAllCards()
+        public async Task<List<CardDBO>> GetAllCards()
         {
             return await _db.Cards.Where(x => x.CardId > 0).ToListAsync();
         }
 
-        public async Task<Card> GetCard(uint cardid)
+        public async Task<CardDBO> GetCard(uint cardid)
         {
             return await _db.Cards.FirstOrDefaultAsync(x => x.CardId == cardid);
         }
 
-        public async Task<Card> AddCard(UpdateCard card)
+        public async Task<CardDBO> AddCard(Card card)
         {
-            var newCard = new Card
+            var newCard = new CardDBO
             {
                 ClientId = card.ClientId,
                 isActive = card.isActive
@@ -39,7 +40,7 @@ namespace AttendanceAPI.Services
             return await _db.Cards.AnyAsync(x => x.CardId == cardid && x.isActive == true);
         }
 
-        public async Task<Card> UpdateCardActive(uint cardid, bool activeState)
+        public async Task<CardDBO> UpdateCardActive(uint cardid, bool activeState)
         {
             var card = await _db.Cards.FirstOrDefaultAsync(x=>x.CardId == cardid);
             if(card != null)

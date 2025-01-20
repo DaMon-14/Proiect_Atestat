@@ -10,10 +10,10 @@ namespace AttendanceAPI.Controllers
     {
         private readonly ICard _cards;
         private readonly IScanner_Course _scanner_courses;
-        private readonly IEntry _entries;
+        private readonly IAttendance _entries;
         private readonly IClient_Course _client_courses;
 
-        public ESP32Controller(ICard cardService, IScanner_Course scannercourseService, IEntry entryService, IClient_Course client_courseService)
+        public ESP32Controller(ICard cardService, IScanner_Course scannercourseService, IAttendance entryService, IClient_Course client_courseService)
         {
             _cards = cardService;
             _scanner_courses = scannercourseService;
@@ -71,7 +71,7 @@ namespace AttendanceAPI.Controllers
                 });
             }
 
-            var entry = await _entries.AddEntry(new UpdateEntry
+            var entry = await _entries.AddEntry(new Attendance
             {
                 ClientId = card.ClientId,
                 CourseId = scanner_course.CourseId

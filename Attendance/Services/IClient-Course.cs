@@ -1,12 +1,13 @@
-﻿using AttendanceAPI.Models;
+﻿using AttendanceAPI.EF.DBO;
+using AttendanceAPI.Models;
 
 namespace AttendanceAPI.Services
 {
     public interface IClient_Course
     {
-        Task<List<Client_Course>> GetClient_Courses();
-        Task<Client_Course> GetClient_courseByClientIdAndCourseId(int clientid, int courseid);
-        Task<Client_Course> UpdateClient_Course(uint id, UpdateClient_Course client_course);
-        Task<Client_Course> AddClient_Course(int clientid, int courseid, UpdateClient_Course client_course);
+        Task<List<Client_CourseDBO>> GetClient_Courses();
+        Task<Client_CourseDBO> GetClient_courseByClientIdAndCourseId(int clientid, int courseid);
+        Task<Client_CourseDBO> UpdateClient_Course(Client_CourseDBO client_course);
+        Task<Client_CourseDBO> AddClient_Course(int clientid, int courseid, Client_Course client_course);
     }
 }

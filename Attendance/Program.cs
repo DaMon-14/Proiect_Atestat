@@ -11,7 +11,7 @@ builder.Services.AddSingleton<ICourse, CourseService>();
 builder.Services.AddSingleton<IClient_Course, Client_CourseService>();
 builder.Services.AddSingleton<IScanner, ScannerService>();
 builder.Services.AddSingleton<IScanner_Course, Scanner_CourseService>();
-builder.Services.AddSingleton<IEntry, EntryService>();
+builder.Services.AddSingleton<IAttendance, AttendanceService>();
 builder.Services.AddSingleton<IAdmin, AdminService>();
 
 if (Environment.MachineName == "DAMON-PC")

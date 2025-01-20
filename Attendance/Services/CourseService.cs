@@ -1,5 +1,5 @@
 ﻿using AttendanceAPI.EF;
-using AttendanceAPI.Models;
+using AttendanceAPI.EF.DBO;
 using Microsoft.EntityFrameworkCore;
 
 namespace AttendanceAPI.Services
@@ -12,12 +12,12 @@ namespace AttendanceAPI.Services
             _db = db;
         }
 
-        public async Task<List<Course>> GetCourses()
+        public async Task<List<CourseDBO>> GetCourses()
         {
             return await _db.Courses.Where(x => x.CourseId > 0).ToListAsync();
         }
 
-        public async Task<Course> GetCourse(uint courseid)
+        public async Task<CourseDBO> GetCourse(uint courseid)
         {
             return await _db.Courses.FirstOrDefaultAsync(x => x.CourseId == courseid);
         }

@@ -1,13 +1,14 @@
-﻿using AttendanceAPI.Models;
+﻿using AttendanceAPI.EF.DBO;
+using AttendanceAPI.Models;
 
 namespace AttendanceAPI.Services
 {
     public interface ICard
     {
-        Task<List<Card>> GetAllCards();
-        Task<Card> GetCard(uint cardid);
-        Task<Card> AddCard(UpdateCard card);
+        Task<List<CardDBO>> GetAllCards();
+        Task<CardDBO> GetCard(uint cardid);
+        Task<CardDBO> AddCard(Card card);
         Task<bool> IsCardActive(uint cardid);
-        Task<Card> UpdateCardActive(uint cardid, bool activeState);
+        Task<CardDBO> UpdateCardActive(uint cardid, bool activeState);
     }
 }

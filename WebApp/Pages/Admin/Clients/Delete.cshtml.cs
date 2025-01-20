@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using AttendanceAPI.EF;
-using AttendanceAPI.Models;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
+using AttendanceAPI.EF.DBO;
 
 namespace WebApp.Pages.Clients
 {
@@ -27,7 +27,7 @@ namespace WebApp.Pages.Clients
         }
 
         [BindProperty]
-        public Client Client { get; set; } = default!;
+        public ClientDBO Client { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

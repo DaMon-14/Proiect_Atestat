@@ -1,4 +1,5 @@
-﻿using AttendanceAPI.Models;
+﻿using AttendanceAPI.EF.DBO;
+using AttendanceAPI.Models;
 
 namespace AttendanceAPI.Services
 {

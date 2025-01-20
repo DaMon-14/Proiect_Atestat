@@ -1,7 +1,8 @@
-﻿namespace AttendanceAPI.Models
+﻿namespace AttendanceAPI.EF.DBO
 {
-    public class UpdateClient
+    public class ClientDBO
     {
+        public int ClientId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Institution { get; set; }

@@ -1,6 +1,7 @@
 ﻿using AttendanceAPI.Services;
 using AttendanceAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using AttendanceAPI.EF.DBO;
 
 namespace AttendanceAPI.Controllers
 {
@@ -9,9 +10,9 @@ namespace AttendanceAPI.Controllers
     public class WebAppController : ControllerBase
     {
         private readonly IClient _clients;
-        private readonly IEntry _entries;
+        private readonly IAttendance _entries;
         private readonly IAdmin _admins;
-        public WebAppController(IClient clientService, IEntry entryService, IAdmin adminService)
+        public WebAppController(IClient clientService, IAttendance entryService, IAdmin adminService)
         {
             _clients = clientService;
             _entries = entryService;
@@ -27,7 +28,7 @@ namespace AttendanceAPI.Controllers
 
         [HttpPost]
         [Route("clients")]
-        public async Task<IActionResult> AddClient([FromBody] UpdateClient client)
+        public async Task<IActionResult> AddClient([FromBody] Client client)
         {
             if (client == null)
             {
@@ -45,7 +46,7 @@ namespace AttendanceAPI.Controllers
 
         [HttpPut]
         [Route("clients")]
-        public async Task<IActionResult> UpdateClient([FromBody] Client clientinfo)
+        public async Task<IActionResult> UpdateClient([FromBody] ClientDBO clientinfo)
         {
             var client = await _clients.UpdateClient(clientinfo);
             if (client == null)
@@ -97,14 +98,14 @@ namespace AttendanceAPI.Controllers
 
         [HttpPost]
         [Route("entries")]
-        public async Task<IActionResult> AddEntry([FromBody] Entry entry)
+        public async Task<IActionResult> AddEntry([FromBody] AttendanceDBO entry)
         {
             if (entry == null)
             {
                 return BadRequest();
             }
 
-            UpdateEntry Entry = new UpdateEntry
+            Attendance Entry = new Attendance
             {
                 ClientId = entry.ClientId,
                 CourseId = entry.CourseId,
@@ -122,7 +123,7 @@ namespace AttendanceAPI.Controllers
 
         [HttpPut]
         [Route("entries")]
-        public async Task<IActionResult> UpdateEntry([FromBody] Entry entry)
+        public async Task<IActionResult> UpdateEntry([FromBody] AttendanceDBO entry)
         {
             var updateEntry = await _entries.UpdateEntry(entry);
             if (updateEntry == null)

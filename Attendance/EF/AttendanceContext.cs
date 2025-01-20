@@ -1,4 +1,4 @@
-﻿using AttendanceAPI.Models;
+﻿using AttendanceAPI.EF.DBO;
 using Microsoft.EntityFrameworkCore;
 
 namespace AttendanceAPI.EF
@@ -10,14 +10,14 @@ namespace AttendanceAPI.EF
         }
 
         //Registered DB model in EntryContext file
-        public DbSet<Card> Cards { get; set; }
-        public DbSet<Client> Clients { get; set; } = default!;
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Client_Course> Client_Courses { get; set; }
-        public DbSet<Scanner> Scanners { get; set; }
+        public DbSet<CardDBO> Cards { get; set; }
+        public DbSet<ClientDBO> Clients { get; set; } = default!;
+        public DbSet<CourseDBO> Courses { get; set; }
+        public DbSet<Client_CourseDBO> Client_Courses { get; set; }
+        public DbSet<ScannerDBO> Scanners { get; set; }
         public DbSet<Scanner_Course> Scanner_Courses { get; set; }
-        public DbSet<Entry> Entries { get; set; }
-        public DbSet<Admin> Admins { get; set; }
+        public DbSet<AttendanceDBO> Entries { get; set; }
+        public DbSet<AdminDBO> Admins { get; set; }
 
         /*
          OnModelCreating mainly used to configured our EF model
@@ -26,24 +26,24 @@ namespace AttendanceAPI.EF
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Primary key
-            modelBuilder.Entity<Card>().HasKey(x => x.CardId);
-            modelBuilder.Entity<Client>().HasKey(x => x.ClientId);
-            modelBuilder.Entity<Course>().HasKey(x => x.CourseId);
-            modelBuilder.Entity<Client_Course>().HasKey(x => x.Id);
-            modelBuilder.Entity<Scanner>().HasKey(x => x.ScannerId);
+            modelBuilder.Entity<CardDBO>().HasKey(x => x.CardId);
+            modelBuilder.Entity<ClientDBO>().HasKey(x => x.ClientId);
+            modelBuilder.Entity<CourseDBO>().HasKey(x => x.CourseId);
+            modelBuilder.Entity<Client_CourseDBO>().HasKey(x => x.Id);
+            modelBuilder.Entity<ScannerDBO>().HasKey(x => x.ScannerId);
             modelBuilder.Entity<Scanner_Course>().HasKey(x => x.Id);
-            modelBuilder.Entity<Entry>().HasKey(x => x.Id);
-            modelBuilder.Entity<Admin>().HasKey(x => x.Id);
+            modelBuilder.Entity<AttendanceDBO>().HasKey(x => x.Id);
+            modelBuilder.Entity<AdminDBO>().HasKey(x => x.Id);
 
-            modelBuilder.Entity<Card>().HasData(
-                new Card
+            modelBuilder.Entity<CardDBO>().HasData(
+                new CardDBO
                 {
                     CardId = -1,
                     ClientId = -1,
                     isActive = false
                 });
-            modelBuilder.Entity<Client>().HasData(
-                new Client
+            modelBuilder.Entity<ClientDBO>().HasData(
+                new ClientDBO
                 {
                     ClientId = -1,
                     FirstName = "FirstName",
@@ -52,16 +52,16 @@ namespace AttendanceAPI.EF
                     Email = "Email@email.com",
                     PhoneNumber = 1234567890
                 });
-            modelBuilder.Entity<Course>().HasData(
-                new Course
+            modelBuilder.Entity<CourseDBO>().HasData(
+                new CourseDBO
                 {
                     CourseId = -1,
                     CourseName = "CourseName",
                     InstitutionId = -1,
                     CourseDescription = "CourseDescription"
                 });
-            modelBuilder.Entity<Client_Course>().HasData(
-                new Client_Course
+            modelBuilder.Entity<Client_CourseDBO>().HasData(
+                new Client_CourseDBO
                 {
                     Id = -1,
                     ClientId = -1,
@@ -69,8 +69,8 @@ namespace AttendanceAPI.EF
                     Points = -1,
                     isEnrolled = false
                 });
-            modelBuilder.Entity<Scanner>().HasData(
-                new Scanner
+            modelBuilder.Entity<ScannerDBO>().HasData(
+                new ScannerDBO
                 {
                     ScannerId = -1,
                     ScannerName = "ScannerName",
@@ -84,16 +84,16 @@ namespace AttendanceAPI.EF
                     CourseId = -1,
                     isActive = false
                 });
-            modelBuilder.Entity<Entry>().HasData(
-                new Entry
+            modelBuilder.Entity<AttendanceDBO>().HasData(
+                new AttendanceDBO
                 {
                     Id = -1,
                     ClientId = -1,
                     CourseId = -1,
                     ScanTime = new DateTime(1,1,1,1,1,1,DateTimeKind.Utc)
                 });
-            modelBuilder.Entity<Admin>().HasData(
-                new Admin
+            modelBuilder.Entity<AdminDBO>().HasData(
+                new AdminDBO
                 {
                     Id = -1,
                     Password = "Password",

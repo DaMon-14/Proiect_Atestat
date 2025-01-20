@@ -1,10 +1,10 @@
-﻿namespace AttendanceAPI.Models
+﻿namespace AttendanceAPI.EF.DBO
 {
-    public class UpdateScanner_Course
+    public class Scanner_Course
     {
+        public int Id { get; set; }
         public int ScannerId { get; set; }
         public int CourseId { get; set; }
-
         public bool isActive { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AttendanceAPI.Models;
 using AttendanceAPI.EF;
 using Microsoft.EntityFrameworkCore;
+using AttendanceAPI.EF.DBO;
 
 namespace AttendanceAPI.Services
 {
@@ -12,19 +13,19 @@ namespace AttendanceAPI.Services
             _db = db;
         }
 
-        public async Task<List<Client>> GetAllClients()
+        public async Task<List<ClientDBO>> GetAllClients()
         {
             return await _db.Clients.Where(x => x.ClientId > 0).ToListAsync();
         }
 
-        public async Task<Client> GetClient(uint clientid)
+        public async Task<ClientDBO> GetClient(uint clientid)
         {
             return await _db.Clients.FirstOrDefaultAsync(x => x.ClientId == clientid);
         }
 
-        public async Task<Client> AddClient(UpdateClient client)
+        public async Task<ClientDBO> AddClient(Client client)
         {
-            var newClient = new Client
+            var newClient = new ClientDBO
             {
                 FirstName = client.FirstName,
                 LastName = client.LastName,
@@ -37,7 +38,7 @@ namespace AttendanceAPI.Services
             return newClient;
         }
 
-        public async Task<Client> UpdateClient(Client clientinfo)
+        public async Task<ClientDBO> UpdateClient(ClientDBO clientinfo)
         {
             var client = await _db.Clients.FirstOrDefaultAsync(x => x.ClientId == clientinfo.ClientId);
             if (client != null)
@@ -53,7 +54,7 @@ namespace AttendanceAPI.Services
             return null;
         }
 
-        public async Task<Client> DeleteClient(uint clientid)
+        public async Task<ClientDBO> DeleteClient(uint clientid)
         {
             var client = await _db.Clients.FirstOrDefaultAsync(x => x.ClientId == clientid);
             if (client != null)
