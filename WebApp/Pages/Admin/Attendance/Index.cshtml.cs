@@ -27,10 +27,17 @@ namespace WebApp.Pages.Attendance
 
         public IList<AttendanceDBO> Entry { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
-            Entry = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
+            var reps = HttpContext.Session.TryGetValue("Admin", out _);
+            if (HttpContext.Session.TryGetValue("Admin", out _))
+            {
+                using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
+                Entry = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
+                return Page();
+            }
+            return RedirectToPage("/Index");
+            
         }
     }
 }

@@ -32,10 +32,15 @@ namespace WebApp.Pages.Attendance
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Entry.ClientId = 0;
-            using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
-            Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
-            return Page();
+            var reps = HttpContext.Session.TryGetValue("Admin", out _);
+            if (HttpContext.Session.TryGetValue("Admin", out _))
+            {
+                Entry.ClientId = 0;
+                using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
+                Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
+                return Page();
+            }
+            return RedirectToPage("/Index");
         }
 
         public async Task<IActionResult> OnPostAsync()

@@ -31,20 +31,25 @@ namespace WebApp.Pages.Attendance
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            var reps = HttpContext.Session.TryGetValue("Admin", out _);
+            if (HttpContext.Session.TryGetValue("Admin", out _))
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
-            var entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
-            var entry = entries.Where(x => x.Id == id).FirstOrDefault();
-            if (entry == null)
-            {
-                return NotFound();
+                using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
+                var entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
+                var entry = entries.Where(x => x.Id == id).FirstOrDefault();
+                if (entry == null)
+                {
+                    return NotFound();
+                }
+                Entry = entry;
+                return Page();
             }
-            Entry = entry;
-            return Page();
+            return RedirectToPage("/Index");
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.

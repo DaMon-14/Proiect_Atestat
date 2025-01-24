@@ -28,22 +28,26 @@ namespace WebApp.Pages.Attendance
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            var reps = HttpContext.Session.TryGetValue("Admin", out _);
+            if (HttpContext.Session.TryGetValue("Admin", out _))
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
+                var entry = await _context.Entries.FirstOrDefaultAsync(m => m.Id == id);
 
-            var entry = await _context.Entries.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (entry == null)
-            {
-                return NotFound();
+                if (entry == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    Entry = entry;
+                }
+                return Page();
             }
-            else
-            {
-                Entry = entry;
-            }
-            return Page();
+            return RedirectToPage("/Index");
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)

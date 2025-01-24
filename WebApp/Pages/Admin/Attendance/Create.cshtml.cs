@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AttendanceAPI.EF;
+using AttendanceAPI.Models;
 using Newtonsoft.Json;
 using System.Text;
 using AttendanceAPI.EF.DBO;
@@ -25,9 +23,14 @@ namespace WebApp.Pages.Attendance
             _context = context;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            return Page();
+            var reps = HttpContext.Session.TryGetValue("Admin", out _);
+            if (HttpContext.Session.TryGetValue("Admin", out _))
+            {
+                return Page();
+            }
+            return RedirectToPage("/Index");
         }
 
         [BindProperty]
