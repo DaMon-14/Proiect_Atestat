@@ -27,10 +27,22 @@ namespace WebApp.Pages.Clients
 
         public IList<ClientDBO> Client { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        [BindProperty]
+        public string errormsg { get; set; } = default!;
+
+        public async Task<IActionResult> OnGetAsync()
         {
-            using HttpResponseMessage response = await httpClient.GetAsync("WebApp/clients");
-            Client = JsonConvert.DeserializeObject<List<ClientDBO>>(await response.Content.ReadAsStringAsync());
+            var reps = HttpContext.Session.TryGetValue("Admin", out _);
+            if (HttpContext.Session.TryGetValue("Admin", out _))
+            {
+                using HttpResponseMessage response = await httpClient.GetAsync("WebApp/clients");
+                Client = JsonConvert.DeserializeObject<List<ClientDBO>>(await response.Content.ReadAsStringAsync());
+            }
+            if(Client == null)
+            {
+                Client = new List<ClientDBO>();
+            }
+            return Page();
         }
     }
 }

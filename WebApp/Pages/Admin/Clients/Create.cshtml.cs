@@ -25,9 +25,14 @@ namespace WebApp.Pages.Clients
             _context = context;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            return Page();
+            var reps = HttpContext.Session.TryGetValue("Admin", out _);
+            if (HttpContext.Session.TryGetValue("Admin", out _))
+            {
+                return Page();
+            }
+            return RedirectToPage("/Index");
         }
 
         [BindProperty]

@@ -31,22 +31,28 @@ namespace WebApp.Pages.Clients
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            var reps = HttpContext.Session.TryGetValue("Admin", out _);
+            if (HttpContext.Session.TryGetValue("Admin", out _))
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var client = await _context.Clients.FirstOrDefaultAsync(m => m.ClientId == id);
+                var client = await _context.Clients.FirstOrDefaultAsync(m => m.ClientId == id);
 
-            if (client == null)
-            {
-                return NotFound();
+                if (client == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    Client = client;
+                }
+                return Page();
             }
-            else
-            {
-                Client = client;
-            }
-            return Page();
+            return RedirectToPage("/Index");
+
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)

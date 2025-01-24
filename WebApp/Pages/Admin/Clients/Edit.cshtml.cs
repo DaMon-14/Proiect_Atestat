@@ -31,18 +31,23 @@ namespace WebApp.Pages.Clients
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            var reps = HttpContext.Session.TryGetValue("Admin", out _);
+            if (HttpContext.Session.TryGetValue("Admin", out _))
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var client =  await _context.Clients.FirstOrDefaultAsync(m => m.ClientId == id);
-            if (client == null)
-            {
-                return NotFound();
+                var client = await _context.Clients.FirstOrDefaultAsync(m => m.ClientId == id);
+                if (client == null)
+                {
+                    return NotFound();
+                }
+                Client = client;
+                return Page();
             }
-            Client = client;
-            return Page();
+            return RedirectToPage("/Index");
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.

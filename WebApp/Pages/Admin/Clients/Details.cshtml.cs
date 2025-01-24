@@ -29,23 +29,27 @@ namespace WebApp.Pages.Clients
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.TryGetValue("Admin", out _))
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            using HttpResponseMessage response = await httpClient.GetAsync("WebApp/clients");
-            var clients = JsonConvert.DeserializeObject<List<ClientDBO>>(await response.Content.ReadAsStringAsync());
-            var client = clients.Where(x => x.ClientId == id).FirstOrDefault();
-            if (client == null)
-            {
-                return NotFound();
+                using HttpResponseMessage response = await httpClient.GetAsync("WebApp/clients");
+                var clients = JsonConvert.DeserializeObject<List<ClientDBO>>(await response.Content.ReadAsStringAsync());
+                var client = clients.Where(x => x.ClientId == id).FirstOrDefault();
+                if (client == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    Client = client;
+                }
+                return Page();
             }
-            else
-            {
-                Client = client;
-            }
-            return Page();
+            return RedirectToPage("/Index");
         }
     }
 }
