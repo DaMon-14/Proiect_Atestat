@@ -1,12 +1,12 @@
 ﻿@page
-@model WebApp.Pages.LoginRegister.LoginRegisterModel
+@model WebApp.Pages.Login.LoginModel
 @{
-    ViewData["Title"] = "LoginRegister";
+    ViewData["Title"] = "Login";
 }
 
-<h1>Create</h1>
+<h1>Login</h1>
 
-<h4>Client</h4>
+<h4>Available only to admins</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,7 +24,9 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Login" class="btn btn-primary" asp-page-handler="Login"/>
+                <input type="submit" value="Register" class="btn btn-secondary" asp-page-handler="Register" />
             </div>
+
         </form>
     </div>
 </div>

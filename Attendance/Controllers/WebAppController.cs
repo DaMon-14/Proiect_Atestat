@@ -170,5 +170,21 @@ namespace AttendanceAPI.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        [Route("addadmin")]
+        public async Task<IActionResult> AddAdmin([FromBody] Admin admin, [FromHeader] string UID)
+        {
+            //var x =Request.Headers["z"];
+            if (admin == null)
+            {
+                return BadRequest();
+            }
+            var adminExists = await _admins.AddAdmin(admin, UID);
+            if (adminExists == null)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
     }
 }

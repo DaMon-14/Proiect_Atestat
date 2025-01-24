@@ -1,0 +1,19 @@
+﻿@page
+@model WebApp.Pages.Register.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>Register</h1>
+<hr />
+<p>Please contact ..... to register as an admin and have acces to admin tools for your courses</p>
+
+<div>
+    <a asp-page="/Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

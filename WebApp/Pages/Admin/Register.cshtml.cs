@@ -11,12 +11,12 @@ using Newtonsoft.Json;
 using System.Text;
 using AttendanceAPI.EF.DBO;
 
-namespace WebApp.Pages.LoginRegister
+namespace WebApp.Pages.Register
 {
-    public class LoginRegisterModel : PageModel
+    public class RegisterModel : PageModel
     {
         private readonly IConfiguration _configuration;
-        public LoginRegisterModel(IConfiguration configuration)
+        public RegisterModel(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -36,7 +36,7 @@ namespace WebApp.Pages.LoginRegister
         [BindProperty]
         public AttendanceAPI.Models.Admin Admin { get; set; } = default!;
 
-        public async Task<IActionResult> OnPostLogin()
+        public async Task<IActionResult> OnPostCreateAdmin()
         {
             if (!ModelState.IsValid)
             {
