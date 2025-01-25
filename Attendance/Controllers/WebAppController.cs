@@ -163,7 +163,7 @@ namespace AttendanceAPI.Controllers
             var corectlogininfo = await _users.CorectCredentials(admin, UID);
             if(corectlogininfo == false)
             {
-                return NotFound("Incorect Id or Password");
+                return NotFound("Incorect Username or Password");
             }
             var adminExists = await _users.AdminExists(admin, UID);
             if (adminExists == false)

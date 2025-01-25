@@ -76,7 +76,7 @@ namespace AttendanceAPI.Services
             {
                 return false;
             }
-            var client = await _db.Users.FirstOrDefaultAsync(x => x.ClientId == admin.ClientId && x.IsAdmin ==true);
+            var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName && x.IsAdmin ==true);
             if (client != null)
             {
                 return true;
@@ -90,7 +90,7 @@ namespace AttendanceAPI.Services
             {
                 return false;
             }
-            var client = await _db.Users.FirstOrDefaultAsync(x => x.ClientId == admin.ClientId && x.Password == admin.Password);
+            var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName && x.Password == admin.Password);
             if (client != null)
             {
                 return true;

@@ -43,21 +43,21 @@ namespace WebApp.Pages.Login
                 return Page();
             }
 
-            if (User.ClientId == null || User.Password == null)
+            if (User.Username == null || User.Password == null)
             {
                 ModelState.AddModelError(string.Empty, "Id and password are mandatory");
                 return Page();
             }
             User admin = new User
             {
-                ClientId = User.ClientId,
+                ClientId = 0,
                 Password = User.Password,
-                FirstName = " ",
-                LastName = " ",
-                Institution = " ",
-                Email = " ",
+                FirstName = "",
+                LastName = "",
+                Institution = "",
+                Email = "",
                 PhoneNumber = 0,
-
+                UserName = User.Username
             };
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
             using HttpResponseMessage response = await httpClient.PostAsync("WebApp/admin", new StringContent(JsonConvert.SerializeObject(admin), Encoding.UTF8, "application/json"));
@@ -73,9 +73,9 @@ namespace WebApp.Pages.Login
                 ModelState.AddModelError(string.Empty, "You are not an admin");
                 return Page();
             }
-            if(jsonResponse == "Incorect Id or Password")
+            if(jsonResponse == "Incorect Username or Password")
             {
-                ModelState.AddModelError(string.Empty, "Incorect Id or Password");
+                ModelState.AddModelError(string.Empty, "Incorect Username or Password");
                 return Page();
             }
 
@@ -91,7 +91,7 @@ namespace WebApp.Pages.Login
 
     public class LoginUser
     {
-        public int ClientId { get; set; }
+        public string Username { get; set; }
         public string Password { get; set; }
     }
 }

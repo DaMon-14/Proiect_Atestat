@@ -28,6 +28,7 @@ namespace AttendanceAPI.EF
             //Primary key
             modelBuilder.Entity<CardDBO>().HasKey(x => x.CardId);
             modelBuilder.Entity<UserDBO>().HasKey(x => x.ClientId);
+            modelBuilder.Entity<UserDBO>().HasIndex(x => x.UserName).IsUnique();
             modelBuilder.Entity<CourseDBO>().HasKey(x => x.CourseId);
             modelBuilder.Entity<Client_CourseDBO>().HasKey(x => x.Id);
             modelBuilder.Entity<ScannerDBO>().HasKey(x => x.ScannerId);
@@ -52,7 +53,8 @@ namespace AttendanceAPI.EF
                     PhoneNumber = 1234567890,
                     Password = "Password",
                     IsAdmin = false,
-                    Salt = "Salt"
+                    Salt = "Salt",
+                    UserName = "UserName"
                 });
             modelBuilder.Entity<CourseDBO>().HasData(
                 new CourseDBO
