@@ -25,7 +25,7 @@ namespace WebApp.Pages.Clients
             _context = context;
         }
 
-        public ClientDBO Client { get; set; } = default!;
+        public UserDBO Client { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -37,7 +37,7 @@ namespace WebApp.Pages.Clients
                 }
 
                 using HttpResponseMessage response = await httpClient.GetAsync("WebApp/clients");
-                var clients = JsonConvert.DeserializeObject<List<ClientDBO>>(await response.Content.ReadAsStringAsync());
+                var clients = JsonConvert.DeserializeObject<List<UserDBO>>(await response.Content.ReadAsStringAsync());
                 var client = clients.Where(x => x.ClientId == id).FirstOrDefault();
                 if (client == null)
                 {

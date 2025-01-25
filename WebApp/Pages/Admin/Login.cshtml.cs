@@ -34,24 +34,30 @@ namespace WebApp.Pages.Login
         }
 
         [BindProperty]
-        public PageAdmin Admin { get; set; } = default!;
+        public LoginUser User { get; set; } = default!;
 
         public async Task<IActionResult> OnPostLogin()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
-            } 
+            }
 
-            if(Admin.Username == null || Admin.Password == null)
+            if (User.ClientId == null || User.Password == null)
             {
-                ModelState.AddModelError(string.Empty, "Username and password are mandatory");
+                ModelState.AddModelError(string.Empty, "Id and password are mandatory");
                 return Page();
             }
-            AttendanceAPI.Models.Admin admin = new AttendanceAPI.Models.Admin
+            User admin = new User
             {
-                Username = Admin.Username,
-                Password = Admin.Password
+                ClientId = User.ClientId,
+                Password = User.Password,
+                FirstName = " ",
+                LastName = " ",
+                Institution = " ",
+                Email = " ",
+                PhoneNumber = 0,
+
             };
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
             using HttpResponseMessage response = await httpClient.PostAsync("WebApp/admin", new StringContent(JsonConvert.SerializeObject(admin), Encoding.UTF8, "application/json"));
@@ -59,7 +65,7 @@ namespace WebApp.Pages.Login
 
             if (response.ReasonPhrase == "OK")
             {
-                HttpContext.Session.SetString("Admin", admin.Username);
+                HttpContext.Session.SetString("Admin", admin.ClientId.ToString());
                 return RedirectToPage("./AdminInterface");
             }
 
@@ -73,9 +79,9 @@ namespace WebApp.Pages.Login
         }
     }
 
-    public class PageAdmin
+    public class LoginUser
     {
-        public string? Username { get; set; } = default!;
-        public string? Password { get; set; } = default!;
+        public int ClientId { get; set; }
+        public string Password { get; set; }
     }
 }

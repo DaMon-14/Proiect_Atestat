@@ -25,7 +25,7 @@ namespace WebApp.Pages.Clients
             
         }
 
-        public IList<ClientDBO> Client { get;set; } = default!;
+        public IList<UserDBO> Client { get;set; } = default!;
 
         [BindProperty]
         public string errormsg { get; set; } = default!;
@@ -36,11 +36,11 @@ namespace WebApp.Pages.Clients
             if (HttpContext.Session.TryGetValue("Admin", out _))
             {
                 using HttpResponseMessage response = await httpClient.GetAsync("WebApp/clients");
-                Client = JsonConvert.DeserializeObject<List<ClientDBO>>(await response.Content.ReadAsStringAsync());
+                Client = JsonConvert.DeserializeObject<List<UserDBO>>(await response.Content.ReadAsStringAsync());
             }
             if(Client == null)
             {
-                Client = new List<ClientDBO>();
+                Client = new List<UserDBO>();
             }
             return Page();
         }

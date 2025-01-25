@@ -7,13 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<ICard, CardService>();
-builder.Services.AddScoped<IClient, ClientService>();
+builder.Services.AddScoped<IUser, UserService>();
 builder.Services.AddSingleton<ICourse, CourseService>();
 builder.Services.AddSingleton<IClient_Course, Client_CourseService>();
 builder.Services.AddSingleton<IScanner, ScannerService>();
 builder.Services.AddSingleton<IScanner_Course, Scanner_CourseService>();
 builder.Services.AddSingleton<IAttendance, AttendanceService>();
-builder.Services.AddSingleton<IAdmin, AdminService>();
 
 if (Environment.MachineName == "DAMON-PC")
 {

@@ -12,13 +12,12 @@ namespace AttendanceAPI.EF
 
         //Registered DB model in EntryContext file
         public DbSet<CardDBO> Cards { get; set; }
-        public DbSet<ClientDBO> Clients { get; set; } = default!;
+        public DbSet<UserDBO> Users { get; set; } = default!;
         public DbSet<CourseDBO> Courses { get; set; }
         public DbSet<Client_CourseDBO> Client_Courses { get; set; }
         public DbSet<ScannerDBO> Scanners { get; set; }
         public DbSet<Scanner_Course> Scanner_Courses { get; set; }
         public DbSet<AttendanceDBO> Entries { get; set; }
-        public DbSet<AdminDBO> Admins { get; set; }
 
         /*
          OnModelCreating mainly used to configured our EF model
@@ -28,13 +27,12 @@ namespace AttendanceAPI.EF
         {
             //Primary key
             modelBuilder.Entity<CardDBO>().HasKey(x => x.CardId);
-            modelBuilder.Entity<ClientDBO>().HasKey(x => x.ClientId);
+            modelBuilder.Entity<UserDBO>().HasKey(x => x.ClientId);
             modelBuilder.Entity<CourseDBO>().HasKey(x => x.CourseId);
             modelBuilder.Entity<Client_CourseDBO>().HasKey(x => x.Id);
             modelBuilder.Entity<ScannerDBO>().HasKey(x => x.ScannerId);
             modelBuilder.Entity<Scanner_Course>().HasKey(x => x.Id);
             modelBuilder.Entity<AttendanceDBO>().HasKey(x => x.Id);
-            modelBuilder.Entity<AdminDBO>().HasKey(x => x.Id);
 
             modelBuilder.Entity<CardDBO>().HasData(
                 new CardDBO
@@ -43,15 +41,18 @@ namespace AttendanceAPI.EF
                     ClientId = -1,
                     isActive = false
                 });
-            modelBuilder.Entity<ClientDBO>().HasData(
-                new ClientDBO
+            modelBuilder.Entity<UserDBO>().HasData(
+                new UserDBO
                 {
                     ClientId = -1,
                     FirstName = "FirstName",
                     LastName = "LastName",
                     Institution = "Instituion",
                     Email = "Email@email.com",
-                    PhoneNumber = 1234567890
+                    PhoneNumber = 1234567890,
+                    Password = "Password",
+                    IsAdmin = false,
+                    Salt = "Salt"
                 });
             modelBuilder.Entity<CourseDBO>().HasData(
                 new CourseDBO
@@ -92,13 +93,6 @@ namespace AttendanceAPI.EF
                     ClientId = -1,
                     CourseId = -1,
                     ScanTime = new DateTime(1,1,1,1,1,1,DateTimeKind.Utc)
-                });
-            modelBuilder.Entity<AdminDBO>().HasData(
-                new AdminDBO
-                {
-                    Id = -1,
-                    Username = "Username",
-                    Password = "Password"
                 });
         }
     }

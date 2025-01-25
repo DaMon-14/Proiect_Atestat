@@ -40,7 +40,7 @@ namespace AttendanceAPI.Services
 
         public async Task<Client_CourseDBO> AddClient_Course(int clientid, int courseid, Client_Course uclient_course)
         {
-            var client = await _db.Clients.FindAsync(clientid);
+            var client = await _db.Users.FindAsync(clientid);
             var course = await _db.Courses.FindAsync(courseid);
             if (client == null || course == null)
             {

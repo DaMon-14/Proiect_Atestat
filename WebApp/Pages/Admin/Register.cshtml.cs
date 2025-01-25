@@ -34,7 +34,7 @@ namespace WebApp.Pages.Register
         }
 
         [BindProperty]
-        public AttendanceAPI.Models.Admin Admin { get; set; } = default!;
+        public UserDBO Admin { get; set; } = default!;
 
         public async Task<IActionResult> OnPostCreateAdmin()
         {
@@ -48,7 +48,7 @@ namespace WebApp.Pages.Register
 
             if(response.ReasonPhrase == "OK")
             {
-                HttpContext.Session.SetString("Admin", Admin.Username);
+                HttpContext.Session.SetString("Admin", Admin.ClientId.ToString());
                 return RedirectToPage("./AdminInterface");
             }
 

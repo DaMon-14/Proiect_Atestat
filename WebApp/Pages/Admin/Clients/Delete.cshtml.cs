@@ -27,7 +27,7 @@ namespace WebApp.Pages.Clients
         }
 
         [BindProperty]
-        public ClientDBO Client { get; set; } = default!;
+        public UserDBO Client { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -39,7 +39,7 @@ namespace WebApp.Pages.Clients
                     return NotFound();
                 }
 
-                var client = await _context.Clients.FirstOrDefaultAsync(m => m.ClientId == id);
+                var client = await _context.Users.FirstOrDefaultAsync(m => m.ClientId == id);
 
                 if (client == null)
                 {
