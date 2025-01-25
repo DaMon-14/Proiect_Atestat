@@ -68,8 +68,18 @@ namespace WebApp.Pages.Login
                 HttpContext.Session.SetString("Admin", admin.ClientId.ToString());
                 return RedirectToPage("./AdminInterface");
             }
+            if(jsonResponse == "Client")
+            {
+                ModelState.AddModelError(string.Empty, "You are not an admin");
+                return Page();
+            }
+            if(jsonResponse == "Incorect Id or Password")
+            {
+                ModelState.AddModelError(string.Empty, "Incorect Id or Password");
+                return Page();
+            }
 
-            ModelState.AddModelError(string.Empty, "Incorect username or password");
+            ModelState.AddModelError(string.Empty, "Unknown error");
             return Page();
         }
 

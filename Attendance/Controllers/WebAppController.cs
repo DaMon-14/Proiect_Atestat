@@ -156,14 +156,19 @@ namespace AttendanceAPI.Controllers
         public async Task<IActionResult> AdminExist([FromBody] User admin, [FromHeader] string UID)
         {
             //var x =Request.Headers["z"];
-            if(admin == null)
+            if(admin == null || UID == "")
             {
                 return BadRequest();
             }
-            var adminExists = await _users.AdminExists(admin, UID);
-            if (adminExists == false || await _users.CorectCredentials(admin, UID) == false)
+            var corectlogininfo = await _users.CorectCredentials(admin, UID);
+            if(corectlogininfo == false)
             {
-                return NotFound();
+                return NotFound("Incorect Id or Password");
+            }
+            var adminExists = await _users.AdminExists(admin, UID);
+            if (adminExists == false)
+            {
+                return NotFound("Client");
             }
             return Ok();
         }
