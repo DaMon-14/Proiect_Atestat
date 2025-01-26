@@ -13,15 +13,15 @@ namespace WebApp.Pages.Attendance
 {
     public class DetailsModel : PageModel
     {
-        private readonly AttendanceContext _context;
+        public readonly IConfiguration _configuration;
         public readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
         };
 
-        public DetailsModel(AttendanceContext context)
+        public DetailsModel(IConfiguration configuration)
         {
-            _context = context;
+            _configuration = configuration;
         }
 
         public AttendanceDBO Entry { get; set; } = default!;
@@ -35,10 +35,9 @@ namespace WebApp.Pages.Attendance
                 {
                     return NotFound();
                 }
-
-                using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
-                var entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
-                var entry = entries.Where(x => x.Id == id).FirstOrDefault();
+                httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/entryById/"+id.ToString());
+                var entry = JsonConvert.DeserializeObject<AttendanceDBO>(await response.Content.ReadAsStringAsync());
                 if (entry == null)
                 {
                     return NotFound();

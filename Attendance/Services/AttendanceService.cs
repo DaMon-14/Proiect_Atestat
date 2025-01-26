@@ -9,14 +9,20 @@ namespace AttendanceAPI.Services
     public class AttendanceService : IAttendance
     {
         private readonly AttendanceContext _db;
+        private readonly IConfiguration _configuration;
 
-        public AttendanceService(AttendanceContext db)
+        public AttendanceService(AttendanceContext db, IConfiguration configuration)
         {
             _db = db;
+            _configuration = configuration;
         }
 
-        public async Task<AttendanceDBO> AddEntry(Attendance addentry)
+        public async Task<AttendanceDBO> AddEntry(Attendance addentry, string UID)
         {
+            if(UID != _configuration.GetValue<string>("UID"))
+            {
+                return null;
+            }
             var newEntry = new AttendanceDBO
             {
                 ClientId = addentry.ClientId,
@@ -35,23 +41,48 @@ namespace AttendanceAPI.Services
             return newEntry;
         }
 
-        public async Task<List<AttendanceDBO>> GetEntries()
+        public async Task<List<AttendanceDBO>> GetEntries(string UID)
         {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return null;
+            }
             return await _db.Entries.Where(x=>x.Id>0).ToListAsync();
         }
 
-        public async Task<List<AttendanceDBO>> GetEntriesByClientId(uint clientId)
+        public async Task<AttendanceDBO> GetEntriesById(uint Id, string UID)
         {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return null;
+            }
+            return await _db.Entries.FirstOrDefaultAsync(x => x.Id == Id);
+        }
+
+        public async Task<List<AttendanceDBO>> GetEntriesByClientId(uint clientId, string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return null;
+            }
             return await _db.Entries.Where(x => x.ClientId == clientId && x.Id>0).ToListAsync();
         }
 
-        public async Task<List<AttendanceDBO>> GetEntriesByCourseId(uint courseId)
+        public async Task<List<AttendanceDBO>> GetEntriesByCourseId(uint courseId, string UID)
         {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return null;
+            }
             return await _db.Entries.Where(x => x.CourseId == courseId && x.Id>0).ToListAsync();
         }
 
-        public async Task<AttendanceDBO> UpdateEntry(AttendanceDBO entry)
+        public async Task<AttendanceDBO> UpdateEntry(AttendanceDBO entry, string UID)
         {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return null;
+            }
             var updateEntry = await _db.Entries.FirstOrDefaultAsync(x => x.Id == entry.Id);
             if (updateEntry == null)
             {
@@ -64,8 +95,12 @@ namespace AttendanceAPI.Services
             return updateEntry;
         }
 
-        public async Task<bool> DeleteEntry(int id)
+        public async Task<bool> DeleteEntry(int id, string UID)
         {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return false;
+            }
             var entry = await _db.Entries.FirstOrDefaultAsync(x => x.Id == id);
             if (entry == null)
             {

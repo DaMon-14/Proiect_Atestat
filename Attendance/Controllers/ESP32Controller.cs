@@ -21,7 +21,7 @@ namespace AttendanceAPI.Controllers
             _client_courses = client_courseService;
             
         }
-
+        /*
         [HttpPost]
         [Route("add")]
         public async Task<IActionResult> AddEntry([FromBody] ESP32 esp32)
@@ -89,6 +89,6 @@ namespace AttendanceAPI.Controllers
                 message = "Added Entry",
                 entry = entry
             });
-        }
+        }*/
     }
 }

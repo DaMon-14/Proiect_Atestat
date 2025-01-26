@@ -14,15 +14,15 @@ namespace WebApp.Pages.Attendance
 {
     public class IndexModel : PageModel
     {
-        private readonly AttendanceContext _context;
+        private readonly IConfiguration _configuration;
         public readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
         };
 
-        public IndexModel(AttendanceContext context)
+        public IndexModel(IConfiguration configuration)
         {
-            _context = context;
+            _configuration = configuration;
         }
 
         public IList<AttendanceDBO> Entry { get;set; } = default!;
@@ -32,12 +32,15 @@ namespace WebApp.Pages.Attendance
             var reps = HttpContext.Session.TryGetValue("Admin", out _);
             if (HttpContext.Session.TryGetValue("Admin", out _))
             {
-                using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
+                httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/entries");
                 Entry = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
-                return Page();
             }
-            return RedirectToPage("/Index");
-            
+            if (Entry == null)
+            {
+                Entry = new List<AttendanceDBO>();
+            }
+            return Page();
         }
     }
 }

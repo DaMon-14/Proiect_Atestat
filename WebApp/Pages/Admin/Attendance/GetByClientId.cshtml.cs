@@ -15,15 +15,15 @@ namespace WebApp.Pages.Attendance
 {
     public class GetByClientIdModel : PageModel
     {
-        private readonly AttendanceContext _context;
+        private readonly IConfiguration _configuration;
         public readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
         };
 
-        public GetByClientIdModel(AttendanceContext context)
+        public GetByClientIdModel(IConfiguration configuration)
         {
-            _context = context;
+            _configuration = configuration;
         }
 
         public IList<AttendanceDBO> Entries { get; set; } = default!;
@@ -35,9 +35,7 @@ namespace WebApp.Pages.Attendance
             var reps = HttpContext.Session.TryGetValue("Admin", out _);
             if (HttpContext.Session.TryGetValue("Admin", out _))
             {
-                Entry.ClientId = 0;
-                using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
-                Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
+                Entries = new List<AttendanceDBO>();
                 return Page();
             }
             return RedirectToPage("/Index");
@@ -49,10 +47,15 @@ namespace WebApp.Pages.Attendance
             {
                 return Page();
             }
-
-            using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
-            Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());//.Where(x=>x.ClientId == Entry.ClientId).ToList();
-            Entries = Entries.Where(x => x.ClientId == Entry.ClientId).ToList();
+            httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+            using HttpResponseMessage response = await httpClient.GetAsync("Admin/entryByClient/"+Entry.ClientId.ToString());
+            if(response.ReasonPhrase == "OK")
+            {
+                Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
+                return Page();
+            }
+            ModelState.AddModelError(string.Empty, "No entries found for this client");
+            Entries = new List<AttendanceDBO>();
 
             return Page();
         }

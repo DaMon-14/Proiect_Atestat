@@ -7,20 +7,21 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using AttendanceAPI.EF;
 using AttendanceAPI.EF.DBO;
+using Newtonsoft.Json;
 
 namespace WebApp.Pages.Attendance
 {
     public class DeleteModel : PageModel
     {
-        private readonly AttendanceContext _context;
+        private readonly IConfiguration _configuration;
         public readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
         };
 
-        public DeleteModel(AttendanceContext context)
+        public DeleteModel(IConfiguration configuration)
         {
-            _context = context;
+            _configuration = configuration;
         }
 
         [BindProperty]
@@ -35,8 +36,9 @@ namespace WebApp.Pages.Attendance
                 {
                     return NotFound();
                 }
-                var entry = await _context.Entries.FirstOrDefaultAsync(m => m.Id == id);
-
+                httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/entryById/" + id.ToString());
+                var entry = JsonConvert.DeserializeObject<AttendanceDBO>(await response.Content.ReadAsStringAsync());
                 if (entry == null)
                 {
                     return NotFound();
@@ -56,10 +58,14 @@ namespace WebApp.Pages.Attendance
             {
                 return NotFound();
             }
-
-            using HttpResponseMessage response = await httpClient.DeleteAsync("WebApp/entries/" + id.ToString());
+            httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+            using HttpResponseMessage response = await httpClient.DeleteAsync("Admin/entry/" + id.ToString());
             var jsonResponse = await response.Content.ReadAsStringAsync();
-
+            if(response.ReasonPhrase != "OK")
+            {
+                ModelState.AddModelError(string.Empty, "Failed to delete entry");
+                return Page();
+            }
             return RedirectToPage("./Index");
         }
     }

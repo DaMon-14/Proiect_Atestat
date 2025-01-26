@@ -15,15 +15,15 @@ namespace WebApp.Pages.Attendance
 {
     public class EditModel : PageModel
     {
-        private readonly AttendanceContext _context;
+        public readonly IConfiguration _configuration;
         private readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
         };
 
-        public EditModel(AttendanceContext context)
+        public EditModel(IConfiguration configuration)
         {
-            _context = context;
+            _configuration = configuration;
         }
 
         [BindProperty]
@@ -38,10 +38,9 @@ namespace WebApp.Pages.Attendance
                 {
                     return NotFound();
                 }
-
-                using HttpResponseMessage response = await httpClient.GetAsync("WebApp/entries");
-                var entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
-                var entry = entries.Where(x => x.Id == id).FirstOrDefault();
+                httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/entryById/" + id.ToString());
+                var entry = JsonConvert.DeserializeObject<AttendanceDBO>(await response.Content.ReadAsStringAsync());
                 if (entry == null)
                 {
                     return NotFound();
@@ -60,9 +59,15 @@ namespace WebApp.Pages.Attendance
             {
                 return Page();
             }
-
-            using HttpResponseMessage response = await httpClient.PutAsync("WebApp/entries", new StringContent(JsonConvert.SerializeObject(Entry), Encoding.UTF8, "application/json"));
+            httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+            using HttpResponseMessage response = await httpClient.PutAsync("Admin/entries", new StringContent(JsonConvert.SerializeObject(Entry), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
+
+            if(response.ReasonPhrase != "OK")
+            {
+                ModelState.AddModelError(string.Empty, "Unable to update entry.");
+                return Page();
+            }
 
             return RedirectToPage("./Index");
         }

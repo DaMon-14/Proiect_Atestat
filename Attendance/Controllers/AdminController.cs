@@ -110,79 +110,125 @@ namespace AttendanceAPI.Controllers
 
         [HttpGet]
         [Route("entries")]
-        public async Task<IActionResult> GetAllEntries()
+        public async Task<IActionResult> GetAllEntries([FromHeader] string UID)
         {
-            return Ok(await _entries.GetEntries());
+            if(UID == null)
+            {
+                return BadRequest();
+            }
+            var entries = await _entries.GetEntries(UID);   
+            if(entries == null)
+            {
+                return NotFound();
+            }
+            return Ok(entries);
         }
 
         [HttpGet]
-        [Route("entries/{clientId}")]
-        public async Task<IActionResult> GetEntriesByClientId(uint clientId)
+        [Route("entryById/{Id}")]
+        public async Task<IActionResult> GetEntriesById(uint Id, [FromHeader] string UID)
         {
-            return Ok(await _entries.GetEntriesByClientId(clientId));
+            if (UID == null)
+            {
+                return BadRequest();
+            }
+            var entries = await _entries.GetEntriesById(Id, UID);
+            if (entries == null)
+            {
+                return NotFound();
+            }
+            return Ok(entries);
         }
 
         [HttpGet]
-        [Route("entries/{courseId}")]
-        public async Task<IActionResult> GetEntriesByCourseId(uint courseId)
+        [Route("entryByClient/{clientId}")]
+        public async Task<IActionResult> GetEntriesByClientId(uint clientId, [FromHeader] string UID)
         {
-            return Ok(await _entries.GetEntriesByCourseId(courseId));
+            if(UID == null)
+            {
+                return BadRequest();
+            }
+            var entries = await _entries.GetEntriesByClientId(clientId, UID);
+            if(entries.Count()==0)
+            {
+                return NotFound();
+            }
+            return Ok(entries);
+        }
+
+        [HttpGet]
+        [Route("entryByCourse/{courseId}")]
+        public async Task<IActionResult> GetEntriesByCourseId(uint courseId, [FromHeader] string UID)
+        {
+            if (UID == null)
+            {
+                return BadRequest();
+            }
+            var entries = await _entries.GetEntriesByCourseId(courseId, UID);
+            if(entries.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(entries);
         }
 
         [HttpPost]
         [Route("entries")]
-        public async Task<IActionResult> AddEntry([FromBody] AttendanceDBO entry)
+        public async Task<IActionResult> AddEntry([FromBody] Attendance entry, [FromHeader] string UID)
         {
-            if (entry == null)
+            if(entry == null || UID == "")
             {
                 return BadRequest();
             }
 
-            Attendance Entry = new Attendance
+            var newclient = await _entries.AddEntry(entry, UID);
+            if(newclient == null)
             {
-                ClientId = entry.ClientId,
-                CourseId = entry.CourseId,
-                ScanTime = entry.ScanTime
-            };
-
-            var newclient = await _entries.AddEntry(Entry);
+                return NotFound();
+            }
 
             return Ok(new
             {
-                message = "Added Client",
-                ClientId = newclient.ClientId
+                message = "Added Client"
             });
         }
 
         [HttpPut]
         [Route("entries")]
-        public async Task<IActionResult> UpdateEntry([FromBody] AttendanceDBO entry)
+        public async Task<IActionResult> UpdateEntry([FromBody] AttendanceDBO entry, [FromHeader] string UID)
         {
-            var updateEntry = await _entries.UpdateEntry(entry);
+            if(entry == null || UID == "")
+            {
+                return BadRequest();
+            }
+
+            var updateEntry = await _entries.UpdateEntry(entry, UID);
             if (updateEntry == null)
             {
                 return NotFound();
             }
             return Ok(new
             {
-                message = "Updated Entry",
-                EntryId = updateEntry.Id,
+                message = "Updated Entry"
             });
         }
 
         [HttpDelete]
-        [Route("entries/{id}")]
-        public async Task<IActionResult> DeleteEntry(int id)
+        [Route("entry/{id}")]
+        public async Task<IActionResult> DeleteEntry(int id, [FromHeader] string UID)
         {
-            var entry = await _entries.DeleteEntry(id);
+            if(UID == null)
+            {
+                return BadRequest();
+            }
+            var entry = await _entries.DeleteEntry(id, UID);
             if (entry == false)
             {
                 return NotFound();
             }
             return Ok(new
             {
-                message = "Deleted Entry",
-                EntryId = id,
+                message = "Deleted Entry"
             });
         }
     }
