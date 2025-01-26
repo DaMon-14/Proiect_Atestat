@@ -65,8 +65,16 @@ namespace WebApp.Pages.Login
 
             if (response.ReasonPhrase == "OK")
             {
-                HttpContext.Session.SetString("Admin", admin.ClientId.ToString());
-                return RedirectToPage("/Admin/AdminInterface");
+                if (jsonResponse == "Admin")
+                {
+                    HttpContext.Session.SetString("Admin", admin.ClientId.ToString());
+                    return RedirectToPage("/Admin/AdminInterface");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "You are not an admin");
+                    return Page();
+                }
             }
             if(jsonResponse == "Client")
             {
