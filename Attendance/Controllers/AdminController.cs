@@ -2,16 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Interfaces;
+using System.Globalization;
 
 namespace AttendanceAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class WebAppController : ControllerBase
+    public class AdminController : ControllerBase
     {
         private readonly IUser _users;
         private readonly IAttendance _entries;
-        public WebAppController(IUser userService, IAttendance entryService)
+        public AdminController(IUser userService, IAttendance entryService)
         {
             _users = userService;
             _entries = entryService;
@@ -19,34 +20,66 @@ namespace AttendanceAPI.Controllers
 
         [HttpGet]
         [Route("clients")]
-        public async Task<IActionResult> GetAllClients()
+        public async Task<IActionResult> GetAllClients([FromHeader] string UID)
         {
-            return Ok(await _users.GetAllClients());
+            if(UID == null)
+            {
+                return BadRequest();
+            }
+            var clients = await _users.GetAllClients(UID);
+            if(clients == null)
+            {
+                return NotFound();
+            }
+            return Ok(clients);
+        }
+
+        [HttpGet]
+        [Route("client/{id}")]
+        public async Task<IActionResult> GetClient(uint id, [FromHeader] string UID)
+        {
+            if (UID == null)
+            {
+                return BadRequest();
+            }
+            var client = await _users.GetClient(id, UID);
+            if(client == null)
+            {
+                return NotFound();
+            }
+            return Ok(client);
         }
 
         [HttpPost]
-        [Route("clients")]
-        public async Task<IActionResult> AddClient([FromBody] User client)
+        [Route("client")]
+        public async Task<IActionResult> AddClient([FromBody] User client, [FromHeader] string UID)
         {
-            if (client == null)
+            if (client == null || UID == "")
             {
                 return BadRequest();
             }
 
-            var newclient = await _users.AddClient(client);
+            var newclient = await _users.AddClient(client, UID);
+            if(newclient == null)
+            {
+                return NotFound();
+            }
 
             return Ok(new
             {
-                message = "Added Client",
-                ClientId = newclient.ClientId
+                message = "Added Client"
             });
         }
 
         [HttpPut]
-        [Route("clients")]
-        public async Task<IActionResult> UpdateClient([FromBody] UserDBO clientinfo)
+        [Route("client")]
+        public async Task<IActionResult> UpdateClient([FromBody] User clientinfo, [FromHeader] string UID)
         {
-            var client = await _users.UpdateClient(clientinfo);
+            if(clientinfo == null || UID == "")
+            {
+                return BadRequest();
+            }
+            var client = await _users.UpdateClient(clientinfo, UID);
             if (client == null)
             {
                 return NotFound();
@@ -54,14 +87,17 @@ namespace AttendanceAPI.Controllers
             return Ok(new
             {
                 message = "Updated Client",
-                ClientId = client.ClientId,
             });
         }
 
-        [HttpDelete("clients/{id}")]
-        public async Task<IActionResult> DeleteClient(uint id)
+        [HttpDelete("client/{id}")]
+        public async Task<IActionResult> DeleteClient(uint id, [FromHeader] string UID)
         {
-            var client = await _users.DeleteClient(id);
+            if (UID == null)
+            {
+                return BadRequest();
+            }
+            var client = await _users.DeleteClient(id, UID);
             if (client == null)
             {
                 return NotFound();
@@ -69,7 +105,6 @@ namespace AttendanceAPI.Controllers
             return Ok(new
             {
                 message = "Deleted Client",
-                ClientId = client.ClientId,
             });
         }
 
@@ -149,28 +184,6 @@ namespace AttendanceAPI.Controllers
                 message = "Deleted Entry",
                 EntryId = id,
             });
-        }
-
-        [HttpPost]
-        [Route("admin")]
-        public async Task<IActionResult> AdminExist([FromBody] User admin, [FromHeader] string UID)
-        {
-            //var x =Request.Headers["z"];
-            if(admin == null || UID == "")
-            {
-                return BadRequest();
-            }
-            var corectlogininfo = await _users.CorectCredentials(admin, UID);
-            if(corectlogininfo == false)
-            {
-                return NotFound("Incorect Username or Password");
-            }
-            var adminExists = await _users.AdminExists(admin, UID);
-            if (adminExists == false)
-            {
-                return NotFound("Client");
-            }
-            return Ok();
         }
     }
 }

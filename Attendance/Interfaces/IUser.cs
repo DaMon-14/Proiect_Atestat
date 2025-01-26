@@ -5,11 +5,11 @@ namespace AttendanceAPI.Interfaces
 {
     public interface IUser
     {
-        Task<List<UserDBO>> GetAllClients();
-        Task<UserDBO> GetClient(uint clientid);
-        Task<UserDBO> AddClient(User client);
-        Task<UserDBO> UpdateClient(UserDBO clientinfo);
-        Task<UserDBO> DeleteClient(uint clientid);
+        Task<List<UserDBO>> GetAllClients(string UID);
+        Task<UserDBO> GetClient(uint clientid, string UID);
+        Task<UserDBO> AddClient(User client, string UID);
+        Task<UserDBO> UpdateClient(User clientinfo,string UID);
+        Task<UserDBO> DeleteClient(uint clientid, string UID);
         Task<bool> AdminExists(User admin, string UID);
         Task<bool> CorectCredentials(User admin, string UID);
     }

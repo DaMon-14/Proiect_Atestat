@@ -9,23 +9,24 @@ using AttendanceAPI.EF;
 using Newtonsoft.Json;
 using System.Net.Http;
 using AttendanceAPI.EF.DBO;
+using AttendanceAPI.Models;
 
 namespace WebApp.Pages.Clients
 {
     public class DetailsModel : PageModel
     {
-        private readonly AttendanceContext _context;
+        private readonly IConfiguration _configuration;
         public readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
         };
 
-        public DetailsModel(AttendanceContext context)
+        public DetailsModel(IConfiguration configuration)
         {
-            _context = context;
+            _configuration = configuration;
         }
 
-        public UserDBO Client { get; set; } = default!;
+        public User Client { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -35,10 +36,9 @@ namespace WebApp.Pages.Clients
                 {
                     return NotFound();
                 }
-
-                using HttpResponseMessage response = await httpClient.GetAsync("WebApp/clients");
-                var clients = JsonConvert.DeserializeObject<List<UserDBO>>(await response.Content.ReadAsStringAsync());
-                var client = clients.Where(x => x.ClientId == id).FirstOrDefault();
+                httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/client/"+id.ToString());
+                var client = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync());
                 if (client == null)
                 {
                     return NotFound();

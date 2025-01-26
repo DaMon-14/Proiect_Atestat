@@ -17,33 +17,53 @@ namespace AttendanceAPI.Services
             _configuration = config;
         }
 
-        public async Task<List<UserDBO>> GetAllClients()
+        public async Task<List<UserDBO>> GetAllClients(string UID)
         {
+            if(UID != _configuration.GetValue<string>("UID"))
+            {
+                return null;
+            }
             return await _db.Users.Where(x => x.ClientId > 0).ToListAsync();
         }
 
-        public async Task<UserDBO> GetClient(uint clientid)
+        public async Task<UserDBO> GetClient(uint clientid, string UID)
         {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return null;
+            }
             return await _db.Users.FirstOrDefaultAsync(x => x.ClientId == clientid);
         }
 
-        public async Task<UserDBO> AddClient(User client)
+        public async Task<UserDBO> AddClient(User client, string UID)
         {
+            if(UID != _configuration.GetValue<string>("UID"))
+            {
+                return null;
+            }
             var newClient = new UserDBO
             {
                 FirstName = client.FirstName,
                 LastName = client.LastName,
                 Institution = client.Institution,
                 Email = client.Email,
-                PhoneNumber = client.PhoneNumber
+                PhoneNumber = client.PhoneNumber,
+                UserName = client.UserName,
+                Password = client.Password,
+                IsAdmin = false,
+                Salt = DateTime.UtcNow.ToString()
             };
             _db.Users.Add(newClient);
             await _db.SaveChangesAsync();
             return newClient;
         }
 
-        public async Task<UserDBO> UpdateClient(UserDBO clientinfo)
+        public async Task<UserDBO> UpdateClient(User clientinfo, string UID)
         {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return null;
+            }
             var client = await _db.Users.FirstOrDefaultAsync(x => x.ClientId == clientinfo.ClientId);
             if (client != null)
             {
@@ -58,8 +78,12 @@ namespace AttendanceAPI.Services
             return null;
         }
 
-        public async Task<UserDBO> DeleteClient(uint clientid)
+        public async Task<UserDBO> DeleteClient(uint clientid, string UID)
         {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return null;
+            }
             var client = await _db.Users.FirstOrDefaultAsync(x => x.ClientId == clientid);
             if (client != null)
             {

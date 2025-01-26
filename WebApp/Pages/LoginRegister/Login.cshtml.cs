@@ -60,13 +60,13 @@ namespace WebApp.Pages.Login
                 UserName = User.Username
             };
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.PostAsync("WebApp/admin", new StringContent(JsonConvert.SerializeObject(admin), Encoding.UTF8, "application/json"));
+            using HttpResponseMessage response = await httpClient.PostAsync("/Common/Login", new StringContent(JsonConvert.SerializeObject(admin), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
             if (response.ReasonPhrase == "OK")
             {
                 HttpContext.Session.SetString("Admin", admin.ClientId.ToString());
-                return RedirectToPage("./AdminInterface");
+                return RedirectToPage("/Admin/AdminInterface");
             }
             if(jsonResponse == "Client")
             {

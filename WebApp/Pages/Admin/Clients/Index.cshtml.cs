@@ -13,17 +13,15 @@ namespace WebApp.Pages.Clients
 {
     public class IndexModel : PageModel
     {
-        private readonly AttendanceContext _context;
+        private readonly IConfiguration _configuration;
+        public IndexModel(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
         };
-
-        public IndexModel(AttendanceContext context)
-        {
-            _context = context;
-            
-        }
 
         public IList<UserDBO> Client { get;set; } = default!;
 
@@ -35,8 +33,10 @@ namespace WebApp.Pages.Clients
             var reps = HttpContext.Session.TryGetValue("Admin", out _);
             if (HttpContext.Session.TryGetValue("Admin", out _))
             {
-                using HttpResponseMessage response = await httpClient.GetAsync("WebApp/clients");
+                httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/clients");
                 Client = JsonConvert.DeserializeObject<List<UserDBO>>(await response.Content.ReadAsStringAsync());
+                Client = Client.Where(x=>x.IsAdmin == false).ToList();
             }
             if(Client == null)
             {

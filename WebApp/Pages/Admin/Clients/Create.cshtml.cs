@@ -9,20 +9,21 @@ using AttendanceAPI.EF;
 using AttendanceAPI.Models;
 using Newtonsoft.Json;
 using System.Text;
+using AttendanceAPI.Models;
 
 namespace WebApp.Pages.Clients
 {
     public class CreateModel : PageModel
     {
-        private readonly AttendanceContext _context;
+        private readonly IConfiguration _configuration;
         private readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
         };
 
-        public CreateModel(AttendanceContext context)
+        public CreateModel(IConfiguration configuration)
         {
-            _context = context;
+            _configuration = configuration;
         }
 
         public async Task<IActionResult> OnGet()
@@ -45,9 +46,14 @@ namespace WebApp.Pages.Clients
             {
                 return Page();
             }
-
-            using HttpResponseMessage response = await httpClient.PostAsync("WebApp/clients", new StringContent(JsonConvert.SerializeObject(Client), Encoding.UTF8, "application/json"));
+            httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+            using HttpResponseMessage response = await httpClient.PostAsync("Admin/client", new StringContent(JsonConvert.SerializeObject(Client), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
+            if(response.ReasonPhrase != "OK")
+            {
+                ModelState.AddModelError(string.Empty, "Could not create User");
+                return Page();
+            }
 
             return RedirectToPage("./Index");
         }

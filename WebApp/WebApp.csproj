@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Attendance\AttendanceAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\User\" />
+  </ItemGroup>
+
 </Project>

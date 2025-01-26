@@ -10,24 +10,24 @@ using AttendanceAPI.EF;
 using Newtonsoft.Json;
 using System.Text;
 using AttendanceAPI.EF.DBO;
+using AttendanceAPI.Models;
 
 namespace WebApp.Pages.Clients
 {
     public class EditModel : PageModel
     {
-        private readonly AttendanceContext _context;
+        private readonly IConfiguration _configuration;
+        public EditModel(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         private readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
         };
 
-        public EditModel(AttendanceContext context)
-        {
-            _context = context;
-        }
-
         [BindProperty]
-        public UserDBO Client { get; set; } = default!;
+        public UserEdit Client { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -38,13 +38,20 @@ namespace WebApp.Pages.Clients
                 {
                     return NotFound();
                 }
+                httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/client/" + id.ToString());
+                var client = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync());
 
-                var client = await _context.Users.FirstOrDefaultAsync(m => m.ClientId == id);
-                if (client == null)
-                {
+                if (client == null)     {
                     return NotFound();
                 }
-                Client = client;
+                Client = new UserEdit();
+                Client.Institution = client.Institution;
+                Client.FirstName = client.FirstName;
+                Client.LastName = client.LastName;
+                Client.Email = client.Email;
+                Client.PhoneNumber = client.PhoneNumber;
+                Client.ClientId = client.ClientId;
                 return Page();
             }
             return RedirectToPage("/Index");
@@ -54,36 +61,44 @@ namespace WebApp.Pages.Clients
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-
-            
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-
-            try
+            var User = new AttendanceAPI.Models.User
             {
-                using HttpResponseMessage response = await httpClient.PutAsync("WebApp/clients", new StringContent(JsonConvert.SerializeObject(Client), Encoding.UTF8, "application/json"));
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-            }
-            catch (DbUpdateConcurrencyException)
+                ClientId = Client.ClientId,
+                FirstName = Client.FirstName,
+                LastName = Client.LastName,
+                Institution = Client.Institution,
+                Email = Client.Email,
+                PhoneNumber = Client.PhoneNumber,
+                UserName = "",
+                Password = ""
+            };
+            httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+            using HttpResponseMessage response = await httpClient.PutAsync("Admin/client", new StringContent(JsonConvert.SerializeObject(User), Encoding.UTF8, "application/json"));
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            if (response.ReasonPhrase == "OK")
             {
-                if (!ClientExists(Client.ClientId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return RedirectToPage("./Index");
             }
-
-            return RedirectToPage("./Index");
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Failed to update client");
+                return Page();
+            }
         }
+    }
 
-        private bool ClientExists(int id)
-        {
-            return _context.Users.Any(e => e.ClientId == id);
-        }
+
+    public class UserEdit
+    {
+        public int ClientId { get; set; }
+        public string FirstName { get; set; } = default!;
+        public string LastName { get; set; } = default!;
+        public string Institution { get; set; } = default!;
+        public string Email { get; set; } = default!;
+        public int PhoneNumber { get; set; } = default!;
     }
 }

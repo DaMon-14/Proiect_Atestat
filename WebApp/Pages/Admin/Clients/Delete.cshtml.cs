@@ -9,25 +9,25 @@ using AttendanceAPI.EF;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
-using AttendanceAPI.EF.DBO;
+using AttendanceAPI.Models;
 
 namespace WebApp.Pages.Clients
 {
     public class DeleteModel : PageModel
     {
-        private readonly AttendanceContext _context;
+        private readonly IConfiguration _configuration;
         private readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
         };
 
-        public DeleteModel(AttendanceContext context)
+        public DeleteModel(IConfiguration configuration)
         {
-            _context = context;
+            _configuration = configuration;
         }
 
         [BindProperty]
-        public UserDBO Client { get; set; } = default!;
+        public User Client { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -39,7 +39,9 @@ namespace WebApp.Pages.Clients
                     return NotFound();
                 }
 
-                var client = await _context.Users.FirstOrDefaultAsync(m => m.ClientId == id);
+                httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/client/" + id.ToString());
+                var client = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync());
 
                 if (client == null)
                 {
@@ -55,15 +57,23 @@ namespace WebApp.Pages.Clients
 
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(uint? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            using HttpResponseMessage response = await httpClient.DeleteAsync("WebApp/clients/"+id.ToString());
+            httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+            using HttpResponseMessage response = await httpClient.DeleteAsync("Admin/client/"+id.ToString());
             var jsonResponse = await response.Content.ReadAsStringAsync();
+            if(response.IsSuccessStatusCode)
+            {
+                return RedirectToPage("./Index");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Unable to delete client");
+            }
 
             return RedirectToPage("./Index");
         }
