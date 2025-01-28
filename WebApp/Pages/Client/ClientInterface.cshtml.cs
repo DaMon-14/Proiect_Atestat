@@ -14,10 +14,15 @@ namespace WebApp.Pages.Client
 
         public IActionResult OnGet()
         {
-            var reps = HttpContext.Session.TryGetValue("Admin", out _);
-            if (HttpContext.Session.TryGetValue("Admin", out _))
+            
+            var reps = HttpContext.Session.TryGetValue("Client", out _);
+            if(reps == true)
             {
-                return Page();
+                var ClientId = Convert.ToInt32(HttpContext.Session.GetString("Client"));
+                if (ClientId > 0)
+                {
+                    return Page();
+                }
             }
             return RedirectToPage("/Index");
         }

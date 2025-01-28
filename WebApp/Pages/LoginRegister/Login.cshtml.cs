@@ -70,17 +70,15 @@ namespace WebApp.Pages.LoginRegister
                     HttpContext.Session.SetString("Admin", admin.ClientId.ToString());
                     return RedirectToPage("/Admin/AdminInterface");
                 }
-                else
+                else if(jsonResponse == "Client")
                 {
-                    ModelState.AddModelError(string.Empty, "You are not an admin");
-                    return Page();
+                    HttpContext.Session.SetString("Client", admin.ClientId.ToString());
+                    return RedirectToPage("/Client/ClientInterface");
                 }
-            }
-            if(jsonResponse == "Client")
-            {
-                ModelState.AddModelError(string.Empty, "You are not an admin");
+                ModelState.AddModelError(string.Empty, "Unknown user type");
                 return Page();
             }
+            
             if(jsonResponse == "Incorect Username or Password")
             {
                 ModelState.AddModelError(string.Empty, "Incorect Username or Password");
