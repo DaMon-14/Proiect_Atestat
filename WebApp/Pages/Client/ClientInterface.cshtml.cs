@@ -28,7 +28,7 @@ namespace WebApp.Pages.Client
         }
         public async Task<IActionResult> OnPostLogout()
         {
-            HttpContext.Session.Remove("Admin");
+            HttpContext.Session.Remove("Client");
             return RedirectToPage("/Index");
         }
     }

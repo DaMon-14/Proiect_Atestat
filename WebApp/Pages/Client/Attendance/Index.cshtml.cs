@@ -9,6 +9,7 @@ using AttendanceAPI.EF;
 using Newtonsoft.Json;
 using System.Net.Http;
 using AttendanceAPI.EF.DBO;
+using AttendanceAPI.Models;
 
 namespace WebApp.Pages.Client.Attendance
 {
@@ -25,20 +26,25 @@ namespace WebApp.Pages.Client.Attendance
             _configuration = configuration;
         }
 
-        public IList<AttendanceDBO> Entry { get;set; } = default!;
+        public IList<AttendanceAPI.Models.Attendance> Entry { get;set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var reps = HttpContext.Session.TryGetValue("Admin", out _);
-            if (HttpContext.Session.TryGetValue("Admin", out _))
+            var reps = HttpContext.Session.TryGetValue("Client", out _);
+            if (reps == true)
             {
+                var id = Convert.ToInt32(HttpContext.Session.GetString("Client"));
+                if (id == 0)
+                {
+                    return RedirectToPage("/Index");
+                }
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                using HttpResponseMessage response = await httpClient.GetAsync("Admin/entries");
-                Entry = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
+                using HttpResponseMessage response = await httpClient.GetAsync("Client/"+id.ToString());
+                Entry = JsonConvert.DeserializeObject<List<AttendanceAPI.Models.Attendance>>(await response.Content.ReadAsStringAsync());
             }
             if (Entry == null)
             {
-                Entry = new List<AttendanceDBO>();
+                Entry = new List<AttendanceAPI.Models.Attendance>();
             }
             return Page();
         }

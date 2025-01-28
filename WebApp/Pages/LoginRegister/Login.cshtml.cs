@@ -29,7 +29,11 @@ namespace WebApp.Pages.LoginRegister
         {
             if (HttpContext.Session.TryGetValue("Admin", out _))
             {
-                return RedirectToPage("./AdminInterface");
+                return RedirectToPage("/Admin/AdminInterface");
+            }
+            if(HttpContext.Session.TryGetValue("Client", out _))
+            {
+                return RedirectToPage("/Client/ClientInterface");
             }
             return Page();
         }
