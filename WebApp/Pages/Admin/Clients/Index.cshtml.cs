@@ -9,7 +9,7 @@ using AttendanceAPI.EF;
 using Newtonsoft.Json;
 using AttendanceAPI.EF.DBO;
 
-namespace WebApp.Pages.Clients
+namespace WebApp.Pages.Admin.Clients
 {
     public class IndexModel : PageModel
     {

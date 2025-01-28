@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using System.Text;
 using AttendanceAPI.EF.DBO;
 
-namespace WebApp.Pages.Attendance
+namespace WebApp.Pages.Admin.Attendance
 {
     public class GetByClientIdModel : PageModel
     {
