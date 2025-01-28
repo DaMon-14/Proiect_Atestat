@@ -12,5 +12,6 @@ namespace AttendanceAPI.Interfaces
         Task<UserDBO> DeleteClient(uint clientid, string UID);
         Task<bool> AdminExists(User admin, string UID);
         Task<bool> CorectCredentials(User admin, string UID);
+        Task<uint> GetUserId(User admin, string UID);
     }
 }

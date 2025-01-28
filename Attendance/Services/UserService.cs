@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Interfaces;
 using Microsoft.Extensions.Configuration;
+using System.Globalization;
 
 namespace AttendanceAPI.Services
 {
@@ -120,6 +121,20 @@ namespace AttendanceAPI.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task<uint> GetUserId(User admin, string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return 0;
+            }
+            var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName && x.Password == admin.Password);
+            if (client != null)
+            {
+                return Convert.ToUInt16(client.ClientId);
+            }
+            return 0;
         }
     }
 }

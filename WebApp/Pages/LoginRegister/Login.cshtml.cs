@@ -10,6 +10,7 @@ using AttendanceAPI.Models;
 using Newtonsoft.Json;
 using System.Text;
 using AttendanceAPI.EF.DBO;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApp.Pages.LoginRegister
 { 
@@ -62,26 +63,32 @@ namespace WebApp.Pages.LoginRegister
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
             using HttpResponseMessage response = await httpClient.PostAsync("/Common/Login", new StringContent(JsonConvert.SerializeObject(admin), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
-
+            var json = JsonConvert.DeserializeObject<LoginResponse>(jsonResponse);
             if (response.ReasonPhrase == "OK")
             {
-                if (jsonResponse == "Admin")
+                if (json.message == "Admin")
                 {
-                    HttpContext.Session.SetString("Admin", admin.ClientId.ToString());
+                    HttpContext.Session.SetString("Admin", Convert.ToInt32(json.Id).ToString());
                     return RedirectToPage("/Admin/AdminInterface");
                 }
-                else if(jsonResponse == "Client")
+                else if(json.message == "Client")
                 {
-                    HttpContext.Session.SetString("Client", admin.ClientId.ToString());
+                    HttpContext.Session.SetString("Client", Convert.ToInt32(json.Id).ToString());
                     return RedirectToPage("/Client/ClientInterface");
                 }
                 ModelState.AddModelError(string.Empty, "Unknown user type");
                 return Page();
             }
             
-            if(jsonResponse == "Incorect Username or Password")
+            if(json.message == "Incorect Username or Password")
             {
                 ModelState.AddModelError(string.Empty, "Incorect Username or Password");
+                return Page();
+            }
+
+            if(json.message == "Failed to fetch user id")
+            {
+                ModelState.AddModelError(string.Empty, "Failed to fetch user id");
                 return Page();
             }
 
