@@ -1,0 +1,52 @@
+﻿@page
+@model WebApp.Pages.Client.Attendance.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutClient";
+}
+
+<h1>Attendance</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+    <a asp-page="GetByClientId"> Get By Client Id</a>
+    <a asp-page="GetByCourseId"> Get By Course Id</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Entry[0].ClientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Entry[0].CourseId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Entry[0].ScanTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Entry) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScanTime)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<p>To <a href="https://localhost:7054/Admin/AdminInterface">Admin page</a>.</p>

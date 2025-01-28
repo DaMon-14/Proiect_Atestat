@@ -1,0 +1,69 @@
+﻿@page
+@model WebApp.Pages.Client.Attendance.GetByCourseIdModel
+
+@{
+    ViewData["Title"] = "GetByCourseId";
+    Layout = "_LayoutClient";
+}
+
+<h1>Get By Course Id</h1>
+
+<h4>Entry</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Entry.CourseId" class="control-label"></label>
+                <input asp-for="Entry.CourseId"  type="number" class="form-control" />
+                <span asp-validation-for="Entry.CourseId" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Entries[0].ClientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Entries[0].CourseId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Entries[0].ScanTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Entries)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ScanTime)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
