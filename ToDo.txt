@@ -1,0 +1,6 @@
+-verify corect text is displayed
+-On Admin Clients shows only Non admin, by on get by course id shows admins also
+-verify conditions: null checks for empty strings
+-repair esp Api controller
+-On dashboard get names not id's
+-Add modify profile button on dashbar
