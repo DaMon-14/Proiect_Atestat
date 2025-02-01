@@ -8,24 +8,29 @@ namespace AttendanceAPI.Controllers
     [ApiController]
     public class ESP32Controller : ControllerBase
     {
+        private readonly IConfiguration _configuration;
         private readonly ICard _cards;
         private readonly IScanner_Course _scanner_courses;
         private readonly IAttendance _entries;
         private readonly IClient_Course _client_courses;
 
-        public ESP32Controller(ICard cardService, IScanner_Course scannercourseService, IAttendance entryService, IClient_Course client_courseService)
+        public ESP32Controller(IConfiguration config, ICard cardService, IScanner_Course scannercourseService, IAttendance entryService, IClient_Course client_courseService)
         {
+            _configuration = config;
             _cards = cardService;
             _scanner_courses = scannercourseService;
             _entries = entryService;
             _client_courses = client_courseService;
             
         }
-        /*
         [HttpPost]
         [Route("add")]
-        public async Task<IActionResult> AddEntry([FromBody] ESP32 esp32)
+        public async Task<IActionResult> AddEntry([FromBody] ESP32 esp32, [FromHeader] string UID)
         {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
             var card = await _cards.GetCard(esp32.CardId);
             if (card == null) 
             {
@@ -49,15 +54,10 @@ namespace AttendanceAPI.Controllers
                     message = "Scanner not active"
                 });
             }
-
+            /*    Not needed for now
+             
             var client_course = await _client_courses.GetClient_courseByClientIdAndCourseId(card.ClientId, scanner_course.CourseId);
-            if(client_course == null) {
-                return NotFound(new
-                {
-                    message = "Client not enrolled"
-                });
-            }
-            if(!client_course.isEnrolled) {
+            if(client_course == null || !client_course.isEnrolled) {
                 return NotFound(new
                 {
                     message = "Client not enrolled"
@@ -70,7 +70,7 @@ namespace AttendanceAPI.Controllers
                     message = "Not Enough Points"
                 });
             }
-
+            */
             var entry = await _entries.AddEntry(new Attendance
             {
                 ClientId = card.ClientId,
@@ -84,11 +84,7 @@ namespace AttendanceAPI.Controllers
                 });
             }
 
-            return Ok(new
-            {
-                message = "Added Entry",
-                entry = entry
-            });
-        }*/
+            return Ok();
+        }
     }
 }
