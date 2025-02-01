@@ -25,7 +25,7 @@ namespace WebApp.Pages.Admin.Attendance
             _configuration = configuration;
         }
 
-        public IList<AttendanceDBO> Entry { get;set; } = default!;
+        public IList<AttendanceDBO> Entries { get;set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -34,11 +34,13 @@ namespace WebApp.Pages.Admin.Attendance
             {
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 using HttpResponseMessage response = await httpClient.GetAsync("Admin/entries");
-                Entry = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
+                Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
+                Entries = Entries.OrderBy(x => x.ScanTime.Year).ThenBy(x=>x.ScanTime.Month).ThenBy(x=>x.ScanTime.Day).ThenBy(x=>x.ScanTime.Hour).ThenBy(x=>x.ScanTime.Minute).ThenBy(x=>x.ScanTime.Second).ToList();
+                Entries = Entries.Reverse().ToList();
             }
-            if (Entry == null)
+            if (Entries.Count()==0)
             {
-                Entry = new List<AttendanceDBO>();
+                Entries = new List<AttendanceDBO>();
             }
             return Page();
         }

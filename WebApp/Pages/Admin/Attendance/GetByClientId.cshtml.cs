@@ -52,6 +52,8 @@ namespace WebApp.Pages.Admin.Attendance
             if(response.ReasonPhrase == "OK")
             {
                 Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
+                Entries = Entries.OrderBy(x => x.ScanTime.Year).ThenBy(x => x.ScanTime.Month).ThenBy(x => x.ScanTime.Day).ThenBy(x => x.ScanTime.Hour).ThenBy(x => x.ScanTime.Minute).ThenBy(x => x.ScanTime.Second).ToList();
+                Entries = Entries.Reverse().ToList();
                 return Page();
             }
             ModelState.AddModelError(string.Empty, "No entries found for this client");

@@ -26,7 +26,7 @@ namespace WebApp.Pages.Client.Attendance
             _configuration = configuration;
         }
 
-        public IList<AttendanceAPI.Models.Attendance> Entry { get;set; } = default!;
+        public IList<AttendanceAPI.Models.Attendance> Entries { get;set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -40,11 +40,13 @@ namespace WebApp.Pages.Client.Attendance
                 }
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 using HttpResponseMessage response = await httpClient.GetAsync("Client/"+id.ToString());
-                Entry = JsonConvert.DeserializeObject<List<AttendanceAPI.Models.Attendance>>(await response.Content.ReadAsStringAsync());
+                Entries = JsonConvert.DeserializeObject<List<AttendanceAPI.Models.Attendance>>(await response.Content.ReadAsStringAsync());
+                Entries = Entries.OrderBy(x => x.ScanTime.Year).ThenBy(x => x.ScanTime.Month).ThenBy(x => x.ScanTime.Day).ThenBy(x => x.ScanTime.Hour).ThenBy(x => x.ScanTime.Minute).ThenBy(x => x.ScanTime.Second).ToList();
+                Entries = Entries.Reverse().ToList();
             }
-            if (Entry == null)
+            if (Entries.Count()==0)
             {
-                Entry = new List<AttendanceAPI.Models.Attendance>();
+                Entries = new List<AttendanceAPI.Models.Attendance>();
             }
             return Page();
         }

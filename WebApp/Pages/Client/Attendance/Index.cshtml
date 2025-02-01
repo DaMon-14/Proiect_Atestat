@@ -12,19 +12,20 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Entry[0].ClientId)
+                @Html.DisplayNameFor(model => model.Entries[0].ClientId)
+            </th> 
+            <th> 
+                @Html.DisplayNameFor(model => model.Entries[0].CourseId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Entry[0].CourseId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Entry[0].ScanTime)
+                @Html.DisplayNameFor(model => model.Entries[0].ScanTime)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Entry) {
+        @foreach (var item in Model.Entries)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ClientId)

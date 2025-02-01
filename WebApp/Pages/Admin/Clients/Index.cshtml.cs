@@ -36,7 +36,7 @@ namespace WebApp.Pages.Admin.Clients
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 using HttpResponseMessage response = await httpClient.GetAsync("Admin/clients");
                 Client = JsonConvert.DeserializeObject<List<UserDBO>>(await response.Content.ReadAsStringAsync());
-                Client = Client.Where(x=>x.IsAdmin == false).ToList();
+                Client = Client.Where(x=>x.IsAdmin == false).OrderBy(x => x.FirstName).ToList();
             }
             if(Client == null)
             {
