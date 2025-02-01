@@ -4,3 +4,6 @@
 -repair esp Api controller
 -On dashboard get names not id's
 -Add modify profile button on dashbar
+-set phone number to string
+-order by most recent on attendace getbycourseid
+-implement verification condition on creates(ie client exists on entry creation)

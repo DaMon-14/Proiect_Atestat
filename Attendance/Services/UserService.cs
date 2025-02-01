@@ -11,37 +11,23 @@ namespace AttendanceAPI.Services
     public class UserService : IUser
     {
         private readonly AttendanceContext _db;
-        private readonly IConfiguration _configuration;
-        public UserService(AttendanceContext db, IConfiguration config)
+        public UserService(AttendanceContext db)
         {
             _db = db;
-            _configuration = config;
         }
 
-        public async Task<List<UserDBO>> GetAllClients(string UID)
+        public async Task<List<UserDBO>> GetAllUsers()
         {
-            if(UID != _configuration.GetValue<string>("UID"))
-            {
-                return null;
-            }
             return await _db.Users.Where(x => x.ClientId > 0).ToListAsync();
         }
 
-        public async Task<UserDBO> GetClient(uint clientid, string UID)
+        public async Task<UserDBO> GetUser(uint clientid)
         {
-            if (UID != _configuration.GetValue<string>("UID"))
-            {
-                return null;
-            }
             return await _db.Users.FirstOrDefaultAsync(x => x.ClientId == clientid);
         }
 
-        public async Task<UserDBO> AddClient(User client, string UID)
+        public async Task<UserDBO> AddUser(User client)
         {
-            if(UID != _configuration.GetValue<string>("UID"))
-            {
-                return null;
-            }
             var newClient = new UserDBO
             {
                 FirstName = client.FirstName,
@@ -59,32 +45,47 @@ namespace AttendanceAPI.Services
             return newClient;
         }
 
-        public async Task<UserDBO> UpdateClient(User clientinfo, string UID)
+        public async Task<UserDBO> UpdateUser(User clientinfo)
         {
-            if (UID != _configuration.GetValue<string>("UID"))
-            {
-                return null;
-            }
-            var client = await _db.Users.FirstOrDefaultAsync(x => x.ClientId == clientinfo.ClientId);
+            UserDBO client = await _db.Users.FirstOrDefaultAsync(x => x.ClientId == clientinfo.ClientId);
             if (client != null)
             {
-                client.FirstName = clientinfo.FirstName;
-                client.LastName = clientinfo.LastName;
-                client.Institution = clientinfo.Institution;
-                client.Email = clientinfo.Email;
-                client.PhoneNumber = clientinfo.PhoneNumber;
+                if(clientinfo.FirstName != null)
+                {
+                    client.FirstName = clientinfo.FirstName;
+                }
+                if(clientinfo.LastName != null)
+                {
+                    client.LastName = clientinfo.LastName;
+                }
+                if(clientinfo.Institution != null)
+                {
+                    client.Institution = clientinfo.Institution;
+                }
+                if(clientinfo.Email != null)
+                {
+                    client.Email = clientinfo.Email;
+                }
+                if(clientinfo.PhoneNumber != 0)
+                {
+                    client.PhoneNumber = clientinfo.PhoneNumber;
+                }
+                if(clientinfo.Password != null)
+                {
+                    client.Password = clientinfo.Password;
+                }
+                if(clientinfo.UserName != null)
+                {
+                    client.UserName = clientinfo.UserName;
+                }
                 var results = await _db.SaveChangesAsync();
                 return client;
             }
             return null;
         }
 
-        public async Task<UserDBO> DeleteClient(uint clientid, string UID)
+        public async Task<UserDBO> DeleteUser(uint clientid)
         {
-            if (UID != _configuration.GetValue<string>("UID"))
-            {
-                return null;
-            }
             var client = await _db.Users.FirstOrDefaultAsync(x => x.ClientId == clientid);
             if (client != null)
             {
@@ -95,12 +96,8 @@ namespace AttendanceAPI.Services
             return null;
         }
 
-        public async Task<bool> AdminExists(User admin, string UID)
+        public async Task<bool> AdminExists(User admin)
         {
-            if(UID != _configuration.GetValue<string>("UID"))
-            {
-                return false;
-            }
             var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName && x.IsAdmin ==true);
             if (client != null)
             {
@@ -109,12 +106,8 @@ namespace AttendanceAPI.Services
             return false;
         }
 
-        public async Task<bool> CorectCredentials(User admin, string UID)
+        public async Task<bool> CorectCredentials(User admin)
         {
-            if (UID != _configuration.GetValue<string>("UID"))
-            {
-                return false;
-            }
             var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName && x.Password == admin.Password);
             if (client != null)
             {
@@ -123,12 +116,8 @@ namespace AttendanceAPI.Services
             return false;
         }
 
-        public async Task<uint> GetUserId(User admin, string UID)
+        public async Task<uint> GetUserId(User admin)
         {
-            if (UID != _configuration.GetValue<string>("UID"))
-            {
-                return 0;
-            }
             var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName && x.Password == admin.Password);
             if (client != null)
             {

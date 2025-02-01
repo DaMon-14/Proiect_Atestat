@@ -9,22 +9,25 @@ namespace AttendanceAPI.Controllers
     {
         private readonly IUser _users;
         private readonly IAttendance _entries;
-        public ClientController(IUser userService, IAttendance entryService)
+        private readonly IConfiguration _configuration;
+        public ClientController(IUser userService, IAttendance entryService, IConfiguration configuration)
         {
             _users = userService;
             _entries = entryService;
+            _configuration = configuration;
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetClient(uint id, [FromHeader] string UID)
+        public async Task<IActionResult> GetClientAttendances(uint id, [FromHeader] string UID)
         {
-            if (UID == null)
+            if (UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
-            var attendances = await _entries.GetEntriesByClientId(id, UID);
-            if (attendances == null)
+            var attendances = await _entries.GetEntries();
+            attendances = attendances.Where(x => x.ClientId == id).ToList();
+            if (attendances.Count()==0)
             {
                 return NotFound();
             }

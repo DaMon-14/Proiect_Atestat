@@ -12,22 +12,24 @@ namespace AttendanceAPI.Controllers
     {
         private readonly IUser _users;
         private readonly IAttendance _entries;
-        public AdminController(IUser userService, IAttendance entryService)
+        private readonly IConfiguration _configuration;
+        public AdminController(IUser userService, IAttendance entryService, IConfiguration config)
         {
             _users = userService;
             _entries = entryService;
+            _configuration = config;
         }
-
         [HttpGet]
         [Route("clients")]
-        public async Task<IActionResult> GetAllClients([FromHeader] string UID)
+        public async Task<IActionResult> GetAllUsers([FromHeader] string UID)
         {
-            if(UID == null)
+            if(UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
-            var clients = await _users.GetAllClients(UID);
-            if(clients == null)
+            var clients = await _users.GetAllUsers();
+            clients = clients.Where(x => x.ClientId > 0 && x.IsAdmin == false).ToList();
+            if(clients.Count() == 0)
             {
                 return NotFound();
             }
@@ -36,14 +38,14 @@ namespace AttendanceAPI.Controllers
 
         [HttpGet]
         [Route("client/{id}")]
-        public async Task<IActionResult> GetClient(uint id, [FromHeader] string UID)
+        public async Task<IActionResult> GetUser(uint id, [FromHeader] string UID)
         {
-            if (UID == null)
+            if (UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
-            var client = await _users.GetClient(id, UID);
-            if(client == null)
+            var client = await _users.GetUser(id);
+            if(client == null || client.IsAdmin==true)
             {
                 return NotFound();
             }
@@ -52,52 +54,45 @@ namespace AttendanceAPI.Controllers
 
         [HttpPost]
         [Route("client")]
-        public async Task<IActionResult> AddClient([FromBody] User client, [FromHeader] string UID)
+        public async Task<IActionResult> AddUser([FromBody] User client, [FromHeader] string UID)
         {
-            if (client == null || UID == "")
+            if (client == null || UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
 
-            var newclient = await _users.AddClient(client, UID);
+            var newclient = await _users.AddUser(client);
             if(newclient == null)
             {
-                return NotFound();
+                return StatusCode(500);
             }
-
-            return Ok(new
-            {
-                message = "Added Client"
-            });
+            return Ok();
         }
 
         [HttpPut]
         [Route("client")]
         public async Task<IActionResult> UpdateClient([FromBody] User clientinfo, [FromHeader] string UID)
         {
-            if(clientinfo == null || UID == "")
+            if(clientinfo == null || UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
-            var client = await _users.UpdateClient(clientinfo, UID);
+            var client = await _users.UpdateUser(clientinfo);
             if (client == null)
             {
                 return NotFound();
             }
-            return Ok(new
-            {
-                message = "Updated Client",
-            });
+            return Ok();
         }
 
         [HttpDelete("client/{id}")]
         public async Task<IActionResult> DeleteClient(uint id, [FromHeader] string UID)
         {
-            if (UID == null)
+            if (UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
-            var client = await _users.DeleteClient(id, UID);
+            var client = await _users.DeleteUser(id);
             if (client == null)
             {
                 return NotFound();
@@ -112,11 +107,11 @@ namespace AttendanceAPI.Controllers
         [Route("entries")]
         public async Task<IActionResult> GetAllEntries([FromHeader] string UID)
         {
-            if(UID == null)
+            if(UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
-            var entries = await _entries.GetEntries(UID);   
+            var entries = await _entries.GetEntries();   
             if(entries == null)
             {
                 return NotFound();
@@ -126,13 +121,13 @@ namespace AttendanceAPI.Controllers
 
         [HttpGet]
         [Route("entryById/{Id}")]
-        public async Task<IActionResult> GetEntriesById(uint Id, [FromHeader] string UID)
+        public async Task<IActionResult> GetEntryById(uint Id, [FromHeader] string UID)
         {
-            if (UID == null)
+            if (UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
-            var entries = await _entries.GetEntriesById(Id, UID);
+            var entries = await _entries.GetEntryById(Id);
             if (entries == null)
             {
                 return NotFound();
@@ -144,11 +139,12 @@ namespace AttendanceAPI.Controllers
         [Route("entryByClient/{clientId}")]
         public async Task<IActionResult> GetEntriesByClientId(uint clientId, [FromHeader] string UID)
         {
-            if(UID == null)
+            if(UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
-            var entries = await _entries.GetEntriesByClientId(clientId, UID);
+            var entries = await _entries.GetEntries();
+            entries = entries.Where(x => x.ClientId == clientId).ToList();
             if(entries.Count()==0)
             {
                 return NotFound();
@@ -160,11 +156,12 @@ namespace AttendanceAPI.Controllers
         [Route("entryByCourse/{courseId}")]
         public async Task<IActionResult> GetEntriesByCourseId(uint courseId, [FromHeader] string UID)
         {
-            if (UID == null)
+            if (UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
-            var entries = await _entries.GetEntriesByCourseId(courseId, UID);
+            var entries = await _entries.GetEntries();
+            entries = entries.Where(x => x.CourseId == courseId).ToList();
             if(entries.Count() == 0)
             {
                 return NotFound();
@@ -176,12 +173,12 @@ namespace AttendanceAPI.Controllers
         [Route("entries")]
         public async Task<IActionResult> AddEntry([FromBody] Attendance entry, [FromHeader] string UID)
         {
-            if(entry == null || UID == "")
+            if(entry == null || UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
 
-            var newclient = await _entries.AddEntry(entry, UID);
+            var newclient = await _entries.AddEntry(entry);
             if(newclient == null)
             {
                 return NotFound();
@@ -197,12 +194,12 @@ namespace AttendanceAPI.Controllers
         [Route("entries")]
         public async Task<IActionResult> UpdateEntry([FromBody] AttendanceDBO entry, [FromHeader] string UID)
         {
-            if(entry == null || UID == "")
+            if(entry == null || UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
 
-            var updateEntry = await _entries.UpdateEntry(entry, UID);
+            var updateEntry = await _entries.UpdateEntry(entry);
             if (updateEntry == null)
             {
                 return NotFound();
@@ -217,11 +214,11 @@ namespace AttendanceAPI.Controllers
         [Route("entry/{id}")]
         public async Task<IActionResult> DeleteEntry(int id, [FromHeader] string UID)
         {
-            if(UID == null)
+            if(UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
-            var entry = await _entries.DeleteEntry(id, UID);
+            var entry = await _entries.DeleteEntry(id);
             if (entry == false)
             {
                 return NotFound();
