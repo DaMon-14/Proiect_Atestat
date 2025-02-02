@@ -57,17 +57,35 @@ namespace AttendanceAPI.Services
             return await _db.Entries.FirstOrDefaultAsync(x => x.Id == Id && x.Id > 0);
         }
 
-        public async Task<AttendanceDBO> UpdateEntry(AttendanceDBO entry)
+        public async Task<string> UpdateEntry(AttendanceDBO updateEntry)
         {
-            var updateEntry = await _db.Entries.FirstOrDefaultAsync(x => x.Id == entry.Id && x.Id>0);
             if (updateEntry == null)
             {
-                return null;
+                return "error";
             }
-            updateEntry.CourseId = entry.CourseId;
-            updateEntry.ScanTime = entry.ScanTime;
+            AttendanceDBO entry = await _db.Entries.FirstOrDefaultAsync(x => x.Id == updateEntry.Id && x.Id > 0);
+            if(entry == null) {
+                return "Entry not found";
+            }
+            if(updateEntry.ClientId != 0)
+            {
+                if (_db.Users.FirstOrDefault(x => x.ClientId == updateEntry.ClientId && x.IsAdmin == false) == null)
+                {
+                    return "Client not found";
+                }
+                entry.ClientId = updateEntry.ClientId;
+            }
+            if(updateEntry.CourseId != 0)
+            {
+                if (_db.Courses.FirstOrDefault(x => x.CourseId == updateEntry.CourseId) == null)
+                {
+                    return "Course not found";
+                }
+                entry.CourseId = updateEntry.CourseId;
+            }
+            entry.ScanTime = updateEntry.ScanTime;
             await _db.SaveChangesAsync();
-            return updateEntry;
+            return "Ok";
         }
 
         public async Task<bool> DeleteEntry(int id)

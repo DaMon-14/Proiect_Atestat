@@ -189,7 +189,7 @@ namespace AttendanceAPI.Controllers
         }
 
         [HttpPut]
-        [Route("entries")]
+        [Route("updateEntry")]
         public async Task<IActionResult> UpdateEntry([FromBody] AttendanceDBO entry, [FromHeader] string UID)
         {
             if(entry == null || UID != _configuration.GetValue<string>("UID"))
@@ -198,13 +198,13 @@ namespace AttendanceAPI.Controllers
             }
 
             var updateEntry = await _entries.UpdateEntry(entry);
-            if (updateEntry == null)
+            if (updateEntry == "Ok")
             {
-                return NotFound();
+                return Ok();
             }
-            return Ok(new
+            return NotFound(new
             {
-                message = "Updated Entry"
+                message = updateEntry
             });
         }
 
