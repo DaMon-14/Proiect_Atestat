@@ -51,7 +51,7 @@ namespace WebApp.Pages.Admin.Clients
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if(response.ReasonPhrase != "OK")
             {
-                ModelState.AddModelError(string.Empty, "Could not create User");
+                ModelState.AddModelError(string.Empty, jsonResponse);
                 return Page();
             }
 

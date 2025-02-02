@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Interfaces;
 using System.Globalization;
+using System.Net;
 
 namespace AttendanceAPI.Controllers
 {
@@ -59,7 +60,14 @@ namespace AttendanceAPI.Controllers
             {
                 return BadRequest();
             }
-
+            var users = await _users.GetAllUsers();
+            if(users.FirstOrDefault(x=>x.UserName == client.UserName) != null)
+            {
+                return new ObjectResult("User already exists")
+                {
+                    StatusCode = (int)HttpStatusCode.Conflict
+                };
+            }
             var newclient = await _users.AddUser(client);
             if(newclient == null)
             {
