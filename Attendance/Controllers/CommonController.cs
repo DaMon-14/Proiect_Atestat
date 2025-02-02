@@ -34,16 +34,9 @@ namespace AttendanceAPI.Controllers
                 loginResponse.Id = 0;
                 return NotFound(loginResponse);
             }
-            var userId = await _users.GetUserId(user);
-            if (userId == 0)
-            {
-                loginResponse.message = "Failed to fetch user id";
-                loginResponse.Id = 0;
-                return NotFound(loginResponse);
-            }
-            loginResponse.Id = userId;
-            var adminExists = await _users.AdminExists(user);
-            if (adminExists == false)
+            var userinfo = await _users.GetUserByUsername(user);
+            loginResponse.Id = Convert.ToUInt32(userinfo.ClientId);
+            if (userinfo.IsAdmin == false)
             {
                 loginResponse.message = "Client";
             }

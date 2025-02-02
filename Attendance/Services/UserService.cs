@@ -152,14 +152,25 @@ namespace AttendanceAPI.Services
             return false;
         }
 
-        public async Task<uint> GetUserId(UpdateUser admin)
+        public async Task<UserInfo> GetUserByUsername(UpdateUser admin)
         {
-            var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName && x.Password == admin.Password);
+            var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName);
             if (client != null)
             {
-                return Convert.ToUInt16(client.ClientId);
+                UserInfo userInfo = new UserInfo
+                {
+                    ClientId = client.ClientId,
+                    FirstName = client.FirstName,
+                    LastName = client.LastName,
+                    Institution = client.Institution,
+                    Email = client.Email,
+                    PhoneNumber = client.PhoneNumber,
+                    UserName = client.UserName,
+                    IsAdmin = client.IsAdmin
+                };
+                return userInfo;
             }
-            return 0;
+            return null;
         }
     }
 }
