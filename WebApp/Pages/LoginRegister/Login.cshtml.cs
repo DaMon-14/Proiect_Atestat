@@ -61,7 +61,7 @@ namespace WebApp.Pages.LoginRegister
                 LastName = "",
                 Institution = "",
                 Email = "",
-                PhoneNumber = 0,
+                PhoneNumber = "",
                 UserName = User.Username
             };
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));

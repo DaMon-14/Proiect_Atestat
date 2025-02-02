@@ -66,7 +66,7 @@ namespace AttendanceAPI.Services
                 {
                     client.Email = clientinfo.Email;
                 }
-                if(clientinfo.PhoneNumber != 0)
+                if(clientinfo.PhoneNumber != "")
                 {
                     client.PhoneNumber = clientinfo.PhoneNumber;
                 }

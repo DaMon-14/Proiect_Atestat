@@ -99,6 +99,6 @@ namespace WebApp.Pages.Admin.Clients
         public string LastName { get; set; } = default!;
         public string Institution { get; set; } = default!;
         public string Email { get; set; } = default!;
-        public int PhoneNumber { get; set; } = default!;
+        public string PhoneNumber { get; set; } = default!;
     }
 }

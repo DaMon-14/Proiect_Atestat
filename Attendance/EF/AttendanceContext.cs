@@ -50,7 +50,7 @@ namespace AttendanceAPI.EF
                     LastName = "LastName",
                     Institution = "Instituion",
                     Email = "Email@email.com",
-                    PhoneNumber = 1234567890,
+                    PhoneNumber = "0",
                     Password = "Password",
                     IsAdmin = false,
                     Salt = "Salt",
