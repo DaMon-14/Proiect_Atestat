@@ -28,7 +28,6 @@ namespace AttendanceAPI.Controllers
                 return BadRequest();
             }
             var clients = await _users.GetAllUsers();
-            clients = clients.Where(x => x.ClientId > 0 && x.IsAdmin == false).ToList();
             if(clients.Count() == 0)
             {
                 return NotFound();
@@ -45,7 +44,7 @@ namespace AttendanceAPI.Controllers
                 return BadRequest();
             }
             var client = await _users.GetUser(id);
-            if(client == null || client.IsAdmin==true)
+            if(client == null)
             {
                 return NotFound();
             }

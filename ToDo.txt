@@ -2,12 +2,13 @@
 ~On Admin Clients shows only Non admin, by on get by course id shows admins also
 ~verify conditions: null checks for empty strings
 ~repair esp Api controller
--On dashboard get names not id's
+~On dashboard get names not id's
 -Add modify profile button on dashbar
 ~set phone number to string
 ~order by most recent on attendace getbycourseid
 -chenge Register button to reset password button
 -revise api return methods (ie on user get do not return user password)
+-remove delete client method
 -implement verification condition on creates(ie client exists on entry creation)
 
 leave admin get methods to use id's not names

@@ -38,13 +38,32 @@ namespace AttendanceAPI.Services
             return clientinfo;
         }
 
-        public async Task<UserDBO> GetUser(uint clientid)
+        public async Task<UserInfo> GetUser(uint clientid)
         {
-            return await _db.Users.FirstOrDefaultAsync(x => x.ClientId == clientid);
+            var client = await _db.Users.FirstOrDefaultAsync(x => x.ClientId == clientid);
+            if (client != null)
+            {
+                return new UserInfo
+                {
+                    ClientId = client.ClientId,
+                    FirstName = client.FirstName,
+                    LastName = client.LastName,
+                    Institution = client.Institution,
+                    Email = client.Email,
+                    PhoneNumber = client.PhoneNumber,
+                    UserName = client.UserName,
+                    IsAdmin = client.IsAdmin
+                };
+            }
+            return null;
         }
 
         public async Task<UserDBO> AddUser(UpdateUser client)
         {
+            if(client.UserName == null || client.Password == null)
+            {
+                return null;
+            }
             var newClient = new UserDBO
             {
                 FirstName = client.FirstName,
