@@ -40,7 +40,7 @@ namespace WebApp.Pages.Admin.Clients
                 }
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 using HttpResponseMessage response = await httpClient.GetAsync("Admin/client/" + id.ToString());
-                var client = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync());
+                var client = JsonConvert.DeserializeObject<UpdateUser>(await response.Content.ReadAsStringAsync());
 
                 if (client == null)     {
                     return NotFound();
@@ -65,7 +65,7 @@ namespace WebApp.Pages.Admin.Clients
             {
                 return Page();
             }
-            var User = new AttendanceAPI.Models.User
+            var User = new AttendanceAPI.Models.UpdateUser
             {
                 ClientId = Client.ClientId,
                 FirstName = Client.FirstName,

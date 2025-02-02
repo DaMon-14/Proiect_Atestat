@@ -54,7 +54,7 @@ namespace AttendanceAPI.Controllers
 
         [HttpPost]
         [Route("client")]
-        public async Task<IActionResult> AddUser([FromBody] User client, [FromHeader] string UID)
+        public async Task<IActionResult> AddUser([FromBody] UpdateUser client, [FromHeader] string UID)
         {
             if (client == null || UID != _configuration.GetValue<string>("UID"))
             {
@@ -71,7 +71,7 @@ namespace AttendanceAPI.Controllers
 
         [HttpPut]
         [Route("client")]
-        public async Task<IActionResult> UpdateClient([FromBody] User clientinfo, [FromHeader] string UID)
+        public async Task<IActionResult> UpdateClient([FromBody] UpdateUser clientinfo, [FromHeader] string UID)
         {
             if(clientinfo == null || UID != _configuration.GetValue<string>("UID"))
             {

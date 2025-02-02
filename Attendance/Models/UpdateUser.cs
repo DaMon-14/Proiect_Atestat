@@ -1,6 +1,6 @@
 ﻿namespace AttendanceAPI.Models
 {
-    public class User
+    public class UpdateUser
     {
         public int ClientId { get; set; }
         public string UserName { get; set; }

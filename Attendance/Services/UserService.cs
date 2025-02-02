@@ -16,9 +16,26 @@ namespace AttendanceAPI.Services
             _db = db;
         }
 
-        public async Task<List<UserDBO>> GetAllUsers()
+        public async Task<List<UserInfo>> GetAllUsers()
         {
-            return await _db.Users.Where(x => x.ClientId > 0).ToListAsync();
+            List<UserDBO> clients = new List<UserDBO>();
+            clients = await _db.Users.Where(x => x.ClientId > 0).ToListAsync();
+            List<UserInfo> clientinfo = new List<UserInfo>();
+            foreach (var client in clients)
+            {
+                clientinfo.Add(new UserInfo
+                {
+                    ClientId = client.ClientId,
+                    FirstName = client.FirstName,
+                    LastName = client.LastName,
+                    Institution = client.Institution,
+                    Email = client.Email,
+                    PhoneNumber = client.PhoneNumber,
+                    UserName = client.UserName,
+                    IsAdmin = client.IsAdmin
+                });
+            }
+            return clientinfo;
         }
 
         public async Task<UserDBO> GetUser(uint clientid)
@@ -26,7 +43,7 @@ namespace AttendanceAPI.Services
             return await _db.Users.FirstOrDefaultAsync(x => x.ClientId == clientid);
         }
 
-        public async Task<UserDBO> AddUser(User client)
+        public async Task<UserDBO> AddUser(UpdateUser client)
         {
             var newClient = new UserDBO
             {
@@ -45,7 +62,7 @@ namespace AttendanceAPI.Services
             return newClient;
         }
 
-        public async Task<UserDBO> UpdateUser(User clientinfo)
+        public async Task<UserDBO> UpdateUser(UpdateUser clientinfo)
         {
             UserDBO client = await _db.Users.FirstOrDefaultAsync(x => x.ClientId == clientinfo.ClientId);
             if (client != null)
@@ -96,7 +113,7 @@ namespace AttendanceAPI.Services
             return null;
         }
 
-        public async Task<bool> AdminExists(User admin)
+        public async Task<bool> AdminExists(UpdateUser admin)
         {
             var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName && x.IsAdmin ==true);
             if (client != null)
@@ -106,7 +123,7 @@ namespace AttendanceAPI.Services
             return false;
         }
 
-        public async Task<bool> CorectCredentials(User admin)
+        public async Task<bool> CorectCredentials(UpdateUser admin)
         {
             var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName && x.Password == admin.Password);
             if (client != null)
@@ -116,7 +133,7 @@ namespace AttendanceAPI.Services
             return false;
         }
 
-        public async Task<uint> GetUserId(User admin)
+        public async Task<uint> GetUserId(UpdateUser admin)
         {
             var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName && x.Password == admin.Password);
             if (client != null)

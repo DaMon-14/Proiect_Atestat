@@ -20,7 +20,7 @@ namespace AttendanceAPI.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> UserState([FromBody] User user, [FromHeader] string UID)
+        public async Task<IActionResult> UserState([FromBody] UpdateUser user, [FromHeader] string UID)
         {
             //var x =Request.Headers["z"];
             if (user == null || UID != _configuration.GetValue<string>("UID"))

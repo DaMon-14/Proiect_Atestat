@@ -37,7 +37,7 @@ namespace WebApp.Pages.Admin.Clients
         }
 
         [BindProperty]
-        public User Client { get; set; } = default!;
+        public UpdateUser Client { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()

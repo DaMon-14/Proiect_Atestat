@@ -53,7 +53,7 @@ namespace WebApp.Pages.LoginRegister
                 ModelState.AddModelError(string.Empty, "Id and password are mandatory");
                 return Page();
             }
-            User admin = new User
+            UpdateUser admin = new UpdateUser
             {
                 ClientId = 0,
                 Password = User.Password,
