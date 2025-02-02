@@ -8,3 +8,6 @@
 ~order by most recent on attendace getbycourseid
 -chenge Register button to reset password button
 -implement verification condition on creates(ie client exists on entry creation)
+
+leave admin get methods to use id's not names
+eventually make a tab to display names corelated to id's

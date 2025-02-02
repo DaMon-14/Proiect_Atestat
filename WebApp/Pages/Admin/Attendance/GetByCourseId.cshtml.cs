@@ -16,6 +16,7 @@ namespace WebApp.Pages.Admin.Attendance
     public class GetByCourseIdModel : PageModel
     {
         private readonly IConfiguration _configuration;
+        HttpResponseMessage response = new HttpResponseMessage();
         public readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
@@ -27,6 +28,7 @@ namespace WebApp.Pages.Admin.Attendance
         }
 
         public IList<AttendanceDBO> Entries { get; set; } = default!;
+        public IList<DisplayEntry> DisplayEntries { get; set; } = default!;
         [BindProperty]
         public AttendanceDBO Entry { get; set; } = new AttendanceDBO();
 
@@ -35,7 +37,7 @@ namespace WebApp.Pages.Admin.Attendance
             var reps = HttpContext.Session.TryGetValue("Admin", out _);
             if (HttpContext.Session.TryGetValue("Admin", out _))
             {
-                Entries = new List<AttendanceDBO>();
+                DisplayEntries = new List<DisplayEntry>();
                 return Page();
             }
             return RedirectToPage("/Index");
@@ -48,16 +50,30 @@ namespace WebApp.Pages.Admin.Attendance
                 return Page();
             }
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.GetAsync("Admin/entryByCourse/" + Entry.CourseId.ToString());
+            response = await httpClient.GetAsync("Admin/entryByCourse/" + Entry.CourseId.ToString());
             if(response.ReasonPhrase == "OK")
             {
                 Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
                 Entries = Entries.OrderBy(x => x.ScanTime.Year).ThenBy(x => x.ScanTime.Month).ThenBy(x => x.ScanTime.Day).ThenBy(x => x.ScanTime.Hour).ThenBy(x => x.ScanTime.Minute).ThenBy(x => x.ScanTime.Second).ToList();
                 Entries = Entries.Reverse().ToList();
-                return Page();
+                DisplayEntries = new List<DisplayEntry>();
+                if (Entries.Count() == 0)
+                {
+                    ModelState.AddModelError(string.Empty, "No entries found for this course");
+                    return Page();
+                }
+                foreach (var entry in Entries)
+                {
+                    DisplayEntry displayEntry = new DisplayEntry();
+                    response = await httpClient.GetAsync("Admin/client/" + entry.ClientId.ToString());
+                    displayEntry.UserName = JsonConvert.DeserializeObject<UserDBO>(await response.Content.ReadAsStringAsync()).UserName;
+                    displayEntry.ScanTime = entry.ScanTime;
+                    displayEntry.CourseName = "Course Name";
+                    displayEntry.ClientId = entry.ClientId;
+                    DisplayEntries.Add(displayEntry);
+                    //get course name from course table
+                }
             }
-            ModelState.AddModelError(string.Empty, "No entries found for this course");
-            Entries = new List<AttendanceDBO>();
             return Page();
         }
     }
