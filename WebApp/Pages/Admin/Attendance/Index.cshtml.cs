@@ -51,6 +51,7 @@ namespace WebApp.Pages.Admin.Attendance
                     displayEntry.ScanTime = entry.ScanTime;
                     displayEntry.CourseName = "Course Name";
                     displayEntry.ClientId = entry.ClientId;
+                    displayEntry.EntryId = entry.Id;
                     DisplayEntries.Add(displayEntry);
                     //get course name from course table
                 }
@@ -61,6 +62,7 @@ namespace WebApp.Pages.Admin.Attendance
     }
 
     public class DisplayEntry     {
+        public int EntryId { get; set; }
         public int ClientId { get; set; }
         public string UserName { get; set; }
         public string CourseName { get; set; }

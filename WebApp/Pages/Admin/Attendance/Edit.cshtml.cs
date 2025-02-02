@@ -60,16 +60,14 @@ namespace WebApp.Pages.Admin.Attendance
                 return Page();
             }
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.PutAsync("Admin/entries", new StringContent(JsonConvert.SerializeObject(Entry), Encoding.UTF8, "application/json"));
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-
-            if(response.ReasonPhrase != "OK")
+            using HttpResponseMessage response = await httpClient.PutAsync("Admin/updateEntry", new StringContent(JsonConvert.SerializeObject(Entry), Encoding.UTF8, "application/json"));
+            if (response.ReasonPhrase == "OK")
             {
-                ModelState.AddModelError(string.Empty, "Unable to update entry.");
-                return Page();
+                return RedirectToPage("./Index");
             }
-
-            return RedirectToPage("./Index");
+            var jsonresponse = await response.Content.ReadAsStringAsync();
+            ModelState.AddModelError(string.Empty, jsonresponse);
+            return Page();
         }
     }
 }

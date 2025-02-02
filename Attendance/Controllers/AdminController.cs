@@ -182,10 +182,7 @@ namespace AttendanceAPI.Controllers
             {
                 return Ok();
             }
-            return NotFound(new
-            {
-                message = newclient
-            });
+            return NotFound(newclient);
         }
 
         [HttpPut]
@@ -202,10 +199,7 @@ namespace AttendanceAPI.Controllers
             {
                 return Ok();
             }
-            return NotFound(new
-            {
-                message = updateEntry
-            });
+            return NotFound(updateEntry);
         }
 
         [HttpDelete]

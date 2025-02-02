@@ -48,9 +48,9 @@
                 @Html.DisplayFor(modelItem => item.ScanTime)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.ClientId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ClientId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ClientId">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@item.EntryId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.EntryId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.EntryId">Delete</a>
             </td>
         </tr>
 }

@@ -49,7 +49,7 @@ namespace WebApp.Pages.Admin.Attendance
             {
                 return RedirectToPage("./Index");
             }
-            ModelState.AddModelError(string.Empty, "Unable to create entry");
+            ModelState.AddModelError(string.Empty, jsonResponse);
             return Page();
             
         }
