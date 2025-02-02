@@ -43,7 +43,7 @@ namespace WebApp.Pages.Admin.Attendance
                 return Page();
             }
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.PostAsync("Admin/entries", new StringContent(JsonConvert.SerializeObject(Entry), Encoding.UTF8, "application/json"));
+            using HttpResponseMessage response = await httpClient.PostAsync("Admin/addEntry", new StringContent(JsonConvert.SerializeObject(Entry), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if(response.ReasonPhrase == "OK")
             {

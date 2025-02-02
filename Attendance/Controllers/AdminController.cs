@@ -169,7 +169,7 @@ namespace AttendanceAPI.Controllers
         }
 
         [HttpPost]
-        [Route("entries")]
+        [Route("addEntry")]
         public async Task<IActionResult> AddEntry([FromBody] Attendance entry, [FromHeader] string UID)
         {
             if(entry == null || UID != _configuration.GetValue<string>("UID"))
@@ -178,14 +178,13 @@ namespace AttendanceAPI.Controllers
             }
 
             var newclient = await _entries.AddEntry(entry);
-            if(newclient == null)
+            if(newclient == "Ok")
             {
-                return NotFound();
+                return Ok();
             }
-
-            return Ok(new
+            return NotFound(new
             {
-                message = "Added Client"
+                message = newclient
             });
         }
 

@@ -7,7 +7,7 @@ namespace AttendanceAPI.Interfaces
     {
         public Task<List<AttendanceDBO>> GetEntries();
         public Task<AttendanceDBO> GetEntryById(uint Id);
-        public Task<AttendanceDBO> AddEntry(Attendance addentry);
+        public Task<string> AddEntry(Attendance addentry);
         public Task<AttendanceDBO> UpdateEntry(AttendanceDBO entry);
         public Task<bool> DeleteEntry(int id);
     }

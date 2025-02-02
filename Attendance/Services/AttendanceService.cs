@@ -15,8 +15,20 @@ namespace AttendanceAPI.Services
             _db = db;
         }
 
-        public async Task<AttendanceDBO> AddEntry(Attendance addentry)
+        public async Task<string> AddEntry(Attendance addentry)
         {
+            if(addentry == null)
+            {
+                return "error";
+            }
+            if(_db.Courses.FirstOrDefault(x=>x.CourseId == addentry.CourseId) == null)
+            {
+                return "Course not found";
+            }
+            if (_db.Users.FirstOrDefault(x=>x.ClientId == addentry.ClientId && x.IsAdmin==false) == null)
+            {
+                return "Client not found";
+            }
             var newEntry = new AttendanceDBO
             {
                 ClientId = addentry.ClientId,
@@ -32,7 +44,7 @@ namespace AttendanceAPI.Services
             }
             _db.Entries.Add(newEntry);
             await _db.SaveChangesAsync();
-            return newEntry;
+            return "Ok";
         }
 
         public async Task<List<AttendanceDBO>> GetEntries()
