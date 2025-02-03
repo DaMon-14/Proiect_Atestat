@@ -1,4 +1,4 @@
-﻿namespace WebApp.models
+﻿namespace AttendanceAPI.Models
 {
     public class AttendanceDTO
     {

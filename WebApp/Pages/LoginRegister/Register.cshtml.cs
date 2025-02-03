@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using System.Text;
 using AttendanceAPI.EF.DBO;
 
-namespace WebApp.Pages.LoginRegister
+namespace AttendanceAPI.Pages.LoginRegister
 {
     public class RegisterModel : PageModel
     {

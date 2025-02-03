@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace WebApp.Pages.Client
+namespace AttendanceAPI.Pages.Client
 {
     public class ClientModel : PageModel
     {

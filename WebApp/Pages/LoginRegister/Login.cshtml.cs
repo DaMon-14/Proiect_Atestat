@@ -12,7 +12,7 @@ using System.Text;
 using AttendanceAPI.EF.DBO;
 using Microsoft.AspNetCore.Http;
 
-namespace WebApp.Pages.LoginRegister
+namespace AttendanceAPI.Pages.LoginRegister
 { 
     public class LoginModel : PageModel
     {

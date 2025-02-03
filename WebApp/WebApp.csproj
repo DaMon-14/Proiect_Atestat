@@ -24,8 +24,4 @@
     <ProjectReference Include="..\Attendance\AttendanceAPI.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="models\" />
-  </ItemGroup>
-
 </Project>
