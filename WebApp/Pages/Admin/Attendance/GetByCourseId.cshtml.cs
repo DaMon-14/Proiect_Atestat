@@ -10,6 +10,7 @@ using AttendanceAPI.EF;
 using Newtonsoft.Json;
 using System.Text;
 using AttendanceAPI.EF.DBO;
+using WebApp.models;
 
 namespace WebApp.Pages.Admin.Attendance
 {
@@ -28,7 +29,7 @@ namespace WebApp.Pages.Admin.Attendance
         }
 
         public IList<AttendanceDBO> Entries { get; set; } = default!;
-        public IList<DisplayEntry> DisplayEntries { get; set; } = default!;
+        public IList<AttendanceDisplayDTO> DisplayEntries { get; set; } = default!;
         [BindProperty]
         public AttendanceDBO Entry { get; set; } = new AttendanceDBO();
 
@@ -37,7 +38,7 @@ namespace WebApp.Pages.Admin.Attendance
             var reps = HttpContext.Session.TryGetValue("Admin", out _);
             if (HttpContext.Session.TryGetValue("Admin", out _))
             {
-                DisplayEntries = new List<DisplayEntry>();
+                DisplayEntries = new List<AttendanceDisplayDTO>();
                 return Page();
             }
             return RedirectToPage("/Index");
@@ -56,7 +57,7 @@ namespace WebApp.Pages.Admin.Attendance
                 Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
                 Entries = Entries.OrderBy(x => x.ScanTime.Year).ThenBy(x => x.ScanTime.Month).ThenBy(x => x.ScanTime.Day).ThenBy(x => x.ScanTime.Hour).ThenBy(x => x.ScanTime.Minute).ThenBy(x => x.ScanTime.Second).ToList();
                 Entries = Entries.Reverse().ToList();
-                DisplayEntries = new List<DisplayEntry>();
+                DisplayEntries = new List<AttendanceDisplayDTO>();
                 if (Entries.Count() == 0)
                 {
                     ModelState.AddModelError(string.Empty, "No entries found for this course");
@@ -64,7 +65,7 @@ namespace WebApp.Pages.Admin.Attendance
                 }
                 foreach (var entry in Entries)
                 {
-                    DisplayEntry displayEntry = new DisplayEntry();
+                    AttendanceDisplayDTO displayEntry = new AttendanceDisplayDTO();
                     response = await httpClient.GetAsync("Admin/client/" + entry.ClientId.ToString());
                     displayEntry.UserName = JsonConvert.DeserializeObject<UserDBO>(await response.Content.ReadAsStringAsync()).UserName;
                     displayEntry.ScanTime = entry.ScanTime;

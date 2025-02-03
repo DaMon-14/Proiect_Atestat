@@ -23,6 +23,9 @@
                 @Html.DisplayNameFor(model => model.DisplayEntries[0].UserName)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.DisplayEntries[0].CourseId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.DisplayEntries[0].CourseName)
             </th>
             <th>
@@ -40,6 +43,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CourseName)

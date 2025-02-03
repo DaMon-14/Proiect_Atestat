@@ -13,12 +13,14 @@ namespace AttendanceAPI.Controllers
     {
         private readonly IUser _users;
         private readonly IAttendance _entries;
+        private readonly ICourse _courses;
         private readonly IConfiguration _configuration;
-        public AdminController(IUser userService, IAttendance entryService, IConfiguration config)
+        public AdminController(IUser userService, IAttendance entryService, IConfiguration config, ICourse courses)
         {
             _users = userService;
             _entries = entryService;
             _configuration = config;
+            _courses = courses;
         }
         [HttpGet]
         [Route("clients")]
@@ -227,6 +229,22 @@ namespace AttendanceAPI.Controllers
             {
                 message = "Deleted Entry"
             });
+        }
+
+        [HttpGet]
+        [Route("course/{id}")]
+        public async Task<IActionResult> GetCourse(uint id, [FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var course = await _courses.GetCourse(id);
+            if (course==null)
+            {
+                return NotFound();
+            }
+            return Ok(course);
         }
     }
 }

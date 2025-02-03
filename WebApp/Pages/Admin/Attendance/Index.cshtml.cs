@@ -9,6 +9,7 @@ using AttendanceAPI.EF;
 using Newtonsoft.Json;
 using System.Net.Http;
 using AttendanceAPI.EF.DBO;
+using WebApp.models;
 
 namespace WebApp.Pages.Admin.Attendance
 {
@@ -26,7 +27,7 @@ namespace WebApp.Pages.Admin.Attendance
         }
 
         public IList<AttendanceDBO> Entries { get;set; } = default!;
-        public IList<DisplayEntry> DisplayEntries { get;set; } = default!;
+        public IList<AttendanceDisplayDTO> DisplayEntries { get;set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -38,20 +39,22 @@ namespace WebApp.Pages.Admin.Attendance
                 Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
                 Entries = Entries.OrderBy(x => x.ScanTime.Year).ThenBy(x=>x.ScanTime.Month).ThenBy(x=>x.ScanTime.Day).ThenBy(x=>x.ScanTime.Hour).ThenBy(x=>x.ScanTime.Minute).ThenBy(x=>x.ScanTime.Second).ToList();
                 Entries = Entries.Reverse().ToList();
-                DisplayEntries = new List<DisplayEntry>();
+                DisplayEntries = new List<AttendanceDisplayDTO>();
                 if (Entries.Count() == 0)
                 {
                     return Page();
                 }
                 foreach (var entry in Entries)
                 {
-                    DisplayEntry displayEntry = new DisplayEntry();
+                    AttendanceDisplayDTO displayEntry = new AttendanceDisplayDTO();
                     response = await httpClient.GetAsync("Admin/client/" + entry.ClientId.ToString());
                     displayEntry.UserName = JsonConvert.DeserializeObject<UserDBO>(await response.Content.ReadAsStringAsync()).UserName;
                     displayEntry.ScanTime = entry.ScanTime;
-                    displayEntry.CourseName = "Course Name";
+                    response = await httpClient.GetAsync("Admin/course/" + entry.CourseId.ToString());
+                    displayEntry.CourseName = JsonConvert.DeserializeObject<CourseDBO>(await response.Content.ReadAsStringAsync()).CourseName;
                     displayEntry.ClientId = entry.ClientId;
                     displayEntry.EntryId = entry.Id;
+                    displayEntry.CourseId = entry.CourseId;
                     DisplayEntries.Add(displayEntry);
                     //get course name from course table
                 }
@@ -59,13 +62,5 @@ namespace WebApp.Pages.Admin.Attendance
             
             return Page();
         }
-    }
-
-    public class DisplayEntry     {
-        public int EntryId { get; set; }
-        public int ClientId { get; set; }
-        public string UserName { get; set; }
-        public string CourseName { get; set; }
-        public DateTime ScanTime { get; set; }
-    }
+    } 
 }
