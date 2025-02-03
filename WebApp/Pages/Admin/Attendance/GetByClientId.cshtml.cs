@@ -52,12 +52,12 @@ namespace AttendanceAPI.Pages.Admin.Attendance
             }
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
             response = await httpClient.GetAsync("Admin/entryByClient/"+Entry.ClientId.ToString());
-            if(response.ReasonPhrase == "OK")
+            DisplayEntries = new List<AttendanceDTO>();
+            if (response.ReasonPhrase == "OK")
             {
                 Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
                 Entries = Entries.OrderBy(x => x.ScanTime.Year).ThenBy(x => x.ScanTime.Month).ThenBy(x => x.ScanTime.Day).ThenBy(x => x.ScanTime.Hour).ThenBy(x => x.ScanTime.Minute).ThenBy(x => x.ScanTime.Second).ToList();
                 Entries = Entries.Reverse().ToList();
-                DisplayEntries = new List<AttendanceDTO>();
                 if (Entries.Count() == 0)
                 {
                     ModelState.AddModelError(string.Empty, "No entries found for this client");
@@ -76,6 +76,10 @@ namespace AttendanceAPI.Pages.Admin.Attendance
                     DisplayEntries.Add(displayEntry);
                     //get course name from course table
                 }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "No entries found for this client");
             }
             return Page();
         }
