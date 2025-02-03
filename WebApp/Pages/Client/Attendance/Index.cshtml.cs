@@ -10,12 +10,15 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Models;
+using WebApp.models;
+using Azure;
 
 namespace WebApp.Pages.Client.Attendance
 {
     public class IndexModel : PageModel
     {
         private readonly IConfiguration _configuration;
+        HttpResponseMessage response = new HttpResponseMessage();
         public readonly HttpClient httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://localhost:7172"),
@@ -27,6 +30,7 @@ namespace WebApp.Pages.Client.Attendance
         }
 
         public IList<AttendanceAPI.Models.Attendance> Entries { get;set; } = default!;
+        public IList<AttendanceDisplayDTO> DisplayEntries { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -39,14 +43,25 @@ namespace WebApp.Pages.Client.Attendance
                     return RedirectToPage("/Index");
                 }
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                using HttpResponseMessage response = await httpClient.GetAsync("Client/"+id.ToString());
+                response = await httpClient.GetAsync("Client/"+id.ToString());
                 Entries = JsonConvert.DeserializeObject<List<AttendanceAPI.Models.Attendance>>(await response.Content.ReadAsStringAsync());
                 Entries = Entries.OrderBy(x => x.ScanTime.Year).ThenBy(x => x.ScanTime.Month).ThenBy(x => x.ScanTime.Day).ThenBy(x => x.ScanTime.Hour).ThenBy(x => x.ScanTime.Minute).ThenBy(x => x.ScanTime.Second).ToList();
                 Entries = Entries.Reverse().ToList();
             }
+            DisplayEntries = new List<AttendanceDisplayDTO>();
             if (Entries.Count()==0)
             {
-                Entries = new List<AttendanceAPI.Models.Attendance>();
+                return Page();
+            }
+            foreach(var entry in Entries)
+            {
+                AttendanceDisplayDTO displayEntry = new AttendanceDisplayDTO();
+                response = await httpClient.GetAsync("Client/client/" + entry.ClientId.ToString());
+                displayEntry.UserName = JsonConvert.DeserializeObject<UserDBO>(await response.Content.ReadAsStringAsync()).UserName;
+                displayEntry.ScanTime = entry.ScanTime;
+                response = await httpClient.GetAsync("Client/course/" + entry.CourseId.ToString());
+                displayEntry.CourseName = JsonConvert.DeserializeObject<CourseDBO>(await response.Content.ReadAsStringAsync()).CourseName;
+                DisplayEntries.Add(displayEntry);
             }
             return Page();
         }

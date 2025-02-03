@@ -11,5 +11,8 @@
 -remove delete client method
 -implement verification condition on creates(ie client exists on entry creation)
  (admin client creation and entry) 
+-on aentry creation use names(must be unique) for simplicity
+
+
 leave admin get methods to use id's not names
 eventually make a tab to display names corelated to id's

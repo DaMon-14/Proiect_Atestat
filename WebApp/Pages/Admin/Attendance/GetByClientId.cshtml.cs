@@ -66,10 +66,12 @@ namespace WebApp.Pages.Admin.Attendance
                 foreach (var entry in Entries)
                 {
                     AttendanceDisplayDTO displayEntry = new AttendanceDisplayDTO();
+                    displayEntry.ClientId = entry.ClientId;
                     response = await httpClient.GetAsync("Admin/client/" + entry.ClientId.ToString());
                     displayEntry.UserName = JsonConvert.DeserializeObject<UserDBO>(await response.Content.ReadAsStringAsync()).UserName;
                     displayEntry.ScanTime = entry.ScanTime;
-                    displayEntry.CourseName = "Course Name";
+                    response = await httpClient.GetAsync("Admin/course/" + entry.CourseId.ToString());
+                    displayEntry.CourseName = JsonConvert.DeserializeObject<CourseDBO>(await response.Content.ReadAsStringAsync()).CourseName;
                     displayEntry.ClientId = entry.ClientId;
                     DisplayEntries.Add(displayEntry);
                     //get course name from course table
