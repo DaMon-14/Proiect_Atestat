@@ -27,7 +27,7 @@ namespace WebApp.Pages.Admin.Attendance
         }
 
         public IList<AttendanceDBO> Entries { get;set; } = default!;
-        public IList<AttendanceDisplayDTO> DisplayEntries { get;set; } = default!;
+        public IList<AttendanceDTO> DisplayEntries { get;set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -39,14 +39,14 @@ namespace WebApp.Pages.Admin.Attendance
                 Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
                 Entries = Entries.OrderBy(x => x.ScanTime.Year).ThenBy(x=>x.ScanTime.Month).ThenBy(x=>x.ScanTime.Day).ThenBy(x=>x.ScanTime.Hour).ThenBy(x=>x.ScanTime.Minute).ThenBy(x=>x.ScanTime.Second).ToList();
                 Entries = Entries.Reverse().ToList();
-                DisplayEntries = new List<AttendanceDisplayDTO>();
+                DisplayEntries = new List<AttendanceDTO>();
                 if (Entries.Count() == 0)
                 {
                     return Page();
                 }
                 foreach (var entry in Entries)
                 {
-                    AttendanceDisplayDTO displayEntry = new AttendanceDisplayDTO();
+                    AttendanceDTO displayEntry = new AttendanceDTO();
                     response = await httpClient.GetAsync("Admin/client/" + entry.ClientId.ToString());
                     displayEntry.UserName = JsonConvert.DeserializeObject<UserDBO>(await response.Content.ReadAsStringAsync()).UserName;
                     displayEntry.ScanTime = entry.ScanTime;

@@ -1,6 +1,6 @@
 ﻿namespace WebApp.models
 {
-    public class AttendanceDisplayDTO
+    public class AttendanceDTO
     {
         public int EntryId { get; set; }
         public int ClientId { get; set; }
