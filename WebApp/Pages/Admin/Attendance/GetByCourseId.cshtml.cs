@@ -10,7 +10,7 @@ using AttendanceAPI.EF;
 using Newtonsoft.Json;
 using System.Text;
 using AttendanceAPI.EF.DBO;
-using AttendanceAPI.models;
+using AttendanceAPI.Models;
 
 namespace AttendanceAPI.Pages.Admin.Attendance
 {
