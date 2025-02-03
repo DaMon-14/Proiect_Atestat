@@ -30,6 +30,7 @@ namespace AttendanceAPI.EF
             modelBuilder.Entity<UserDBO>().HasKey(x => x.ClientId);
             modelBuilder.Entity<UserDBO>().HasIndex(x => x.UserName).IsUnique();
             modelBuilder.Entity<CourseDBO>().HasKey(x => x.CourseId);
+            modelBuilder.Entity<CourseDBO>().HasIndex(x=>x.CourseName).IsUnique();
             modelBuilder.Entity<Client_CourseDBO>().HasKey(x => x.Id);
             modelBuilder.Entity<ScannerDBO>().HasKey(x => x.ScannerId);
             modelBuilder.Entity<Scanner_Course>().HasKey(x => x.Id);
