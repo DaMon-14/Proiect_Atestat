@@ -34,7 +34,7 @@ namespace AttendanceAPI.Services
                 ClientId = addentry.ClientId,
                 CourseId = addentry.CourseId,
             };
-            if (addentry.ScanTime == new DateTime(1, 1, 1, 1, 1, 1, DateTimeKind.Utc))
+            if (addentry.ScanTime == new DateTime(1, 1, 1, 0, 0, 0, DateTimeKind.Utc))
             {
                 newEntry.ScanTime = DateTime.Now;
             }
