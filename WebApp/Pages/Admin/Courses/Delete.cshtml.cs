@@ -25,7 +25,7 @@ namespace AttendanceAPI.Pages.Admin.Courses
         }
 
         [BindProperty]
-        public AttendanceDBO Entry { get; set; } = default!;
+        public CourseDBO Course { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -37,15 +37,15 @@ namespace AttendanceAPI.Pages.Admin.Courses
                     return NotFound();
                 }
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                using HttpResponseMessage response = await httpClient.GetAsync("Admin/entryById/" + id.ToString());
-                var entry = JsonConvert.DeserializeObject<AttendanceDBO>(await response.Content.ReadAsStringAsync());
-                if (entry == null)
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/course/" + id.ToString());
+                var course = JsonConvert.DeserializeObject<CourseDBO>(await response.Content.ReadAsStringAsync());
+                if (course == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    Entry = entry;
+                    Course = course;
                 }
                 return Page();
             }
@@ -59,7 +59,7 @@ namespace AttendanceAPI.Pages.Admin.Courses
                 return NotFound();
             }
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.DeleteAsync("Admin/entry/" + id.ToString());
+            using HttpResponseMessage response = await httpClient.DeleteAsync("Admin/deleteCourse/" + id.ToString());
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if(response.ReasonPhrase != "OK")
             {

@@ -19,6 +19,11 @@ namespace AttendanceAPI.Services
             return await _db.Courses.Where(x => x.CourseId > 0).ToListAsync();
         }
 
+        public async Task<List<CourseDBO>> GetActiveCourses()
+        {
+            return await _db.Courses.Where(x => x.CourseId > 0 && x.isActive == true).ToListAsync();
+        }
+
         public async Task<CourseDBO> GetCourse(uint courseid)
         {
             return await _db.Courses.FirstOrDefaultAsync(x => x.CourseId == courseid);
@@ -29,7 +34,8 @@ namespace AttendanceAPI.Services
             var newCourse = new CourseDBO
             {
                 CourseName = course.CourseName,
-                CourseDescription = course.CourseDescription
+                CourseDescription = course.CourseDescription,
+                isActive = true
             };
             _db.Courses.Add(newCourse);
             await _db.SaveChangesAsync();
@@ -45,8 +51,21 @@ namespace AttendanceAPI.Services
             }
             courseToUpdate.CourseName = course.CourseName;
             courseToUpdate.CourseDescription = course.CourseDescription;
+            courseToUpdate.isActive = course.isActive;
             await _db.SaveChangesAsync();
             return courseToUpdate;
+        }
+
+        public async Task<bool> DeleteCourse(int courseId)
+        {
+            CourseDBO courseToDelete = await _db.Courses.FirstOrDefaultAsync(x => x.CourseId == courseId);
+            if (courseToDelete == null)
+            {
+                return false;
+            }
+            courseToDelete.isActive = false;
+            await _db.SaveChangesAsync();
+            return true;
         }
     }
 }

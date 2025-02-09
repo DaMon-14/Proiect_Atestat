@@ -215,6 +215,22 @@ namespace AttendanceAPI.Controllers
 
         [HttpGet]
         [Route("courses")]
+        public async Task<IActionResult> GetActiveCourses([FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var courses = await _courses.GetActiveCourses();
+            if (courses.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(courses);
+        }
+
+        [HttpGet]
+        [Route("allcourses")]
         public async Task<IActionResult> GetAllCourses([FromHeader] string UID)
         {
             if (UID != _configuration.GetValue<string>("UID"))
@@ -270,6 +286,22 @@ namespace AttendanceAPI.Controllers
                 return BadRequest();
             }
             var client = await _courses.UpdateCourse(course);
+            if (client == null)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("deleteCourse/{courseId}")]
+        public async Task<IActionResult> DeleteCourse(int courseId, [FromHeader] string UID)
+        {
+            if (courseId == null || UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var client = await _courses.DeleteCourse(courseId);
             if (client == null)
             {
                 return StatusCode(500);
