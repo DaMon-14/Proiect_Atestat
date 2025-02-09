@@ -33,7 +33,7 @@ namespace AttendanceAPI.Pages.Admin.Courses
         }
 
         [BindProperty]
-        public AttendanceAPI.Models.Attendance Entry { get; set; } = default!;
+        public Course Course { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -43,7 +43,7 @@ namespace AttendanceAPI.Pages.Admin.Courses
                 return Page();
             }
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.PostAsync("Admin/addEntry", new StringContent(JsonConvert.SerializeObject(Entry), Encoding.UTF8, "application/json"));
+            using HttpResponseMessage response = await httpClient.PostAsync("Admin/addCourse", new StringContent(JsonConvert.SerializeObject(Course), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if(response.ReasonPhrase == "OK")
             {
