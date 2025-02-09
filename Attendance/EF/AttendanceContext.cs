@@ -62,8 +62,8 @@ namespace AttendanceAPI.EF
                 {
                     CourseId = -1,
                     CourseName = "CourseName",
-                    InstitutionId = -1,
-                    CourseDescription = "CourseDescription"
+                    CourseDescription = "CourseDescription",
+                    isActive = false
                 });
             modelBuilder.Entity<Client_CourseDBO>().HasData(
                 new Client_CourseDBO
