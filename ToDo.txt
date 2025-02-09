@@ -14,6 +14,7 @@
 -on entry creation use names(must be unique) for simplicity
 ~on getbyclient id page error on nonexistent client
 ~same for course
+-remove course table field named institutionid
 
 
 client shall not have access to id's

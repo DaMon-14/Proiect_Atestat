@@ -214,6 +214,22 @@ namespace AttendanceAPI.Controllers
         }
 
         [HttpGet]
+        [Route("courses")]
+        public async Task<IActionResult> GetAllCourses([FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var courses = await _courses.GetAllCourses();
+            if (courses.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(courses);
+        }
+
+        [HttpGet]
         [Route("course/{id}")]
         public async Task<IActionResult> GetCourse(uint id, [FromHeader] string UID)
         {
@@ -222,11 +238,43 @@ namespace AttendanceAPI.Controllers
                 return BadRequest();
             }
             var course = await _courses.GetCourse(id);
-            if (course==null)
+            if (course == null)
             {
                 return NotFound();
             }
             return Ok(course);
+        }
+
+        [HttpPost]
+        [Route("addCourse")]
+        public async Task<IActionResult> AddCourse([FromBody] Course course, [FromHeader] string UID)
+        {
+            if (course == null || UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var newclient = await _courses.AddCourse(course);
+            if (newclient == null)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("updateCourse")]
+        public async Task<IActionResult> UpdateCourse([FromBody] CourseDBO course, [FromHeader] string UID)
+        {
+            if (course == null || UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var client = await _courses.UpdateCourse(course);
+            if (client == null)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
         }
     }
 }
