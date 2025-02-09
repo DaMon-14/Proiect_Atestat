@@ -19,3 +19,12 @@
 client shall not have access to id's
 leave admin get methods to use id's not names
 eventually make a tab to display names corelated to id's
+
+
+
+sites used:
+https://www.electronicshub.org/write-data-to-rfid-card-using-rc522-rfid/
+https://arduinogetstarted.com/tutorials/arduino-rfid-nfc
+https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/http/httpclient
+https://learn.microsoft.com/en-us/aspnet/core/mvc/views/razor?view=aspnetcore-9.0#razor-reserved-keywords
+https://learn.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/?view=aspnetcore-9.0&viewFallbackFrom=aspnetcore-2.1&preserve-view=true

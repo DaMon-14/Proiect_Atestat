@@ -94,24 +94,6 @@ namespace AttendanceAPI.Controllers
             return Ok();
         }
 
-        [HttpDelete("client/{id}")]
-        public async Task<IActionResult> DeleteClient(uint id, [FromHeader] string UID)
-        {
-            if (UID != _configuration.GetValue<string>("UID"))
-            {
-                return BadRequest();
-            }
-            var client = await _users.DeleteUser(id);
-            if (client == null)
-            {
-                return NotFound();
-            }
-            return Ok(new
-            {
-                message = "Deleted Client",
-            });
-        }
-
         [HttpGet]
         [Route("entries")]
         public async Task<IActionResult> GetAllEntries([FromHeader] string UID)
