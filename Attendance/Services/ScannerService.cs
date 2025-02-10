@@ -57,6 +57,18 @@ namespace AttendanceAPI.Services
             await _db.SaveChangesAsync();
             return scannerToUpdate;
         }
+
+        public async Task<bool> DeleteScanner(uint id)
+        {
+            var scannerToDelete = await _db.Scanners.FirstOrDefaultAsync(x => x.ScannerId == id);
+            if (scannerToDelete == null)
+            {
+                return false;
+            }
+            _db.Scanners.Remove(scannerToDelete);
+            await _db.SaveChangesAsync();
+            return true;
+        }
         
     }
 }

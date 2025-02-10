@@ -374,5 +374,21 @@ namespace AttendanceAPI.Controllers
             }
             return Ok();
         }
+
+        [HttpDelete]
+        [Route("deleteScanner/{courseId}")]
+        public async Task<IActionResult> DeleteScanner(uint scannerId, [FromHeader] string UID)
+        {
+            if (scannerId == null || UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var scanner = await _scanners.DeleteScanner(scannerId);
+            if (scanner == false)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
+        }
     }
 }

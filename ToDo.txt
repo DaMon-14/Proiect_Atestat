@@ -1,6 +1,6 @@
 ~verify corect text is displayed
 ~On Admin Clients shows only Non admin, by on get by course id shows admins also
-~verify conditions: null checks for empty strings
+-verify conditions: null checks for empty strings
 ~repair esp Api controller
 ~On dashboard get names not id's
 -Add modify profile button on dashbar
@@ -15,6 +15,7 @@
 ~on getbyclient id page error on nonexistent client
 ~same for course
 -remove course table field named institutionid
+-add isactive to course table(if want to delete course set isactive to false so at attendance get suposed deleted course still appeares)
 
 
 client shall not have access to id's

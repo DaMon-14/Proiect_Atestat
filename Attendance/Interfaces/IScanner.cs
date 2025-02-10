@@ -9,5 +9,6 @@ namespace AttendanceAPI.Interfaces
         Task<ScannerDBO> GetScanner(uint id);
         Task<ScannerDBO> AddScanner(Scanner scanner);
         Task<ScannerDBO> UpdateScanner(ScannerDBO scanner);
+        Task<bool> DeleteScanner(uint id);
     }
 }
