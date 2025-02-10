@@ -15,6 +15,7 @@
 ~on getbyclient id page error on nonexistent client
 ~same for course
 -remove course table field named institutionid
+-make namespaces match folder
 -add isactive to course table(if want to delete course set isactive to false so at attendance get suposed deleted course still appeares)
 
 
