@@ -28,7 +28,7 @@ namespace WebApp.Pages.Admin.Scanners
         }
 
         [BindProperty]
-        public CourseDBO Course { get; set; } = default!;
+        public ScannerDBO Scanner { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -40,13 +40,13 @@ namespace WebApp.Pages.Admin.Scanners
                     return NotFound();
                 }
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                using HttpResponseMessage response = await httpClient.GetAsync("Admin/course/" + id.ToString());
-                var course = JsonConvert.DeserializeObject<CourseDBO>(await response.Content.ReadAsStringAsync());
-                if (course == null)
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/scanner/" + id.ToString());
+                var scanner = JsonConvert.DeserializeObject<ScannerDBO>(await response.Content.ReadAsStringAsync());
+                if (scanner == null)
                 {
                     return NotFound();
                 }
-                Course = course;
+                Scanner = scanner;
                 return Page();
             }
             return RedirectToPage("/Index");
@@ -61,7 +61,7 @@ namespace WebApp.Pages.Admin.Scanners
                 return Page();
             }
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.PutAsync("Admin/updateCourse", new StringContent(JsonConvert.SerializeObject(Course), Encoding.UTF8, "application/json"));
+            using HttpResponseMessage response = await httpClient.PutAsync("Admin/updateScanner", new StringContent(JsonConvert.SerializeObject(Scanner), Encoding.UTF8, "application/json"));
             if (response.ReasonPhrase == "OK")
             {
                 return RedirectToPage("./Index");

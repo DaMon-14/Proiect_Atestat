@@ -14,16 +14,17 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Course.CourseId" />
+            <input type="hidden" asp-for="Scanner.ScannerId" /> 
             <div class="form-group">
-                <label asp-for="Course.CourseName" class="control-label"></label>
-                <input asp-for="Course.CourseName" class="form-control" />
-                <span asp-validation-for="Course.CourseName" class="text-danger"></span>
+                <label asp-for="Scanner.ScannerName" class="control-label"></label>
+                <input asp-for="Scanner.ScannerName" class="form-control" />
+                <span asp-validation-for="Scanner.ScannerName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Course.CourseDescription" class="control-label"></label>
-                <input asp-for="Course.CourseDescription" class="form-control" />
-                <span asp-validation-for="Course.CourseDescription" class="text-danger"></span>
+                <label asp-for="Scanner.isActive" class="control-label"></label>
+                <br />
+                <input asp-for="Scanner.isActive" type="checkbox" />
+                <span asp-validation-for="Scanner.isActive" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
