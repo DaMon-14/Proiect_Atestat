@@ -14,13 +14,15 @@ namespace AttendanceAPI.Controllers
         private readonly IUser _users;
         private readonly IAttendance _entries;
         private readonly ICourse _courses;
+        private readonly IScanner _scanners;
         private readonly IConfiguration _configuration;
-        public AdminController(IUser userService, IAttendance entryService, IConfiguration config, ICourse courses)
+        public AdminController(IUser userService, IAttendance entryService, IConfiguration config, ICourse courses, IScanner scanners)
         {
             _users = userService;
             _entries = entryService;
             _configuration = config;
             _courses = courses;
+            _scanners = scanners;
         }
         [HttpGet]
         [Route("clients")]
@@ -303,6 +305,70 @@ namespace AttendanceAPI.Controllers
             }
             var client = await _courses.DeleteCourse(courseId);
             if (client == null)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("scanners")]
+        public async Task<IActionResult> GetAllScanners([FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var scanner = await _scanners.GetAllScanners();
+            if (scanner.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(scanner);
+        }
+
+        [HttpGet]
+        [Route("scanner/{id}")]
+        public async Task<IActionResult> GetScanner(uint id, [FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var scanner = await _scanners.GetScanner(id);
+            if (scanner == null)
+            {
+                return NotFound();
+            }
+            return Ok(scanner);
+        }
+
+        [HttpPost]
+        [Route("addScanner")]
+        public async Task<IActionResult> AddScanner([FromBody] Scanner scanner, [FromHeader] string UID)
+        {
+            if (scanner == null || UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var newclient = await _scanners.AddScanner(scanner);
+            if (newclient == null)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("updateScanner")]
+        public async Task<IActionResult> UpdateScanner([FromBody] ScannerDBO scanner, [FromHeader] string UID)
+        {
+            if (scanner == null || UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var Scanner = await _scanners.UpdateScanner(scanner);
+            if (Scanner == null)
             {
                 return StatusCode(500);
             }

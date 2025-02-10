@@ -15,6 +15,11 @@ namespace AttendanceAPI.Services
         {
             _db = db;
         }
+        public async Task<List<ScannerDBO>> GetAllScanners()
+        {
+            return await _db.Scanners.Where(x=>x.ScannerId>0).ToListAsync();
+        }
+
         public async Task<ScannerDBO> GetScanner(uint id)
         {
             return await _db.Scanners.FirstOrDefaultAsync(x => x.ScannerId == id);
@@ -22,6 +27,10 @@ namespace AttendanceAPI.Services
 
         public async Task<ScannerDBO> AddScanner(Scanner addscanner)
         {
+            if(addscanner.ScannerName == "")
+            {
+                return null;
+            }
             var newScanner = new ScannerDBO
             {
                 ScannerName = addscanner.ScannerName,
@@ -31,34 +40,23 @@ namespace AttendanceAPI.Services
             await _db.SaveChangesAsync();
             return newScanner;
         }
-        /*
+        
         public async Task<ScannerDBO> UpdateScanner(ScannerDBO scanner)
         {
-            var scannerToUpdate = await _db.Scanners.FirstOrDefaultAsync(x => x.ScannerId == id);
+            var scannerToUpdate = await _db.Scanners.FirstOrDefaultAsync(x => x.ScannerId == scanner.ScannerId);
             if (scannerToUpdate == null)
             {
                 return null;
             }
-
-            scannerToUpdate.ScannerName = scanner.ScannerName;
+            if(scanner.ScannerName != "")
+            {
+                scannerToUpdate.ScannerName = scanner.ScannerName;
+            }
             scannerToUpdate.isActive = scanner.isActive;
 
             await _db.SaveChangesAsync();
             return scannerToUpdate;
         }
-        */
-        public async Task<ScannerDBO> SetScannerStatus(uint id, bool isactive)
-        {
-            var scannerToUpdate = await _db.Scanners.FirstOrDefaultAsync(x => x.ScannerId == id);
-            if (scannerToUpdate == null)
-            {
-                return null;
-            }
-
-            scannerToUpdate.isActive = isactive;
-
-            await _db.SaveChangesAsync();
-            return scannerToUpdate;
-        }
+        
     }
 }

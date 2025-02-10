@@ -26,7 +26,7 @@ namespace WebApp.Pages.Admin.Scanners
             _configuration = configuration;
         }
 
-        public IList<CourseDBO> Courses { get; set; } = default!;
+        public IList<ScannerDBO> Scanners { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -34,8 +34,8 @@ namespace WebApp.Pages.Admin.Scanners
             if (HttpContext.Session.TryGetValue("Admin", out _))
             {
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                response = await httpClient.GetAsync("Admin/courses");
-                Courses = JsonConvert.DeserializeObject<List<CourseDBO>>(await response.Content.ReadAsStringAsync());
+                response = await httpClient.GetAsync("Admin/scanners");
+                Scanners = JsonConvert.DeserializeObject<List<ScannerDBO>>(await response.Content.ReadAsStringAsync());
             }
             return Page();
         }
