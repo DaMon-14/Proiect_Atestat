@@ -25,7 +25,7 @@ namespace WebApp.Pages.Admin.Scanners
         }
 
         [BindProperty]
-        public CourseDBO Course { get; set; } = default!;
+        public ScannerDBO Scanner { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -37,15 +37,15 @@ namespace WebApp.Pages.Admin.Scanners
                     return NotFound();
                 }
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                using HttpResponseMessage response = await httpClient.GetAsync("Admin/course/" + id.ToString());
-                var course = JsonConvert.DeserializeObject<CourseDBO>(await response.Content.ReadAsStringAsync());
-                if (course == null)
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/scanner/" + id.ToString());
+                var scanner = JsonConvert.DeserializeObject<ScannerDBO>(await response.Content.ReadAsStringAsync());
+                if (scanner == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    Course = course;
+                    Scanner = scanner;
                 }
                 return Page();
             }
@@ -59,11 +59,11 @@ namespace WebApp.Pages.Admin.Scanners
                 return NotFound();
             }
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.DeleteAsync("Admin/deleteCourse/" + id.ToString());
+            using HttpResponseMessage response = await httpClient.DeleteAsync("Admin/deleteScanner/" + id.ToString());
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (response.ReasonPhrase != "OK")
             {
-                ModelState.AddModelError(string.Empty, "Failed to delete entry");
+                ModelState.AddModelError(string.Empty, "Failed to delete scanner");
                 return Page();
             }
             return RedirectToPage("./Index");

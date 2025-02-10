@@ -376,7 +376,7 @@ namespace AttendanceAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("deleteScanner/{courseId}")]
+        [Route("deleteScanner/{scannerId}")]
         public async Task<IActionResult> DeleteScanner(uint scannerId, [FromHeader] string UID)
         {
             if (scannerId == null || UID != _configuration.GetValue<string>("UID"))
