@@ -35,7 +35,15 @@ namespace WebApp.Pages.Admin.Scanner_Courses
             {
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 response = await httpClient.GetAsync("Admin/scanner_courses");
-                Scanner_Courses = JsonConvert.DeserializeObject<List<Scanner_CourseDBO>>(await response.Content.ReadAsStringAsync());
+                if(response.ReasonPhrase == "Ok")
+                {
+                    Scanner_Courses = JsonConvert.DeserializeObject<List<Scanner_CourseDBO>>(await response.Content.ReadAsStringAsync());
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "No scanner_courses found");
+                    Scanner_Courses = new List<Scanner_CourseDBO>();
+                }
             }
             return Page();
         }
