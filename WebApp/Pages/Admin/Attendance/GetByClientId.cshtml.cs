@@ -12,7 +12,7 @@ using System.Text;
 using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Models;
 
-namespace AttendanceAPI.Pages.Admin.Attendance
+namespace WebApp.Pages.Admin.Attendance
 {
     public class GetByClientIdModel : PageModel
     {

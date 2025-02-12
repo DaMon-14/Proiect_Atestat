@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using System.Text;
 using AttendanceAPI.EF.DBO;
 
-namespace AttendanceAPI.Pages.Admin.Attendance
+namespace WebApp.Pages.Admin.Attendance
 {
     public class EditModel : PageModel
     {

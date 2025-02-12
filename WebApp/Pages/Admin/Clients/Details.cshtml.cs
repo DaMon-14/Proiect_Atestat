@@ -11,7 +11,7 @@ using System.Net.Http;
 using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Models;
 
-namespace AttendanceAPI.Pages.Admin.Clients
+namespace WebApp.Pages.Admin.Clients
 {
     public class DetailsModel : PageModel
     {

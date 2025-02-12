@@ -9,7 +9,7 @@ using AttendanceAPI.EF;
 using AttendanceAPI.EF.DBO;
 using Newtonsoft.Json;
 
-namespace AttendanceAPI.Pages.Admin.Attendance
+namespace WebApp.Pages.Admin.Attendance
 {
     public class DeleteModel : PageModel
     {
@@ -61,7 +61,7 @@ namespace AttendanceAPI.Pages.Admin.Attendance
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
             using HttpResponseMessage response = await httpClient.DeleteAsync("Admin/entry/" + id.ToString());
             var jsonResponse = await response.Content.ReadAsStringAsync();
-            if(response.ReasonPhrase != "OK")
+            if (response.ReasonPhrase != "OK")
             {
                 ModelState.AddModelError(string.Empty, "Failed to delete entry");
                 return Page();

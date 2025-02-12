@@ -12,8 +12,8 @@ using System.Text;
 using AttendanceAPI.EF.DBO;
 using Microsoft.AspNetCore.Http;
 
-namespace AttendanceAPI.Pages.LoginRegister
-{ 
+namespace WebApp.Pages.LoginRegister
+{
     public class LoginModel : PageModel
     {
         private readonly IConfiguration _configuration;
@@ -31,7 +31,7 @@ namespace AttendanceAPI.Pages.LoginRegister
             {
                 return RedirectToPage("/Admin/AdminInterface");
             }
-            if(HttpContext.Session.TryGetValue("Client", out _))
+            if (HttpContext.Session.TryGetValue("Client", out _))
             {
                 return RedirectToPage("/Client/ClientInterface");
             }
@@ -75,7 +75,7 @@ namespace AttendanceAPI.Pages.LoginRegister
                     HttpContext.Session.SetString("Admin", Convert.ToInt32(json.Id).ToString());
                     return RedirectToPage("/Admin/AdminInterface");
                 }
-                else if(json.message == "Client")
+                else if (json.message == "Client")
                 {
                     HttpContext.Session.SetString("Client", Convert.ToInt32(json.Id).ToString());
                     return RedirectToPage("/Client/ClientInterface");
@@ -83,14 +83,14 @@ namespace AttendanceAPI.Pages.LoginRegister
                 ModelState.AddModelError(string.Empty, "Unknown user type");
                 return Page();
             }
-            
-            if(json.message == "Incorect Username or Password")
+
+            if (json.message == "Incorect Username or Password")
             {
                 ModelState.AddModelError(string.Empty, "Incorect Username or Password");
                 return Page();
             }
 
-            if(json.message == "Failed to fetch user id")
+            if (json.message == "Failed to fetch user id")
             {
                 ModelState.AddModelError(string.Empty, "Failed to fetch user id");
                 return Page();

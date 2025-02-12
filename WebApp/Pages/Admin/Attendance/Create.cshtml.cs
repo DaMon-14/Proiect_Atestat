@@ -7,7 +7,7 @@ using AttendanceAPI.Models;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace AttendanceAPI.Pages.Admin.Attendance
+namespace WebApp.Pages.Admin.Attendance
 {
     public class CreateModel : PageModel
     {
@@ -45,13 +45,13 @@ namespace AttendanceAPI.Pages.Admin.Attendance
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
             using HttpResponseMessage response = await httpClient.PostAsync("Admin/addEntry", new StringContent(JsonConvert.SerializeObject(Entry), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
-            if(response.ReasonPhrase == "OK")
+            if (response.ReasonPhrase == "OK")
             {
                 return RedirectToPage("./Index");
             }
             ModelState.AddModelError(string.Empty, jsonResponse);
             return Page();
-            
+
         }
     }
 }

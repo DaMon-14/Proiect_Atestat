@@ -9,7 +9,7 @@ using AttendanceAPI.EF;
 using AttendanceAPI.EF.DBO;
 using Newtonsoft.Json;
 
-namespace AttendanceAPI.Pages.Admin.Courses
+namespace WebApp.Pages.Admin.Courses
 {
     public class DeleteModel : PageModel
     {

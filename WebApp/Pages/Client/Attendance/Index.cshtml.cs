@@ -11,7 +11,7 @@ using System.Net.Http;
 using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Models;
 
-namespace AttendanceAPI.Pages.Client.Attendance
+namespace WebApp.Pages.Client.Attendance
 {
     public class IndexModel : PageModel
     {
@@ -27,7 +27,7 @@ namespace AttendanceAPI.Pages.Client.Attendance
             _configuration = configuration;
         }
 
-        public IList<AttendanceAPI.Models.Attendance> Entries { get;set; } = default!;
+        public IList<AttendanceAPI.Models.Attendance> Entries { get; set; } = default!;
         public IList<AttendanceDTO> DisplayEntries { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
@@ -41,17 +41,17 @@ namespace AttendanceAPI.Pages.Client.Attendance
                     return RedirectToPage("/Index");
                 }
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                response = await httpClient.GetAsync("Client/"+id.ToString());
+                response = await httpClient.GetAsync("Client/" + id.ToString());
                 Entries = JsonConvert.DeserializeObject<List<AttendanceAPI.Models.Attendance>>(await response.Content.ReadAsStringAsync());
                 Entries = Entries.OrderBy(x => x.ScanTime.Year).ThenBy(x => x.ScanTime.Month).ThenBy(x => x.ScanTime.Day).ThenBy(x => x.ScanTime.Hour).ThenBy(x => x.ScanTime.Minute).ThenBy(x => x.ScanTime.Second).ToList();
                 Entries = Entries.Reverse().ToList();
             }
             DisplayEntries = new List<AttendanceDTO>();
-            if (Entries.Count()==0)
+            if (Entries.Count() == 0)
             {
                 return Page();
             }
-            foreach(var entry in Entries)
+            foreach (var entry in Entries)
             {
                 AttendanceDTO displayEntry = new AttendanceDTO();
                 response = await httpClient.GetAsync("Client/client/" + entry.ClientId.ToString());

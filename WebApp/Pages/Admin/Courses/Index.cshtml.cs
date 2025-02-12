@@ -11,7 +11,7 @@ using System.Net.Http;
 using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Models;
 
-namespace AttendanceAPI.Pages.Admin.Courses
+namespace WebApp.Pages.Admin.Courses
 {
     public class IndexModel : PageModel
     {

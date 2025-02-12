@@ -9,7 +9,7 @@ using AttendanceAPI.EF;
 using Newtonsoft.Json;
 using AttendanceAPI.EF.DBO;
 
-namespace AttendanceAPI.Pages.Admin.Attendance
+namespace WebApp.Pages.Admin.Attendance
 {
     public class DetailsModel : PageModel
     {
@@ -36,7 +36,7 @@ namespace AttendanceAPI.Pages.Admin.Attendance
                     return NotFound();
                 }
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                using HttpResponseMessage response = await httpClient.GetAsync("Admin/entryById/"+id.ToString());
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/entryById/" + id.ToString());
                 var entry = JsonConvert.DeserializeObject<AttendanceDBO>(await response.Content.ReadAsStringAsync());
                 if (entry == null)
                 {

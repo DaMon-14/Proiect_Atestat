@@ -1,7 +1,8 @@
+using AttendanceAPI.Pages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace AttendanceAPI.Pages.Client
+namespace WebApp.Pages.Client
 {
     public class ClientModel : PageModel
     {
@@ -14,9 +15,9 @@ namespace AttendanceAPI.Pages.Client
 
         public IActionResult OnGet()
         {
-            
+
             var reps = HttpContext.Session.TryGetValue("Client", out _);
-            if(reps == true)
+            if (reps == true)
             {
                 var ClientId = Convert.ToInt32(HttpContext.Session.GetString("Client"));
                 if (ClientId > 0)
@@ -29,7 +30,7 @@ namespace AttendanceAPI.Pages.Client
         public async Task<IActionResult> OnPostLogout()
         {
             HttpContext.Session.Remove("Client");
-            return  RedirectToPage("/Index");
+            return RedirectToPage("/Index");
         }
     }
 }

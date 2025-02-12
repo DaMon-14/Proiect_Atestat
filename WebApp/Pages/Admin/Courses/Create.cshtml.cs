@@ -7,7 +7,7 @@ using AttendanceAPI.Models;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace AttendanceAPI.Pages.Admin.Courses
+namespace WebApp.Pages.Admin.Courses
 {
     public class CreateModel : PageModel
     {
