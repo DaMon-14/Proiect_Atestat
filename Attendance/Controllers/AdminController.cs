@@ -423,7 +423,7 @@ namespace AttendanceAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(scanner_courses);
+            return Ok(scanner_course);
         }
 
         [HttpPost]

@@ -15,6 +15,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Scanner_Courses[0].Id)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Scanner_Courses[0].ScannerId)
             </th>
             <th>
@@ -30,6 +33,9 @@
         {
         <tr>
             <td>
+                 @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
                  @Html.DisplayFor(modelItem => item.ScannerId)
             </td>
             <td>
@@ -39,9 +45,9 @@
                  @Html.DisplayFor(modelItem => item.isActive)
             </td>
             <td>
-                 <a asp-page="./Edit" asp-route-id="@item.ScannerId">Edit</a> |
-                 <a asp-page="./Details" asp-route-id="@item.ScannerId">Details</a> |
-                 <a asp-page="./Delete" asp-route-id="@item.ScannerId">Delete</a>
+                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                 <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                 <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
