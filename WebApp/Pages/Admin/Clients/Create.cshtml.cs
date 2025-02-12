@@ -9,7 +9,6 @@ using AttendanceAPI.EF;
 using AttendanceAPI.Models;
 using Newtonsoft.Json;
 using System.Text;
-using AttendanceAPI.Models;
 
 namespace AttendanceAPI.Pages.Admin.Clients
 {

@@ -12,6 +12,6 @@ namespace AttendanceAPI.Interfaces
         Task<CourseDBO> GetCourse(uint id);
         Task<CourseDBO> AddCourse(Course course);
         Task<CourseDBO> UpdateCourse(CourseDBO course);
-        Task<bool> DeleteCourse(int courseId);
+        Task<bool> DeleteCourse(uint courseId);
     }
 }

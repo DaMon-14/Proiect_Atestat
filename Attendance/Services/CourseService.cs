@@ -44,7 +44,7 @@ namespace AttendanceAPI.Services
 
         public async Task<CourseDBO> UpdateCourse(CourseDBO course)
         {
-            CourseDBO courseToUpdate = await _db.Courses.FirstOrDefaultAsync(x => x.CourseId == course.CourseId);
+            CourseDBO? courseToUpdate = await _db.Courses.FirstOrDefaultAsync(x => x.CourseId == course.CourseId);
             if (courseToUpdate == null)
             {
                 return null;
@@ -56,9 +56,9 @@ namespace AttendanceAPI.Services
             return courseToUpdate;
         }
 
-        public async Task<bool> DeleteCourse(int courseId)
+        public async Task<bool> DeleteCourse(uint courseId)
         {
-            CourseDBO courseToDelete = await _db.Courses.FirstOrDefaultAsync(x => x.CourseId == courseId);
+            CourseDBO? courseToDelete = await _db.Courses.FirstOrDefaultAsync(x => x.CourseId == courseId);
             if (courseToDelete == null)
             {
                 return false;

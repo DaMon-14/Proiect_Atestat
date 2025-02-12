@@ -297,14 +297,14 @@ namespace AttendanceAPI.Controllers
 
         [HttpDelete]
         [Route("deleteCourse/{courseId}")]
-        public async Task<IActionResult> DeleteCourse(int courseId, [FromHeader] string UID)
+        public async Task<IActionResult> DeleteCourse(uint courseId, [FromHeader] string UID)
         {
-            if (courseId == null || UID != _configuration.GetValue<string>("UID"))
+            if (UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
             var client = await _courses.DeleteCourse(courseId);
-            if (client == null)
+            if (client == false)
             {
                 return StatusCode(500);
             }
@@ -379,7 +379,7 @@ namespace AttendanceAPI.Controllers
         [Route("deleteScanner/{scannerId}")]
         public async Task<IActionResult> DeleteScanner(uint scannerId, [FromHeader] string UID)
         {
-            if (scannerId == null || UID != _configuration.GetValue<string>("UID"))
+            if (UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }

@@ -29,7 +29,7 @@ namespace AttendanceAPI.Pages.Client
         public async Task<IActionResult> OnPostLogout()
         {
             HttpContext.Session.Remove("Client");
-            return RedirectToPage("/Index");
+            return  RedirectToPage("/Index");
         }
     }
 }

@@ -10,8 +10,6 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Models;
-using AttendanceAPI.Models;
-using Azure;
 
 namespace AttendanceAPI.Pages.Client.Attendance
 {
