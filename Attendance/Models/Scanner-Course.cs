@@ -1,7 +1,7 @@
 ﻿namespace AttendanceAPI.Models
 {
-    public class UpdateScanner_Course
-    {
+    public class Scanner_Course
+    { 
         public int ScannerId { get; set; }
         public int CourseId { get; set; }
 

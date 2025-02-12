@@ -16,7 +16,7 @@ namespace AttendanceAPI.EF
         public DbSet<CourseDBO> Courses { get; set; }
         public DbSet<Client_CourseDBO> Client_Courses { get; set; }
         public DbSet<ScannerDBO> Scanners { get; set; }
-        public DbSet<Scanner_Course> Scanner_Courses { get; set; }
+        public DbSet<Scanner_CourseDBO> Scanner_Courses { get; set; }
         public DbSet<AttendanceDBO> Entries { get; set; }
 
         /*
@@ -33,7 +33,7 @@ namespace AttendanceAPI.EF
             modelBuilder.Entity<CourseDBO>().HasIndex(x=>x.CourseName).IsUnique();
             modelBuilder.Entity<Client_CourseDBO>().HasKey(x => x.Id);
             modelBuilder.Entity<ScannerDBO>().HasKey(x => x.ScannerId);
-            modelBuilder.Entity<Scanner_Course>().HasKey(x => x.Id);
+            modelBuilder.Entity<Scanner_CourseDBO>().HasKey(x => x.Id);
             modelBuilder.Entity<AttendanceDBO>().HasKey(x => x.Id);
 
             modelBuilder.Entity<CardDBO>().HasData(
@@ -81,8 +81,8 @@ namespace AttendanceAPI.EF
                     ScannerName = "ScannerName",
                     isActive = false
                 });
-            modelBuilder.Entity<Scanner_Course>().HasData(
-                new Scanner_Course
+            modelBuilder.Entity<Scanner_CourseDBO>().HasData(
+                new Scanner_CourseDBO
                 {
                     Id = -1,
                     ScannerId = -1,

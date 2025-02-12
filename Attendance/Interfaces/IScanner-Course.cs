@@ -5,9 +5,10 @@ namespace AttendanceAPI.Interfaces
 {
     public interface IScanner_Course
     {
-        Task<List<Scanner_Course>> GetScanner_Courses();
-        Task<Scanner_Course> GetScanner_CourseByScannerId(uint id);
-        Task<Scanner_Course> AddScanner_Course(UpdateScanner_Course scanner_course);
-        Task<Scanner_Course> SetScanner_CourseStatus(uint id, bool isactive);
+        Task<List<Scanner_CourseDBO>> GetScanner_Courses();
+        Task<Scanner_CourseDBO> GetScanner_CourseByScannerId(uint id);
+        Task<string> AddScanner_Course(Scanner_Course scanner_course);
+        Task<string> UpdateScanner_Course(Scanner_CourseDBO scanner_course);
+        Task<bool> DeleteScanner_Course(uint id);
     }
 }

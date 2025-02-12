@@ -15,14 +15,16 @@ namespace AttendanceAPI.Controllers
         private readonly IAttendance _entries;
         private readonly ICourse _courses;
         private readonly IScanner _scanners;
+        private readonly IScanner_Course _scanner_courses;
         private readonly IConfiguration _configuration;
-        public AdminController(IUser userService, IAttendance entryService, IConfiguration config, ICourse courses, IScanner scanners)
+        public AdminController(IUser userService, IAttendance entryService, IConfiguration config, ICourse courses, IScanner scanners, IScanner_Course scanner_courses)
         {
             _users = userService;
             _entries = entryService;
             _configuration = config;
             _courses = courses;
             _scanners = scanners;
+            _scanner_courses = scanner_courses;
         }
         [HttpGet]
         [Route("clients")]
@@ -387,6 +389,88 @@ namespace AttendanceAPI.Controllers
             if (scanner == false)
             {
                 return StatusCode(500);
+            }
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("scanner_courses")]
+        public async Task<IActionResult> GetAllScanner_Courses([FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var scanner_courses = await _scanner_courses.GetScanner_Courses();
+            if (scanner_courses.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(scanner_courses);
+        }
+
+        [HttpGet]
+        [Route("scanner_course/{id}")]
+        public async Task<IActionResult> GetScanner_Course(uint id, [FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var scanner_courses = await _scanner_courses.GetScanner_Courses();
+            var scanner_course = scanner_courses.FirstOrDefault(x => x.Id == id);
+            if (scanner_course == null)
+            {
+                return NotFound();
+            }
+            return Ok(scanner_courses);
+        }
+
+        [HttpPost]
+        [Route("addScanner_Course")]
+        public async Task<IActionResult> AddScanner_Course([FromBody] Scanner_Course scanner, [FromHeader] string UID)
+        {
+            if (scanner == null || UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var newscanner_course = await _scanner_courses.AddScanner_Course(scanner);
+            if (newscanner_course == "Ok")
+            {
+                return Ok();
+            }
+            return NotFound(newscanner_course);
+            
+        }
+
+        [HttpPut]
+        [Route("updateScanner_Course")]
+        public async Task<IActionResult> UpdateScanner_Course([FromBody] Scanner_CourseDBO scanner_courseinfo, [FromHeader] string UID)
+        {
+            if (scanner_courseinfo == null || UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var Scanner_Course = await _scanner_courses.UpdateScanner_Course(scanner_courseinfo);
+            if (Scanner_Course == "Ok")
+            {
+                return Ok();
+            }
+            return NotFound(Scanner_Course);
+        }
+
+        [HttpDelete]
+        [Route("deleteScanner_Course/{scanner_courseId}")]
+        public async Task<IActionResult> DeleteScanner_Course(uint scanner_courseId, [FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var scanner_course = await _scanner_courses.DeleteScanner_Course(scanner_courseId);
+            if (scanner_course == false)
+            {
+                return NotFound();
             }
             return Ok();
         }
