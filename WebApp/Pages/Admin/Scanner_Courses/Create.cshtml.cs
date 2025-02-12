@@ -33,7 +33,7 @@ namespace WebApp.Pages.Admin.Scanner_Courses
         }
 
         [BindProperty]
-        public Scanner Scanner { get; set; } = default!;
+        public Scanner_Course Scanner_Course { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -43,7 +43,7 @@ namespace WebApp.Pages.Admin.Scanner_Courses
                 return Page();
             }
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.PostAsync("Admin/addScanner", new StringContent(JsonConvert.SerializeObject(Scanner), Encoding.UTF8, "application/json"));
+            using HttpResponseMessage response = await httpClient.PostAsync("Admin/addScanner_Course", new StringContent(JsonConvert.SerializeObject(Scanner_Course), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (response.ReasonPhrase == "OK")
             {

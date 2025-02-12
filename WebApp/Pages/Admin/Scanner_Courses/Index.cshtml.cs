@@ -35,7 +35,7 @@ namespace WebApp.Pages.Admin.Scanner_Courses
             {
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 response = await httpClient.GetAsync("Admin/scanner_courses");
-                if(response.ReasonPhrase == "Ok")
+                if(response.ReasonPhrase == "OK")
                 {
                     Scanner_Courses = JsonConvert.DeserializeObject<List<Scanner_CourseDBO>>(await response.Content.ReadAsStringAsync());
                 }

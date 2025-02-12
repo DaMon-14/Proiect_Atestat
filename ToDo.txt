@@ -16,6 +16,7 @@
 ~same for course
 -remove course table field named institutionid
 -make namespaces match folder
+-perfect Scanner_Course creation conditions
 -add isactive to course table(if want to delete course set isactive to false so at attendance get suposed deleted course still appeares)
 
 
