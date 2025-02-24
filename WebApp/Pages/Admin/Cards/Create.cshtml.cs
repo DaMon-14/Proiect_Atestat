@@ -36,7 +36,7 @@ namespace WebApp.Pages.Admin.Cards
         }
 
         [BindProperty]
-        public UpdateUser Client { get; set; } = default!;
+        public Card Card { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -46,7 +46,7 @@ namespace WebApp.Pages.Admin.Cards
                 return Page();
             }
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.PostAsync("Admin/client", new StringContent(JsonConvert.SerializeObject(Client), Encoding.UTF8, "application/json"));
+            using HttpResponseMessage response = await httpClient.PostAsync("Admin/addCard", new StringContent(JsonConvert.SerializeObject(Card), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if(response.ReasonPhrase != "OK")
             {

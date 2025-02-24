@@ -25,20 +25,48 @@ namespace WebApp.Pages.Admin.Cards
 
         public IList<CardDBO> Cards { get;set; } = default!;
 
+        [BindProperty]
+        public bool SortActive { get; set; }=true;
+
         public async Task<IActionResult> OnGetAsync()
         {
             var reps = HttpContext.Session.TryGetValue("Admin", out _);
             if (HttpContext.Session.TryGetValue("Admin", out _))
             {
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                using HttpResponseMessage response = await httpClient.GetAsync("Admin/clients");
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/allCards");
                 Cards = JsonConvert.DeserializeObject<List<CardDBO>>(await response.Content.ReadAsStringAsync());
+                if (Cards.Count() == 0)
+                {
+                    Cards = new List<CardDBO>();
+                }
+                if(SortActive)
+                {
+                    Cards = Cards.ExceptBy(Cards.Where(x => x.isActive == false), x => x).ToList();
+                }
+                return Page();
             }
-            if(Cards.Count()==0)
-            {
-                Cards = new List<CardDBO>();
-            }
-            return Page();
+            return RedirectToPage("/Index");
         }
-    }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (HttpContext.Session.TryGetValue("Admin", out _))
+            {
+                httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/allCards");
+                Cards = JsonConvert.DeserializeObject<List<CardDBO>>(await response.Content.ReadAsStringAsync());
+                if (Cards.Count() == 0)
+                {
+                    Cards = new List<CardDBO>();
+                }
+                if (SortActive)
+                {
+                    Cards = Cards.ExceptBy(Cards.Where(x => x.isActive == false), x => x).ToList();
+                }
+                return Page();
+            }
+            return RedirectToPage("/Index");
+        }
+    }    
 }
