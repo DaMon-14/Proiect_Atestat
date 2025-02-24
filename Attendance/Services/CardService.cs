@@ -24,8 +24,16 @@ namespace AttendanceAPI.Services
             return await _db.Cards.FirstOrDefaultAsync(x => x.CardId == cardid);
         }
 
-        public async Task<CardDBO> AddCard(Card card)
+        public async Task<string> AddCard(Card card)
         {
+            if(_db.Users.Any(x => x.ClientId == card.ClientId && x.IsAdmin==false) == false)
+            {
+                return "Client does not exist";
+            }
+            if(_db.Cards.Any(x => x.ClientId == card.ClientId && x.isActive==true))
+            {
+                return "Client has a card that is already active";
+            }
             var newCard = new CardDBO
             {
                 ClientId = card.ClientId,
@@ -33,7 +41,7 @@ namespace AttendanceAPI.Services
             };
             _db.Cards.Add(newCard);
             await _db.SaveChangesAsync();
-            return newCard;
+            return "Ok";
         }
 
         public async Task<bool> IsCardActive(uint cardid)

@@ -11,13 +11,14 @@ namespace AttendanceAPI.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
+        private readonly ICard _cards;
         private readonly IUser _users;
         private readonly IAttendance _entries;
         private readonly ICourse _courses;
         private readonly IScanner _scanners;
         private readonly IScanner_Course _scanner_courses;
         private readonly IConfiguration _configuration;
-        public AdminController(IUser userService, IAttendance entryService, IConfiguration config, ICourse courses, IScanner scanners, IScanner_Course scanner_courses)
+        public AdminController(IUser userService, IAttendance entryService, IConfiguration config, ICourse courses, IScanner scanners, IScanner_Course scanner_courses, ICard cards)
         {
             _users = userService;
             _entries = entryService;
@@ -25,6 +26,7 @@ namespace AttendanceAPI.Controllers
             _courses = courses;
             _scanners = scanners;
             _scanner_courses = scanner_courses;
+            _cards = cards;
         }
         [HttpGet]
         [Route("clients")]
@@ -471,6 +473,71 @@ namespace AttendanceAPI.Controllers
             if (scanner_course == false)
             {
                 return NotFound();
+            }
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("allCards")]
+        public async Task<IActionResult> GetAllCards([FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var cards = await _cards.GetAllCards();
+            if (cards.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(cards);
+        }
+
+        [HttpGet]
+        [Route("card/{id}")]
+        public async Task<IActionResult> GetCards(uint id, [FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var card = await _cards.GetCard(id);
+            if (card == null)
+            {
+                return NotFound();
+            }
+            return Ok(card);
+        }
+
+        [HttpPost]
+        [Route("addCard")]
+        public async Task<IActionResult> AddCard([FromBody] Card card, [FromHeader] string UID)
+        {
+            if (card == null || UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            card.isActive = true;
+            var newcard = await _cards.AddCard(card);
+            if (newcard != "Ok")
+            {
+                return NotFound(newcard);
+            }
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("deactivateCard/{cardId}")]
+        public async Task<IActionResult> DeactivateCard(uint cardId, [FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var card = await _cards.UpdateCardActive(cardId, false);
+            if (card == null)
+            {
+                return NotFound("Failed to update card status");
             }
             return Ok();
         }

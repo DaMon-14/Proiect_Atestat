@@ -7,7 +7,7 @@ namespace AttendanceAPI.Interfaces
     {
         Task<List<CardDBO>> GetAllCards();
         Task<CardDBO> GetCard(uint cardid);
-        Task<CardDBO> AddCard(Card card);
+        Task<string> AddCard(Card card);
         Task<bool> IsCardActive(uint cardid);
         Task<CardDBO> UpdateCardActive(uint cardid, bool activeState);
     }
