@@ -1,0 +1,48 @@
+﻿@page
+@model WebApp.Pages.Admin.Cards.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutAdmin";
+}
+
+<h1>Clients</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Client[0].UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client[0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client[0].LastName)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Client) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ClientId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ClientId">Details</a> 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<p>To <a href="https://localhost:7054/Admin/AdminInterface">Admin page</a>.</p>
