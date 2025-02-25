@@ -36,28 +36,37 @@ namespace WebApp.Pages.Admin.Attendance
             {
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 response = await httpClient.GetAsync("Admin/entries");
-                Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
-                Entries = Entries.OrderBy(x => x.ScanTime.Year).ThenBy(x=>x.ScanTime.Month).ThenBy(x=>x.ScanTime.Day).ThenBy(x=>x.ScanTime.Hour).ThenBy(x=>x.ScanTime.Minute).ThenBy(x=>x.ScanTime.Second).ToList();
-                Entries = Entries.Reverse().ToList();
-                DisplayEntries = new List<AttendanceDTO>();
-                if (Entries.Count() == 0)
+                if(response.ReasonPhrase == "OK")
                 {
-                    return Page();
+                    Entries = JsonConvert.DeserializeObject<List<AttendanceDBO>>(await response.Content.ReadAsStringAsync());
+                    Entries = Entries.OrderBy(x => x.ScanTime.Year).ThenBy(x => x.ScanTime.Month).ThenBy(x => x.ScanTime.Day).ThenBy(x => x.ScanTime.Hour).ThenBy(x => x.ScanTime.Minute).ThenBy(x => x.ScanTime.Second).ToList();
+                    Entries = Entries.Reverse().ToList();
+                    DisplayEntries = new List<AttendanceDTO>();
+                    if (Entries.Count() == 0)
+                    {
+                        return Page();
+                    }
+                    foreach (var entry in Entries)
+                    {
+                        AttendanceDTO displayEntry = new AttendanceDTO();
+                        response = await httpClient.GetAsync("Admin/client/" + entry.ClientId.ToString());
+                        displayEntry.UserName = JsonConvert.DeserializeObject<UserDBO>(await response.Content.ReadAsStringAsync()).UserName;
+                        displayEntry.ScanTime = entry.ScanTime;
+                        response = await httpClient.GetAsync("Admin/course/" + entry.CourseId.ToString());
+                        displayEntry.CourseName = JsonConvert.DeserializeObject<CourseDBO>(await response.Content.ReadAsStringAsync()).CourseName;
+                        displayEntry.ClientId = entry.ClientId;
+                        displayEntry.EntryId = entry.Id;
+                        displayEntry.CourseId = entry.CourseId;
+                        DisplayEntries.Add(displayEntry);
+                        //get course name from course table
+                    }
                 }
-                foreach (var entry in Entries)
+                else
                 {
-                    AttendanceDTO displayEntry = new AttendanceDTO();
-                    response = await httpClient.GetAsync("Admin/client/" + entry.ClientId.ToString());
-                    displayEntry.UserName = JsonConvert.DeserializeObject<UserDBO>(await response.Content.ReadAsStringAsync()).UserName;
-                    displayEntry.ScanTime = entry.ScanTime;
-                    response = await httpClient.GetAsync("Admin/course/" + entry.CourseId.ToString());
-                    displayEntry.CourseName = JsonConvert.DeserializeObject<CourseDBO>(await response.Content.ReadAsStringAsync()).CourseName;
-                    displayEntry.ClientId = entry.ClientId;
-                    displayEntry.EntryId = entry.Id;
-                    displayEntry.CourseId = entry.CourseId;
-                    DisplayEntries.Add(displayEntry);
-                    //get course name from course table
+                    ModelState.AddModelError(string.Empty, "No attendance found");
+                    DisplayEntries = new List<AttendanceDTO>();
                 }
+                
             }
             
             return Page();

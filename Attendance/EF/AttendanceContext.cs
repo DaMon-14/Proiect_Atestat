@@ -35,66 +35,6 @@ namespace AttendanceAPI.EF
             modelBuilder.Entity<ScannerDBO>().HasKey(x => x.ScannerId);
             modelBuilder.Entity<Scanner_CourseDBO>().HasKey(x => x.Id);
             modelBuilder.Entity<AttendanceDBO>().HasKey(x => x.Id);
-
-            modelBuilder.Entity<CardDBO>().HasData(
-                new CardDBO
-                {
-                    CardId = -1,
-                    ClientId = -1,
-                    isActive = false
-                });
-            modelBuilder.Entity<UserDBO>().HasData(
-                new UserDBO
-                {
-                    ClientId = -1,
-                    FirstName = "FirstName",
-                    LastName = "LastName",
-                    Institution = "Instituion",
-                    Email = "Email@email.com",
-                    PhoneNumber = "0",
-                    Password = "Password",
-                    IsAdmin = false,
-                    Salt = "Salt",
-                    UserName = "UserName"
-                });
-            modelBuilder.Entity<CourseDBO>().HasData(
-                new CourseDBO
-                {
-                    CourseId = -1,
-                    CourseName = "CourseName",
-                    CourseDescription = "CourseDescription",
-                    isActive = false
-                });
-            modelBuilder.Entity<Client_CourseDBO>().HasData(
-                new Client_CourseDBO
-                {
-                    Id = -1,
-                    ClientId = -1,
-                    CourseId = -1
-                });
-            modelBuilder.Entity<ScannerDBO>().HasData(
-                new ScannerDBO
-                {
-                    ScannerId = -1,
-                    ScannerName = "ScannerName",
-                    isActive = false
-                });
-            modelBuilder.Entity<Scanner_CourseDBO>().HasData(
-                new Scanner_CourseDBO
-                {
-                    Id = -1,
-                    ScannerId = -1,
-                    CourseId = -1,
-                    isActive = false
-                });
-            modelBuilder.Entity<AttendanceDBO>().HasData(
-                new AttendanceDBO
-                {
-                    Id = -1,
-                    ClientId = -1,
-                    CourseId = -1,
-                    ScanTime = new DateTime(1,1,1,1,1,1,DateTimeKind.Utc)
-                });
         }
     }
 }

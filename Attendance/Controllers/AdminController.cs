@@ -111,7 +111,7 @@ namespace AttendanceAPI.Controllers
                 return BadRequest();
             }
             var entries = await _entries.GetEntries();   
-            if(entries == null)
+            if(entries.Count()==0)
             {
                 return NotFound();
             }

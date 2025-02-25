@@ -35,14 +35,21 @@ namespace WebApp.Pages.Admin.Cards
             {
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 using HttpResponseMessage response = await httpClient.GetAsync("Admin/allCards");
-                Cards = JsonConvert.DeserializeObject<List<CardDBO>>(await response.Content.ReadAsStringAsync());
-                if (Cards.Count() == 0)
+                if (response.ReasonPhrase == "OK")
+                {
+                    Cards = JsonConvert.DeserializeObject<List<CardDBO>>(await response.Content.ReadAsStringAsync());
+                    if (Cards.Count() == 0)
+                    {
+                        Cards = new List<CardDBO>();
+                    }
+                    if (SortActive)
+                    {
+                        Cards = Cards.ExceptBy(Cards.Where(x => x.isActive == false), x => x).ToList();
+                    }
+                }
+                else
                 {
                     Cards = new List<CardDBO>();
-                }
-                if(SortActive)
-                {
-                    Cards = Cards.ExceptBy(Cards.Where(x => x.isActive == false), x => x).ToList();
                 }
                 return Page();
             }
@@ -55,14 +62,21 @@ namespace WebApp.Pages.Admin.Cards
             {
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 using HttpResponseMessage response = await httpClient.GetAsync("Admin/allCards");
-                Cards = JsonConvert.DeserializeObject<List<CardDBO>>(await response.Content.ReadAsStringAsync());
-                if (Cards.Count() == 0)
+                if (response.ReasonPhrase == "OK")
+                {
+                    Cards = JsonConvert.DeserializeObject<List<CardDBO>>(await response.Content.ReadAsStringAsync());
+                    if (Cards.Count() == 0)
+                    {
+                        Cards = new List<CardDBO>();
+                    }
+                    if (SortActive)
+                    {
+                        Cards = Cards.ExceptBy(Cards.Where(x => x.isActive == false), x => x).ToList();
+                    }
+                }
+                else
                 {
                     Cards = new List<CardDBO>();
-                }
-                if (SortActive)
-                {
-                    Cards = Cards.ExceptBy(Cards.Where(x => x.isActive == false), x => x).ToList();
                 }
                 return Page();
             }

@@ -77,8 +77,7 @@ namespace AttendanceAPI.Services
                 PhoneNumber = client.PhoneNumber,
                 UserName = client.UserName,
                 Password = hashedPassword,
-                IsAdmin = false,
-                Salt = DateTime.UtcNow.ToString()
+                IsAdmin = false
             };
             _db.Users.Add(newClient);
             await _db.SaveChangesAsync();

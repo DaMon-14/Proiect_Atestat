@@ -35,7 +35,14 @@ namespace WebApp.Pages.Admin.Scanners
             {
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 response = await httpClient.GetAsync("Admin/scanners");
-                Scanners = JsonConvert.DeserializeObject<List<ScannerDBO>>(await response.Content.ReadAsStringAsync());
+                if(response.ReasonPhrase == "OK")
+                {
+                    Scanners = JsonConvert.DeserializeObject<List<ScannerDBO>>(await response.Content.ReadAsStringAsync());
+                }
+                else
+                {
+                    Scanners = new List<ScannerDBO>();
+                }
             }
             return Page();
         }

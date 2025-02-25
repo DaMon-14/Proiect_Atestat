@@ -25,9 +25,6 @@ namespace WebApp.Pages.Admin.Clients
 
         public IList<UserDBO> Client { get;set; } = default!;
 
-        [BindProperty]
-        public string errormsg { get; set; } = default!;
-
         public async Task<IActionResult> OnGetAsync()
         {
             var reps = HttpContext.Session.TryGetValue("Admin", out _);
@@ -35,14 +32,24 @@ namespace WebApp.Pages.Admin.Clients
             {
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 using HttpResponseMessage response = await httpClient.GetAsync("Admin/clients");
-                Client = JsonConvert.DeserializeObject<List<UserDBO>>(await response.Content.ReadAsStringAsync());
-                Client = Client.Where(x=>x.IsAdmin == false).OrderBy(x => x.FirstName).ToList();
+                if(response.ReasonPhrase == "OK")
+                {
+                    Client = JsonConvert.DeserializeObject<List<UserDBO>>(await response.Content.ReadAsStringAsync());
+                    Client = Client.Where(x => x.IsAdmin == false).OrderBy(x => x.FirstName).ToList();
+                    if (Client == null)
+                    {
+                        Client = new List<UserDBO>();
+                    }
+                }
+                else
+                {
+                    Client = new List<UserDBO>();
+                    ModelState.AddModelError(string.Empty, "No clients found");
+                }
+                
+                return Page();
             }
-            if(Client == null)
-            {
-                Client = new List<UserDBO>();
-            }
-            return Page();
+            return RedirectToPage("/Index");
         }
     }
 }

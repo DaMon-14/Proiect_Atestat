@@ -35,7 +35,19 @@ namespace WebApp.Pages.Admin.Courses
             {
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 response = await httpClient.GetAsync("Admin/courses");
-                Courses = JsonConvert.DeserializeObject<List<CourseDBO>>(await response.Content.ReadAsStringAsync());
+                if(response.ReasonPhrase == "OK")
+                {
+                    Courses = JsonConvert.DeserializeObject<List<CourseDBO>>(await response.Content.ReadAsStringAsync());
+                    if (Courses.Count() == 0)
+                    {
+                        Courses = new List<CourseDBO>();
+                    }
+                }
+                else
+                {
+                    Courses = new List<CourseDBO>();
+                    ModelState.AddModelError(string.Empty, "No courses found");
+                }
             }
             return Page();
         }
