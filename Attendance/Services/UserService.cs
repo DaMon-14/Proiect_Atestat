@@ -5,15 +5,18 @@ using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Interfaces;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
+using Microsoft.AspNetCore.Identity;
 
 namespace AttendanceAPI.Services
 {
     public class UserService : IUser
     {
         private readonly AttendanceContext _db;
+        PasswordHasher<UserDBO> passwordHasher = new PasswordHasher<UserDBO>();
         public UserService(AttendanceContext db)
         {
             _db = db;
+            
         }
 
         public async Task<List<UserInfo>> GetAllUsers()
@@ -64,6 +67,7 @@ namespace AttendanceAPI.Services
             {
                 return null;
             }
+            string hashedPassword = passwordHasher.HashPassword(null, client.Password);
             var newClient = new UserDBO
             {
                 FirstName = client.FirstName,
@@ -72,7 +76,7 @@ namespace AttendanceAPI.Services
                 Email = client.Email,
                 PhoneNumber = client.PhoneNumber,
                 UserName = client.UserName,
-                Password = client.Password,
+                Password = hashedPassword,
                 IsAdmin = false,
                 Salt = DateTime.UtcNow.ToString()
             };
@@ -108,7 +112,8 @@ namespace AttendanceAPI.Services
                 }
                 if(clientinfo.Password != null)
                 {
-                    client.Password = clientinfo.Password;
+                    string hashedPassword = passwordHasher.HashPassword(null, clientinfo.Password);
+                    client.Password = hashedPassword;
                 }
                 if(clientinfo.UserName != null)
                 {
@@ -144,11 +149,12 @@ namespace AttendanceAPI.Services
 
         public async Task<bool> CorectCredentials(UpdateUser admin)
         {
-            var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName && x.Password == admin.Password);
+            var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName);
             if (client != null)
             {
                 return true;
             }
+            var PasswordVerification = passwordHasher.VerifyHashedPassword(null, client.Password, admin.Password);
             return false;
         }
 
