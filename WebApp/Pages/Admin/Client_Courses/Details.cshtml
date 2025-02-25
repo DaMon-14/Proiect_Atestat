@@ -1,0 +1,44 @@
+﻿@page
+@model WebApp.Pages.Admin.Client_Courses.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "_LayoutAdmin";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Scanner-Course Relation</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Scanner_Course.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Scanner_Course.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Scanner_Course.ScannerId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Scanner_Course.ScannerId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Scanner_Course.CourseId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Scanner_Course.CourseId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Scanner_Course.isActive)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Scanner_Course.isActive)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Scanner_Course.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

@@ -1,0 +1,46 @@
+﻿@page
+@model WebApp.Pages.Admin.Client_Courses.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "_LayoutAdmin";
+}
+
+<h1>Create</h1>
+
+<h4>Scanner-Course Relation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Scanner_Course.ScannerId" class="control-label"></label>
+                <input asp-for="Scanner_Course.ScannerId" class="form-control" />
+                <span asp-validation-for="Scanner_Course.ScannerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Scanner_Course.CourseId" class="control-label"></label>
+                <input asp-for="Scanner_Course.CourseId" class="form-control" />
+                <span asp-validation-for="Scanner_Course.CourseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Scanner_Course.isActive" class="control-label"></label>
+                <br />
+                <input asp-for="Scanner_Course.isActive" type="checkbox" value="true" />
+                <span asp-validation-for="Scanner_Course.isActive" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
