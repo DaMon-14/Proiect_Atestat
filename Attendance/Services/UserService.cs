@@ -152,9 +152,12 @@ namespace AttendanceAPI.Services
             var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName);
             if (client != null)
             {
-                return true;
+                var PasswordVerification = passwordHasher.VerifyHashedPassword(null, client.Password, admin.Password);
+                if (PasswordVerification >0)
+                {
+                    return true;
+                }
             }
-            var PasswordVerification = passwordHasher.VerifyHashedPassword(null, client.Password, admin.Password);
             return false;
         }
 
