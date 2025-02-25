@@ -24,12 +24,16 @@ namespace AttendanceAPI.Services
         {
             var client = await _db.Users.FindAsync(uclient_course.ClientId);
             var course = await _db.Courses.FindAsync(uclient_course.CourseId);
+            var relationExists = await _db.Client_Courses.Where(x => x.ClientId == uclient_course.ClientId && x.CourseId == uclient_course.CourseId).FirstOrDefaultAsync();
             if(client == null || client.IsAdmin==true) {
                 return "Client not found";
             }
             if (course == null)
             {
                 return "Course not found";
+            }
+            if(relationExists != null) {
+                return "Client already enrolled in this course";
             }
             Client_CourseDBO client_course = new Client_CourseDBO();
             client_course.ClientId = uclient_course.ClientId;

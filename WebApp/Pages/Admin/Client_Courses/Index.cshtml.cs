@@ -26,7 +26,7 @@ namespace WebApp.Pages.Admin.Client_Courses
             _configuration = configuration;
         }
 
-        public IList<Scanner_CourseDBO> Scanner_Courses { get; set; } = default!;
+        public IList<Client_CourseDBO> Client_Courses { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -34,15 +34,15 @@ namespace WebApp.Pages.Admin.Client_Courses
             if (HttpContext.Session.TryGetValue("Admin", out _))
             {
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                response = await httpClient.GetAsync("Admin/scanner_courses");
+                response = await httpClient.GetAsync("Admin/allClient_Course");
                 if(response.ReasonPhrase == "OK")
                 {
-                    Scanner_Courses = JsonConvert.DeserializeObject<List<Scanner_CourseDBO>>(await response.Content.ReadAsStringAsync());
+                    Client_Courses = JsonConvert.DeserializeObject<List<Client_CourseDBO>>(await response.Content.ReadAsStringAsync());
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "No scanner_courses found");
-                    Scanner_Courses = new List<Scanner_CourseDBO>();
+                    ModelState.AddModelError(string.Empty, "No client_courses relations found");
+                    Client_Courses = new List<Client_CourseDBO>();
                 }
             }
             return Page();

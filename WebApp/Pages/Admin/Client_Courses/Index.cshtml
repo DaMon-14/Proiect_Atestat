@@ -6,7 +6,7 @@
     Layout = "_LayoutAdmin";
 }
 
-<h1>Scanner-Course Relations</h1>
+<h1>Client-Course Relations</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -15,38 +15,24 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Scanner_Courses[0].Id)
+                @Html.DisplayNameFor(model => model.Client_Courses[0].ClientId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Scanner_Courses[0].ScannerId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Scanner_Courses[0].CourseId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Scanner_Courses[0].isActive)
+                @Html.DisplayNameFor(model => model.Client_Courses[0].CourseId)
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Scanner_Courses)
+        @foreach (var item in Model.Client_Courses)
         {
         <tr>
             <td>
-                 @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                 @Html.DisplayFor(modelItem => item.ScannerId)
+                 @Html.DisplayFor(modelItem => item.ClientId)
             </td>
             <td>
                  @Html.DisplayFor(modelItem => item.CourseId)
             </td>
             <td>
-                 @Html.DisplayFor(modelItem => item.isActive)
-            </td>
-            <td>
-                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                 <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
                  <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

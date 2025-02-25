@@ -545,6 +545,23 @@ namespace AttendanceAPI.Controllers
         }
 
         [HttpGet]
+        [Route("client_course/{Id}")]
+        public async Task<IActionResult> GetClient_Course([FromHeader] string UID, uint Id)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var all_client_course = await _client_courses.GetAll();
+            var client_course = all_client_course.FirstOrDefault(x => x.Id == Id);
+            if (client_course==null)
+            {
+                return NotFound();
+            }
+            return Ok(client_course);
+        }
+
+        [HttpGet]
         [Route("client_courses/{clientId}")]
         public async Task<IActionResult> GetClient_Courses([FromHeader] string UID, uint clientId)
         {

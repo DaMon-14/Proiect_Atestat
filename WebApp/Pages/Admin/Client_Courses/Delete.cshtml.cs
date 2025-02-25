@@ -25,7 +25,7 @@ namespace WebApp.Pages.Admin.Client_Courses
         }
 
         [BindProperty]
-        public Scanner_CourseDBO Scanner_Course { get; set; } = default!;
+        public Client_CourseDBO Client_Course { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -37,15 +37,15 @@ namespace WebApp.Pages.Admin.Client_Courses
                     return NotFound();
                 }
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                using HttpResponseMessage response = await httpClient.GetAsync("Admin/scanner_course/" + id.ToString());
-                var scanner_course = JsonConvert.DeserializeObject<Scanner_CourseDBO>(await response.Content.ReadAsStringAsync());
-                if (scanner_course == null)
+                using HttpResponseMessage response = await httpClient.GetAsync("Admin/client_course/" + id.ToString());
+                var client_course = JsonConvert.DeserializeObject<Client_CourseDBO>(await response.Content.ReadAsStringAsync());
+                if (client_course == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    Scanner_Course = scanner_course;
+                    Client_Course = client_course;
                 }
                 return Page();
             }
@@ -59,7 +59,7 @@ namespace WebApp.Pages.Admin.Client_Courses
                 return NotFound();
             }
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.DeleteAsync("Admin/deleteScanner_Course/" + id.ToString());
+            using HttpResponseMessage response = await httpClient.DeleteAsync("Admin/deleteClient_Course/" + id.ToString());
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (response.ReasonPhrase != "OK")
             {
