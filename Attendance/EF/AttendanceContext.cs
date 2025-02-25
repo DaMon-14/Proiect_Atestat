@@ -70,9 +70,7 @@ namespace AttendanceAPI.EF
                 {
                     Id = -1,
                     ClientId = -1,
-                    CourseId = -1,
-                    Points = -1,
-                    isEnrolled = false
+                    CourseId = -1
                 });
             modelBuilder.Entity<ScannerDBO>().HasData(
                 new ScannerDBO

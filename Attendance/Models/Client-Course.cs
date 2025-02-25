@@ -2,7 +2,7 @@
 {
     public class Client_Course
     {
-        public int Points { get; set; }
-        public bool isEnrolled { get; set; }
+        public int ClientId { get; set; }
+        public int CourseId { get; set; }
     }
 }

@@ -18,7 +18,8 @@ namespace AttendanceAPI.Controllers
         private readonly IScanner _scanners;
         private readonly IScanner_Course _scanner_courses;
         private readonly IConfiguration _configuration;
-        public AdminController(IUser userService, IAttendance entryService, IConfiguration config, ICourse courses, IScanner scanners, IScanner_Course scanner_courses, ICard cards)
+        private readonly IClient_Course _client_courses;
+        public AdminController(IUser userService, IAttendance entryService, IConfiguration config, ICourse courses, IScanner scanners, IScanner_Course scanner_courses, ICard cards, IClient_Course client_courses)
         {
             _users = userService;
             _entries = entryService;
@@ -27,6 +28,7 @@ namespace AttendanceAPI.Controllers
             _scanners = scanners;
             _scanner_courses = scanner_courses;
             _cards = cards;
+            _client_courses = client_courses;
         }
         [HttpGet]
         [Route("clients")]
@@ -538,6 +540,90 @@ namespace AttendanceAPI.Controllers
             if (card == null)
             {
                 return NotFound("Failed to update card status");
+            }
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("client_courses/{clientId}")]
+        public async Task<IActionResult> GetClient_Courses([FromHeader] string UID, uint clientId)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var client_courses = await _client_courses.GetAll();
+            client_courses = client_courses.Where(x => x.ClientId == clientId).ToList();
+            if (client_courses.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(client_courses);
+        }
+
+        [HttpGet]
+        [Route("course_clients/{courseId}")]
+        public async Task<IActionResult> GetCourse_clients([FromHeader] string UID, uint courseId)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var client_courses = await _client_courses.GetAll();
+            client_courses = client_courses.Where(x => x.CourseId == courseId).ToList();
+            if (client_courses.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(client_courses);
+        }
+
+        [HttpGet]
+        [Route("allClient_Course")]
+        public async Task<IActionResult> AllClient_Course([FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var client_courses = await _client_courses.GetAll();
+            if (client_courses.Count() == 0)
+            {
+                return NotFound();
+            }
+            client_courses = client_courses.OrderBy(x => x.ClientId).ToList();
+            return Ok(client_courses);
+        }
+
+        [HttpPost]
+        [Route("addClient_Course")]
+        public async Task<IActionResult> AddClient_Course([FromBody] Client_Course client_course, [FromHeader] string UID)
+        {
+            if (client_course == null || UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var newclient_course = await _client_courses.AddClient_Course(client_course);
+            if (newclient_course == "Ok")
+            {
+                return Ok();
+            }
+            return NotFound(newclient_course);
+
+        }
+
+        [HttpDelete]
+        [Route("deleteClient_Course/{client_courseId}")]
+        public async Task<IActionResult> DeleteClient_Course(uint client_courseId, [FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var client_course = await _client_courses.DeleteClient_Course(client_courseId);
+            if (client_course == false)
+            {
+                return NotFound();
             }
             return Ok();
         }

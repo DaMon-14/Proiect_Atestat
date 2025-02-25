@@ -15,45 +15,40 @@ namespace AttendanceAPI.Services
             _db = db;
         }
 
-        public async Task<List<Client_CourseDBO>> GetClient_Courses()
+        public async Task<List<Client_CourseDBO>> GetAll()
         {
             return await _db.Client_Courses.Where(x => x.Id > 0).ToListAsync();
         }
 
-        public async Task<Client_CourseDBO> GetClient_courseByClientIdAndCourseId(int clientid, int courseid)
+        public async Task<string> AddClient_Course(Client_Course uclient_course)
         {
-            return await _db.Client_Courses.FirstOrDefaultAsync(x => x.ClientId == clientid && x.CourseId == courseid);
-        }
-
-        public async Task<Client_CourseDBO> UpdateClient_Course(Client_CourseDBO client_course)
-        {
-            var client_courseToUpdate = await _db.Client_Courses.FirstOrDefaultAsync(x => x.Id == client_course.Id);
-            if (client_courseToUpdate == null)
-            {
-                return null;
+            var client = await _db.Users.FindAsync(uclient_course.ClientId);
+            var course = await _db.Courses.FindAsync(uclient_course.CourseId);
+            if(client == null || client.IsAdmin==true) {
+                return "Client not found";
             }
-            client_courseToUpdate.Points = client_course.Points;
-            client_courseToUpdate.isEnrolled = client_course.isEnrolled;
-            await _db.SaveChangesAsync();
-            return client_courseToUpdate;
-        }
-
-        public async Task<Client_CourseDBO> AddClient_Course(int clientid, int courseid, Client_Course uclient_course)
-        {
-            var client = await _db.Users.FindAsync(clientid);
-            var course = await _db.Courses.FindAsync(courseid);
-            if (client == null || course == null)
+            if (course == null)
             {
-                return null;
+                return "Course not found";
             }
             Client_CourseDBO client_course = new Client_CourseDBO();
-            client_course.ClientId = clientid;
-            client_course.CourseId = courseid;
-            client_course.Points = uclient_course.Points;
-            client_course.isEnrolled = uclient_course.isEnrolled;
+            client_course.ClientId = uclient_course.ClientId;
+            client_course.CourseId = uclient_course.CourseId;
             _db.Client_Courses.Add(client_course);
             await _db.SaveChangesAsync();
-            return client_course;
+            return "Ok";
+        }
+
+        public async Task<bool> DeleteClient_Course(uint id)
+        {
+            var client_course = await _db.Client_Courses.FindAsync(Convert.ToInt32(id));
+            if (client_course == null)
+            {
+                return false;
+            }
+            _db.Client_Courses.Remove(client_course);
+            await _db.SaveChangesAsync();
+            return true;
         }
     }
 }
