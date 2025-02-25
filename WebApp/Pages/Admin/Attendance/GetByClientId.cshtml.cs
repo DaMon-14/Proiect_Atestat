@@ -70,6 +70,7 @@ namespace WebApp.Pages.Admin.Attendance
                     response = await httpClient.GetAsync("Admin/client/" + entry.ClientId.ToString());
                     displayEntry.UserName = JsonConvert.DeserializeObject<UserDBO>(await response.Content.ReadAsStringAsync()).UserName;
                     displayEntry.ScanTime = entry.ScanTime;
+                    displayEntry.CourseId = entry.CourseId;
                     response = await httpClient.GetAsync("Admin/course/" + entry.CourseId.ToString());
                     displayEntry.CourseName = JsonConvert.DeserializeObject<CourseDBO>(await response.Content.ReadAsStringAsync()).CourseName;
                     displayEntry.ClientId = entry.ClientId;

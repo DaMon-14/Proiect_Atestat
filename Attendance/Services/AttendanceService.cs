@@ -29,6 +29,10 @@ namespace AttendanceAPI.Services
             {
                 return "Client not found";
             }
+            if(_db.Client_Courses.FirstOrDefault(x=>x.ClientId == addentry.ClientId && x.CourseId == addentry.CourseId) == null)
+            {
+                return "Client not enrolled in course";
+            }
             var newEntry = new AttendanceDBO
             {
                 ClientId = addentry.ClientId,
@@ -82,6 +86,10 @@ namespace AttendanceAPI.Services
                     return "Course not found";
                 }
                 entry.CourseId = updateEntry.CourseId;
+            }
+            if (_db.Client_Courses.FirstOrDefault(x => x.ClientId == updateEntry.ClientId && x.CourseId == updateEntry.CourseId) == null)
+            {
+                return "Client not enrolled in course";
             }
             entry.ScanTime = updateEntry.ScanTime;
             await _db.SaveChangesAsync();
