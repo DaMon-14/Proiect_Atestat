@@ -54,34 +54,14 @@ namespace AttendanceAPI.Controllers
                     message = "Scanner not active"
                 });
             }
-            /*    Not needed for now
-             
-            var client_course = await _client_courses.GetClient_courseByClientIdAndCourseId(card.ClientId, scanner_course.CourseId);
-            if(client_course == null || !client_course.isEnrolled) {
-                return NotFound(new
-                {
-                    message = "Client not enrolled"
-                });
-            }
-            if (client_course.Points == 0)
-            {
-                return NotFound(new
-                {
-                    message = "Not Enough Points"
-                });
-            }
-            */
             var entry = await _entries.AddEntry(new Attendance
             {
                 ClientId = card.ClientId,
                 CourseId = scanner_course.CourseId
             });
-            if (entry == null)
+            if (entry != "Ok")
             {
-                return BadRequest(new
-                {
-                    message = "Failed to add entry"
-                });
+                return NotFound(entry);
             }
 
             return Ok();

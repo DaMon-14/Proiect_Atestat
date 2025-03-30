@@ -14,7 +14,7 @@
 -on entry creation use names(must be unique) for simplicity
 ~on getbyclient id page error on nonexistent client
 ~same for course
--remove course table field named institutionid
+~remove course table field named institutionid
 ~make namespaces match folder
 -perfect Scanner_Course creation conditions
 -verify actions on not login but want to access info
