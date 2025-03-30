@@ -1,6 +1,7 @@
 ﻿using AttendanceAPI.Interfaces;
 using AttendanceAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using AttendanceAPI.EF.DBO;
 
 namespace AttendanceAPI.Controllers
 {
@@ -11,13 +12,15 @@ namespace AttendanceAPI.Controllers
         private readonly IUser _users;
         private readonly IAttendance _entries;
         private readonly ICourse _courses;
+        private readonly IClient_Course _clientCourses;
         private readonly IConfiguration _configuration;
-        public ClientController(IUser userService, IAttendance entryService, IConfiguration configuration, ICourse courses)
+        public ClientController(IUser userService, IAttendance entryService, IConfiguration configuration, ICourse courses, IClient_Course clientCourses)
         {
             _users = userService;
             _entries = entryService;
             _configuration = configuration;
             _courses = courses;
+            _clientCourses = clientCourses;
         }
 
         [HttpGet]
@@ -55,18 +58,40 @@ namespace AttendanceAPI.Controllers
 
         [HttpGet]
         [Route("course/{id}")]
+        public async Task<IActionResult> GetCourses(uint id, [FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var activeCourses = await _courses.GetActiveCourses();
+            var course = activeCourses.FirstOrDefault(x => x.CourseId == id);
+            
+            if (course == null)
+            {
+                return NotFound();
+            }
+            return Ok(course);
+        }
+
+        [HttpGet]
+        [Route("courses/{id}")]
         public async Task<IActionResult> GetCourse(uint id, [FromHeader] string UID)
         {
             if (UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
             }
-            var course = await _courses.GetCourse(id);
-            if (course == null)
+            var allCourses = await _clientCourses.GetAll();
+            var ClientCourses = allCourses.Where(x => x.ClientId == id).ToList();
+            var activeCourses = await _courses.GetActiveCourses();
+            var courses = new List<CourseDBO>();
+            courses = activeCourses.Where(x => ClientCourses.Any(y => y.CourseId == x.CourseId)).ToList();
+            if (courses == null || courses.Count()==0)
             {
                 return NotFound();
             }
-            return Ok(course);
+            return Ok(courses);
         }
     }
 }
