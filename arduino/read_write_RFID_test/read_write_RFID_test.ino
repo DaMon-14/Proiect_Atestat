@@ -75,7 +75,7 @@ void loop()
    /* Call 'WriteDataToBlock' function, which will write data to the block */
    Serial.print("\n");
    Serial.println("Writing to Data Block...");
-   WriteDataToBlock(blockNum, blockData);
+   //WriteDataToBlock(blockNum, blockData);
    
    /* Read data from the same block */
    Serial.print("\n");
