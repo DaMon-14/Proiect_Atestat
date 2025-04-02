@@ -1,0 +1,58 @@
+﻿@page
+@model WebApp.Pages.Shared.Profile.ProfileModel
+@{
+    ViewData["Title"] = "Home page";
+    if (HttpContext.Session.TryGetValue("Admin", out _) == true)
+    {
+        Layout = "_LayoutAdmin";
+    }
+    else if (HttpContext.Session.TryGetValue("Client", out _) == true)
+    {
+        Layout = "_LayoutClient";
+    } else {
+        Layout = "_Layout";
+    }
+}
+
+<div>
+    <h3 class="display-4">Profile</h3>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UserInfo.UserName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UserInfo.UserName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UserInfo.FirstName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UserInfo.FirstName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UserInfo.LastName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UserInfo.LastName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UserInfo.Institution)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UserInfo.Institution)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UserInfo.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UserInfo.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UserInfo.PhoneNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UserInfo.PhoneNumber)
+        </dd>
+    </dl>
+</div>
