@@ -56,3 +56,18 @@
         </dd>
     </dl>
 </div>
+<div>
+    @{
+        if (HttpContext.Session.TryGetValue("Admin", out _) == true)
+        {
+            <a asp-page="./Edit" asp-route-id="@Model.UserInfo.ClientId">Edit</a>
+        }
+    }
+    <a asp-page="./Change_Password" asp-route-id="@Model.UserInfo.ClientId">Change Password</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

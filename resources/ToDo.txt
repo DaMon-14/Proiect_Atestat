@@ -1,6 +1,7 @@
 ~On profile page only admin should be able to edit fields(except password - can be changed by client)
 -add posibility to change client username (beware of unique value)
 -change password on client Profile page
+-change api calls to exclude using the admin ones
 
 -verify conditions: null checks for empty strings
 -Add modify profile button on dashbar

@@ -1,0 +1,67 @@
+﻿@page
+@model WebApp.Pages.Shared.Profile.EditModel
+
+@{
+    ViewData["Title"] = "Change Password";
+    if (HttpContext.Session.TryGetValue("Admin", out _) == true)
+    {
+        Layout = "_LayoutAdmin";
+    }
+    else if (HttpContext.Session.TryGetValue("Client", out _) == true)
+    {
+        Layout = "_LayoutClient";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+}
+
+<h1>Edit</h1>
+
+<h4>Client</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="UserInfo.ClientId" />
+            <div class="form-group">
+                <label asp-for="UserInfo.FirstName" class="control-label"></label>
+                <input asp-for="UserInfo.FirstName" class="form-control" />
+                <span asp-validation-for="UserInfo.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserInfo.LastName" class="control-label"></label>
+                <input asp-for="UserInfo.LastName" class="form-control" />
+                <span asp-validation-for="UserInfo.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserInfo.Institution" class="control-label"></label>
+                <input asp-for="UserInfo.Institution" class="form-control" />
+                <span asp-validation-for="UserInfo.Institution" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserInfo.Email" class="control-label"></label>
+                <input asp-for="UserInfo.Email" class="form-control" />
+                <span asp-validation-for="UserInfo.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserInfo.PhoneNumber" class="control-label"></label>
+                <input asp-for="UserInfo.PhoneNumber" class="form-control" />
+                <span asp-validation-for="UserInfo.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Profile" asp-route-id="@Model.UserInfo.ClientId">Back to Profile</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
