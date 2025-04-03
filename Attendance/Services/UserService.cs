@@ -148,7 +148,16 @@ namespace AttendanceAPI.Services
 
         public async Task<bool> CorectCredentials(UpdateUser admin)
         {
-            var client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName);
+            var client = new UserDBO();
+            if(admin.UserName == null)
+            {
+                client = await _db.Users.FirstOrDefaultAsync(x => x.ClientId == admin.ClientId);
+            }
+            else
+            {
+                client = await _db.Users.FirstOrDefaultAsync(x => x.UserName == admin.UserName);
+            }
+            
             if (client != null)
             {
                 var PasswordVerification = passwordHasher.VerifyHashedPassword(null, client.Password, admin.Password);

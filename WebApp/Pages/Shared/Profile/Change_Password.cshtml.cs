@@ -27,13 +27,13 @@ namespace WebApp.Pages.Shared.Profile
         };
 
         [BindProperty]
-        public PasswordChange PasswordChange { get; set; } = default!;
+        public UpdatePassword PasswordChange { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (HttpContext.Session.TryGetValue("Admin", out _) || HttpContext.Session.TryGetValue("Client", out _))
             {
-                PasswordChange = new PasswordChange();
+                PasswordChange = new UpdatePassword();
                 if (id == null)
                 {
                     return NotFound();
@@ -52,7 +52,7 @@ namespace WebApp.Pages.Shared.Profile
             {
                 return Page();
             }
-            var passwordChange = new PasswordChange()
+            var passwordChange = new UpdatePassword()
             {
                 ClientId = PasswordChange.ClientId,
                 CurrentPassword = PasswordChange.CurrentPassword,
@@ -69,30 +69,27 @@ namespace WebApp.Pages.Shared.Profile
                 ModelState.AddModelError(string.Empty, "Password must be at least 8 characters long");
                 return Page();
             }
-            /*
+            
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.PutAsync("Admin/client", new StringContent(JsonConvert.SerializeObject(User), Encoding.UTF8, "application/json"));
+            using HttpResponseMessage response = await httpClient.PutAsync("Common/client/passwordUpdate", new StringContent(JsonConvert.SerializeObject(PasswordChange), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
             
             if (response.ReasonPhrase == "OK")
             {
-                return RedirectToPage("./Index");
+                return RedirectToPage("./Profile");
+            }
+            else if (response.ReasonPhrase == "Bad Request")
+            {
+                ModelState.AddModelError(string.Empty, "Incorect password");
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Failed to update client");
-                return Page();
+                ModelState.AddModelError(string.Empty, "Failed to update password");
             }
-            */
+            
             return Page();
         }
     }
 
-    public class PasswordChange
-    {
-        public int ClientId { get; set; }
-        public string CurrentPassword { get; set; } = default!;
-        public string NewPassword { get; set; } = default!;
-        public string ConfirmPassword { get; set; } = default!;
-    }
+    
 }

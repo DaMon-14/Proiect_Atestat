@@ -78,5 +78,41 @@ namespace AttendanceAPI.Controllers
             }
             return Ok();
         }
+
+
+        [HttpPut]
+        [Route("client/passwordUpdate")]
+        public async Task<IActionResult> UpdateClientPassword([FromBody] UpdatePassword passwordChange, [FromHeader] string UID)
+        {
+            if (passwordChange == null || UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var client = await _users.GetUser(Convert.ToUInt16(passwordChange.ClientId));
+            if(client == null)
+            {
+                return NotFound();
+            }
+            var checkPassword = await _users.CorectCredentials(new UpdateUser
+            {
+                ClientId = passwordChange.ClientId,
+                Password = passwordChange.CurrentPassword
+            });
+            if(checkPassword == false)
+            {
+                return BadRequest("Incorrect password");
+            }
+            UpdateUser clientInfo = new UpdateUser
+            {
+                ClientId = passwordChange.ClientId,
+                Password = passwordChange.NewPassword
+            };
+            var updateClient = await _users.UpdateUser(clientInfo);
+            if (updateClient == null)
+            {
+                return NotFound();
+            }
+            return Ok();
+        }
     }
 }
