@@ -27,22 +27,24 @@ namespace WebApp.Pages.Shared.Profile
             if (HttpContext.Session.TryGetValue("Admin", out _) == true)
             {
                 id = Convert.ToInt32(HttpContext.Session.GetString("Admin"));
-                httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                using HttpResponseMessage response = await httpClient.GetAsync("Common/client/" + id.ToString());
-                var userInfo = JsonConvert.DeserializeObject<UserInfo>(await response.Content.ReadAsStringAsync());
-                if (userInfo == null)
-                {
-                    return NotFound();
-                }
-                UserInfo = userInfo;
-                return Page();
             }
             else if (HttpContext.Session.TryGetValue("Client", out _) == true)
             {
-                return Page();
+                id = Convert.ToInt32(HttpContext.Session.GetString("Client"));
             }
-
-            return RedirectToPage("/Index");
+            else
+            {
+                return RedirectToPage("/Index");
+            }
+            httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
+            using HttpResponseMessage response = await httpClient.GetAsync("Common/client/" + id.ToString());
+            var userInfo = JsonConvert.DeserializeObject<UserInfo>(await response.Content.ReadAsStringAsync());
+            if (userInfo == null)
+            {
+                return NotFound();
+            }
+            UserInfo = userInfo;
+            return Page();
         }
     }
 }
