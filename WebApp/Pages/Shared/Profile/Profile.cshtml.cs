@@ -28,7 +28,7 @@ namespace WebApp.Pages.Shared.Profile
             {
                 id = Convert.ToInt32(HttpContext.Session.GetString("Admin"));
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                using HttpResponseMessage response = await httpClient.GetAsync("Admin/client/" + id.ToString());
+                using HttpResponseMessage response = await httpClient.GetAsync("Common/client/" + id.ToString());
                 var userInfo = JsonConvert.DeserializeObject<UserInfo>(await response.Content.ReadAsStringAsync());
                 if (userInfo == null)
                 {
