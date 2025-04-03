@@ -39,7 +39,7 @@ namespace WebApp.Pages.Shared.Profile
                     return NotFound();
                 }
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-                using HttpResponseMessage response = await httpClient.GetAsync("Admin/client/" + id.ToString());
+                using HttpResponseMessage response = await httpClient.GetAsync("Common/client/" + id.ToString());
                 var client = JsonConvert.DeserializeObject<UpdateUser>(await response.Content.ReadAsStringAsync());
 
                 if (client == null)     {
@@ -77,11 +77,11 @@ namespace WebApp.Pages.Shared.Profile
                 Password = ""
             };
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.PutAsync("Admin/client", new StringContent(JsonConvert.SerializeObject(User), Encoding.UTF8, "application/json"));
+            using HttpResponseMessage response = await httpClient.PutAsync("Common/client", new StringContent(JsonConvert.SerializeObject(User), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (response.ReasonPhrase == "OK")
             {
-                return RedirectToPage("./Index");
+                return RedirectToPage("./Profile");
             }
             else
             {

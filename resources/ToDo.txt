@@ -2,6 +2,7 @@
 -add posibility to change client username (beware of unique value)
 -change password on client Profile page
 -change api calls to exclude using the admin ones
+-update user resets username and password
 
 -verify conditions: null checks for empty strings
 -Add modify profile button on dashbar

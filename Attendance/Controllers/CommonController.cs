@@ -46,5 +46,37 @@ namespace AttendanceAPI.Controllers
             }
             return Ok(loginResponse);
         }
+
+        [HttpGet]
+        [Route("client/{id}")]
+        public async Task<IActionResult> GetUser(uint id, [FromHeader] string UID)
+        {
+            if (UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var client = await _users.GetUser(id);
+            if (client == null)
+            {
+                return NotFound();
+            }
+            return Ok(client);
+        }
+
+        [HttpPut]
+        [Route("client")]
+        public async Task<IActionResult> UpdateClient([FromBody] UpdateUser clientinfo, [FromHeader] string UID)
+        {
+            if (clientinfo == null || UID != _configuration.GetValue<string>("UID"))
+            {
+                return BadRequest();
+            }
+            var client = await _users.UpdateUser(clientinfo);
+            if (client == null)
+            {
+                return NotFound();
+            }
+            return Ok();
+        }
     }
 }
