@@ -2,6 +2,18 @@
 @model WebApp.Pages.PrivacyModel
 @{
     ViewData["Title"] = "Privacy Policy";
+    if (HttpContext.Session.TryGetValue("Admin", out _) == true)
+    {
+        Layout = "_LayoutAdmin";
+    }
+    else if (HttpContext.Session.TryGetValue("Client", out _) == true)
+    {
+        Layout = "_LayoutClient";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
 }
 <h1>@ViewData["Title"]</h1>
 
