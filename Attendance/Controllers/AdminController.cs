@@ -78,6 +78,10 @@ namespace AttendanceAPI.Controllers
                     StatusCode = (int)HttpStatusCode.Conflict
                 };
             }
+            if(client.Password.Length < 8)
+            {
+                return BadRequest("Password must be longer than 8 caracters");
+            }
             var newclient = await _users.AddUser(client);
             if(newclient == null)
             {
@@ -93,6 +97,10 @@ namespace AttendanceAPI.Controllers
             if(clientinfo == null || UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
+            }
+            if (clientinfo.Password.Length < 8 && clientinfo.Password!="")
+            {
+                return BadRequest("Password must be longer than 8 caracters");
             }
             var client = await _users.UpdateUser(clientinfo);
             if (client == null)

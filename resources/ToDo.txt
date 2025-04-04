@@ -1,6 +1,5 @@
 -admin should be able to reset user password
 -add posibility to change client username (beware of unique value)
--on user creation password lenght cricteria does not apply
 -verify conditions: null checks for empty strings
 -on entry creation use names(must be unique) for simplicity
 -perfect Scanner_Course creation conditions
@@ -9,6 +8,7 @@
 -client id's not shown but required(on attendance create)-use usernames instead of id's or display Users id's
 
 
+~on user creation password lenght cricteria does not apply
 ~Add modify profile button on dashbar
 ~On profile page only admin should be able to edit fields(except password - can be changed by client)
 ~change password on client Profile page
