@@ -63,13 +63,7 @@ namespace WebApp.Pages.Shared.Profile
             {
                 ModelState.AddModelError(string.Empty, "New password and confirm password do not match");
                 return Page();
-            }
-            if(passwordChange.NewPassword.Length < 8)
-            {
-                ModelState.AddModelError(string.Empty, "Password must be at least 8 characters long");
-                return Page();
-            }
-            
+            }   
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
             using HttpResponseMessage response = await httpClient.PutAsync("Common/client/passwordUpdate", new StringContent(JsonConvert.SerializeObject(PasswordChange), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -80,7 +74,7 @@ namespace WebApp.Pages.Shared.Profile
             }
             else if (response.ReasonPhrase == "Bad Request")
             {
-                ModelState.AddModelError(string.Empty, "Incorect password");
+                ModelState.AddModelError(string.Empty, jsonResponse);
             }
             else
             {

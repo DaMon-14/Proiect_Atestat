@@ -107,6 +107,10 @@ namespace AttendanceAPI.Controllers
                 ClientId = passwordChange.ClientId,
                 Password = passwordChange.NewPassword
             };
+            if(clientInfo.Password.Length < 8)
+            {
+                return BadRequest("Password must be longer than 8 caracters");
+            }
             var updateClient = await _users.UpdateUser(clientInfo);
             if (updateClient == null)
             {
