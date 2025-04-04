@@ -1,12 +1,7 @@
-~On profile page only admin should be able to edit fields(except password - can be changed by client)
+-admin should be able to reset user password
 -add posibility to change client username (beware of unique value)
--change password on client Profile page
--change api calls to exclude using the admin ones
--update user resets username and password
-
+-on user creation password lenght cricteria does not apply
 -verify conditions: null checks for empty strings
--Add modify profile button on dashbar
--chenge Register button to reset password button
 -on entry creation use names(must be unique) for simplicity
 -perfect Scanner_Course creation conditions
 -verify actions on not login but want to access info
@@ -14,8 +9,11 @@
 -client id's not shown but required(on attendance create)-use usernames instead of id's or display Users id's
 
 
-
-
+~Add modify profile button on dashbar
+~On profile page only admin should be able to edit fields(except password - can be changed by client)
+~change password on client Profile page
+~change api calls to exclude using the admin ones
+~update user resets username and password
 ~verify corect text is displayed
 ~On Admin Clients shows only Non admin, by on get by course id shows admins also
 ~repair esp Api controller
