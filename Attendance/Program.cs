@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<ICard, CardService>();
-builder.Services.AddScoped<IUser, UserService>();
+builder.Services.AddSingleton<IUser, UserService>(); //previously was Scoped not Singleton
 builder.Services.AddSingleton<ICourse, CourseService>();
 builder.Services.AddSingleton<IClient_Course, Client_CourseService>();
 builder.Services.AddSingleton<IScanner, ScannerService>();
