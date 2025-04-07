@@ -5,7 +5,7 @@
 /*MOSI (11), MISO (12) and SCK (13) are fixed */
 /*You can configure SS and RST Pins*/
 #define SS_PIN 5  /* Slave Select Pin */
-#define RST_PIN 36  /* Reset Pin */
+#define RST_PIN 32  /* Reset Pin */
 
 /* Create an instance of MFRC522 */
 MFRC522 mfrc522(SS_PIN, RST_PIN);
@@ -75,7 +75,7 @@ void loop()
    /* Call 'WriteDataToBlock' function, which will write data to the block */
    Serial.print("\n");
    Serial.println("Writing to Data Block...");
-   //WriteDataToBlock(blockNum, blockData);
+   WriteDataToBlock(blockNum, blockData);
    
    /* Read data from the same block */
    Serial.print("\n");
