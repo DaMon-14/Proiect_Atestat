@@ -89,11 +89,11 @@ namespace AttendanceAPI.Services
             UserDBO client = await _db.Users.FirstOrDefaultAsync(x => x.ClientId == clientinfo.ClientId);
             if (client != null)
             {
-                if(clientinfo.FirstName != null && clientinfo.FirstName != "")
+                if(clientinfo.FirstName != null)
                 {
                     client.FirstName = clientinfo.FirstName;
                 }
-                if(clientinfo.LastName != null && clientinfo.LastName != "")
+                if(clientinfo.LastName != null)
                 {
                     client.LastName = clientinfo.LastName;
                 }
@@ -101,11 +101,11 @@ namespace AttendanceAPI.Services
                 {
                     client.Institution = clientinfo.Institution;
                 }
-                if(clientinfo.Email != null && clientinfo.Email != "")
+                if(clientinfo.Email != null)
                 {
                     client.Email = clientinfo.Email;
                 }
-                if(clientinfo.PhoneNumber != null && clientinfo.PhoneNumber != "")
+                if(clientinfo.PhoneNumber != null)
                 {
                     client.PhoneNumber = clientinfo.PhoneNumber;
                 }

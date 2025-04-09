@@ -41,7 +41,7 @@
                 <span asp-validation-for="Client.PhoneNumber" class="text-danger"></span>
             </div>
             <div>
-                <a asp-page="ResetPassword">Reset user password</a>
+                <a asp-page="ResetPassword" asp-route-id="@Model.Client.ClientId">Reset user password</a>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

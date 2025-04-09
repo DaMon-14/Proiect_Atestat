@@ -27,14 +27,14 @@ namespace WebApp.Pages.Admin.Clients
         };
 
         [BindProperty]
-        public string Password { get; set; } = default!;
-        private int Id;
+        public UpdateUser Client { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (HttpContext.Session.TryGetValue("Admin", out _))
             {
-                Id = Convert.ToInt32(id);
+                Client = new UpdateUser();
+                Client.ClientId = Convert.ToInt32(id);
                 return Page();
             }
             return RedirectToPage("/Index");
@@ -48,12 +48,6 @@ namespace WebApp.Pages.Admin.Clients
             {
                 return Page();
             }
-            /*
-            UpdateUser Client = new UpdateUser() {
-                ClientId = Id,
-                Password = Password
-            };
-
 
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
             using HttpResponseMessage response = await httpClient.PutAsync("Admin/client", new StringContent(JsonConvert.SerializeObject(Client), Encoding.UTF8, "application/json"));
@@ -61,7 +55,7 @@ namespace WebApp.Pages.Admin.Clients
             
             if (response.ReasonPhrase == "OK")
             {
-                return RedirectToPage("./Profile");
+                return RedirectToPage("./Index");
             }
             else if (response.ReasonPhrase == "Bad Request")
             {
@@ -71,7 +65,7 @@ namespace WebApp.Pages.Admin.Clients
             {
                 ModelState.AddModelError(string.Empty, "Failed to update password");
             }
-            */
+            
             return Page();
         }
 
