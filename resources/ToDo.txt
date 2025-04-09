@@ -1,5 +1,4 @@
--reset password not working
--set Client info to be nullable(except Username and password)(verify other conditions of null check, especially User Add/Update)
+-(verify other conditions of null check, especially User Add/Update)
 -admin should be able to reset user password
 -add posibility to change client username (beware of unique value)
 -verify conditions: null checks for empty strings
@@ -10,6 +9,8 @@
 -client id's not shown but required(on attendance create)-use usernames instead of id's or display Users id's
 
 
+~reset password not working
+~set Client info to be nullable(except Username and password)
 ~on user creation password lenght cricteria does not apply
 ~Add modify profile button on dashbar
 ~On profile page only admin should be able to edit fields(except password - can be changed by client)
