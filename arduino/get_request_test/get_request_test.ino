@@ -17,7 +17,7 @@ const char* password = "ZeroSugar0000";
 const char* UID = "a13fab95-ce9c-4325-896f-5cbc4691aa28";
 
 //Your Domain name with URL path or IP address with path
-String serverName = "https://192.168.68.57:7172/Admin/client/1004";
+String serverName = "https://192.168.68.50:7172/Admin/client/1021";
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.

@@ -1,3 +1,4 @@
+-reset password not working
 -set Client info to be nullable(except Username and password)(verify other conditions of null check, especially User Add/Update)
 -admin should be able to reset user password
 -add posibility to change client username (beware of unique value)
