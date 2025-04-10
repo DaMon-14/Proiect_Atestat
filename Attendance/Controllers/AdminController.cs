@@ -71,18 +71,34 @@ namespace AttendanceAPI.Controllers
                 return BadRequest();
             }
             var users = await _users.GetAllUsers();
-            if(users.FirstOrDefault(x=>x.UserName == client.UserName) != null)
+            if (client.UserName == null)
             {
-                return new ObjectResult("User already exists")
+                return BadRequest("Username is mandatory");
+            }
+            else
+            {
+                if (users.FirstOrDefault(x => x.UserName == client.UserName) != null)
                 {
-                    StatusCode = (int)HttpStatusCode.Conflict
-                };
+                    return new ObjectResult("User already exists")
+                    {
+                        StatusCode = (int)HttpStatusCode.Conflict
+                    };
+                }
             }
-            if(client.Password.Length < 8)
+            if(client.Password != null)
             {
-                return BadRequest("Password must be longer than 8 caracters");
+                if (client.Password.Length < 8)
+                {
+                    return BadRequest("Password must be longer than 8 caracters");
+                }
             }
-            var newclient = await _users.AddUser(client);
+            else
+            {
+                return BadRequest("Password is mandatory");
+            }
+            
+
+                var newclient = await _users.AddUser(client);
             if(newclient == null)
             {
                 return StatusCode(500);
