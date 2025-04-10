@@ -13,8 +13,10 @@
 </p>
 <div>
     <form method="post">
-        <p>Sort by active:</p>
-        <input asp-for="SortActive" type="checkbox" asp-action="index" />
+        <label>
+            Sort by active:
+            <input asp-for="SortActive" type="checkbox" asp-action="index" />
+        </label>
         <input type="submit" value="Sort" />
     </form>
 </div>
