@@ -1,14 +1,16 @@
+-search function for admin searching clients usernames
 -(verify other conditions of null check, especially User Add/Update)
--admin should be able to reset user password
--add posibility to change client username (beware of unique value)
 -verify conditions: null checks for empty strings
 -on entry creation use names(must be unique) for simplicity
 -perfect Scanner_Course creation conditions
 -verify actions on not login but want to access info
 -add isactive to course table(if want to delete course set isactive to false so at attendance get suposed deleted course still appeares)
--client id's not shown but required(on attendance create)-use usernames instead of id's or display Users id's
 
 
+~add posibility to change client username (beware of unique value)
+~edit profile email cannot be null but can.
+~client id's not shown but required(on attendance create)-use usernames instead of id's or display Users id's
+~admin should be able to reset user password
 ~reset password not working
 ~set Client info to be nullable(except Username and password)
 ~on user creation password lenght cricteria does not apply
