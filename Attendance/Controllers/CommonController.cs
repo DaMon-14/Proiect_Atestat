@@ -2,6 +2,7 @@
 using AttendanceAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System.Net;
 
 namespace AttendanceAPI.Controllers
 {
@@ -70,6 +71,14 @@ namespace AttendanceAPI.Controllers
             if (clientinfo == null || UID != _configuration.GetValue<string>("UID"))
             {
                 return BadRequest();
+            }
+            var users = await _users.GetAllUsers();
+            if (users.FirstOrDefault(x => x.UserName == clientinfo.UserName && x.UserName != clientinfo.UserName) != null)
+            {
+                return new ObjectResult("User already exists")
+                {
+                    StatusCode = (int)HttpStatusCode.Conflict
+                };
             }
             var client = await _users.UpdateUser(clientinfo);
             if (client == null)

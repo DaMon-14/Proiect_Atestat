@@ -27,7 +27,7 @@ namespace WebApp.Pages.Shared.Profile
         };
 
         [BindProperty]
-        public UserEdit UserInfo { get; set; } = default!;
+        public UpdateUser UserInfo { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -40,18 +40,11 @@ namespace WebApp.Pages.Shared.Profile
                 }
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 using HttpResponseMessage response = await httpClient.GetAsync("Common/client/" + id.ToString());
-                var client = JsonConvert.DeserializeObject<UpdateUser>(await response.Content.ReadAsStringAsync());
-
-                if (client == null)     {
+                UserInfo = JsonConvert.DeserializeObject<UpdateUser>(await response.Content.ReadAsStringAsync());
+                if (UserInfo == null)
+                {
                     return NotFound();
                 }
-                UserInfo = new UserEdit();
-                UserInfo.Institution = client.Institution;
-                UserInfo.FirstName = client.FirstName;
-                UserInfo.LastName = client.LastName;
-                UserInfo.Email = client.Email;
-                UserInfo.PhoneNumber = client.PhoneNumber;
-                UserInfo.ClientId = client.ClientId;
                 return Page();
             }
             return RedirectToPage("/Index");
@@ -65,23 +58,17 @@ namespace WebApp.Pages.Shared.Profile
             {
                 return Page();
             }
-            var User = new AttendanceAPI.Models.UpdateUser
-            {
-                ClientId = UserInfo.ClientId,
-                FirstName = UserInfo.FirstName,
-                LastName = UserInfo.LastName,
-                Institution = UserInfo.Institution,
-                Email = UserInfo.Email,
-                PhoneNumber = UserInfo.PhoneNumber,
-                UserName = "",
-                Password = ""
-            };
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.PutAsync("Common/client", new StringContent(JsonConvert.SerializeObject(User), Encoding.UTF8, "application/json"));
+            using HttpResponseMessage response = await httpClient.PutAsync("Common/client", new StringContent(JsonConvert.SerializeObject(UserInfo), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (response.ReasonPhrase == "OK")
             {
                 return RedirectToPage("./Profile");
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
+                ModelState.AddModelError(string.Empty, jsonResponse);
+                return Page();
             }
             else
             {
