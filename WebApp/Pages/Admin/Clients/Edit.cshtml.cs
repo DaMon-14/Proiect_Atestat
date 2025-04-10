@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.Text;
 using AttendanceAPI.EF.DBO;
 using AttendanceAPI.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace WebApp.Pages.Admin.Clients
 {
@@ -27,7 +28,7 @@ namespace WebApp.Pages.Admin.Clients
         };
 
         [BindProperty]
-        public UserEdit Client { get; set; } = default!;
+        public UpdateUser Client { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -40,18 +41,12 @@ namespace WebApp.Pages.Admin.Clients
                 }
                 httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
                 using HttpResponseMessage response = await httpClient.GetAsync("Admin/client/" + id.ToString());
-                var client = JsonConvert.DeserializeObject<UpdateUser>(await response.Content.ReadAsStringAsync());
+                Client = JsonConvert.DeserializeObject<UpdateUser>(await response.Content.ReadAsStringAsync());
 
-                if (client == null)     {
+                if (Client == null)
+                {
                     return NotFound();
                 }
-                Client = new UserEdit();
-                Client.Institution = client.Institution;
-                Client.FirstName = client.FirstName;
-                Client.LastName = client.LastName;
-                Client.Email = client.Email;
-                Client.PhoneNumber = client.PhoneNumber;
-                Client.ClientId = client.ClientId;
                 return Page();
             }
             return RedirectToPage("/Index");
@@ -65,23 +60,17 @@ namespace WebApp.Pages.Admin.Clients
             {
                 return Page();
             }
-            var User = new AttendanceAPI.Models.UpdateUser
-            {
-                ClientId = Client.ClientId,
-                FirstName = Client.FirstName,
-                LastName = Client.LastName,
-                Institution = Client.Institution,
-                Email = Client.Email,
-                PhoneNumber = Client.PhoneNumber,
-                UserName = "",
-                Password = ""
-            };
             httpClient.DefaultRequestHeaders.Add("UID", _configuration.GetValue<string>("UID"));
-            using HttpResponseMessage response = await httpClient.PutAsync("Admin/client", new StringContent(JsonConvert.SerializeObject(User), Encoding.UTF8, "application/json"));
+            using HttpResponseMessage response = await httpClient.PutAsync("Admin/client", new StringContent(JsonConvert.SerializeObject(Client), Encoding.UTF8, "application/json"));
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (response.ReasonPhrase == "OK")
             {
                 return RedirectToPage("./Index");
+            }
+            else if(response.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
+                ModelState.AddModelError(string.Empty, jsonResponse);
+                return Page();
             }
             else
             {
