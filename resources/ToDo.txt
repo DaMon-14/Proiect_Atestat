@@ -1,3 +1,4 @@
+-on error(expiration of login cookies)-return to home page
 -search function for admin searching clients usernames
 -(verify other conditions of null check, especially User Add/Update)
 -verify conditions: null checks for empty strings

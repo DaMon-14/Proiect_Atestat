@@ -22,7 +22,7 @@ void setup() {
   Serial.begin(9600);
   SPI.begin();
   mfrc522.PCD_Init();
-  Serial.println("Scan a MIFARE 1K Tag to write data...");
+  //Serial.println("Scan a MIFARE 1K Tag to write data...");
 }
 
 void loop() {
@@ -59,9 +59,6 @@ void loop() {
    {
      Serial.write(readBlockData[j]);
    }
-  
-  
-  
 }
 
 void WriteDataToBlock(int blockNum, byte blockData[]) 
