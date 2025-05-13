@@ -4,12 +4,12 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 
-const char* ssid = "monosib";
-const char* password = "ZeroSugar0000";
+const char* ssid = "Damon";
+const char* password = "Damonrpi";
 const char* UID = "a13fab95-ce9c-4325-896f-5cbc4691aa28";
 
 //Your Domain name with URL path or IP address with path
-String serverName = "https://192.168.68.52:7172/ESP32/add";
+String serverName = "https://192.168.53.79:7172/ESP32/add";
 
 LiquidCrystal_I2C lcd(0x27, 16, 2); // I2C address 0x27, 16 column and 2 rows
 
