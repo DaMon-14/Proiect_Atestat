@@ -35,7 +35,7 @@ void loop() {
     key.keyByte[i] = 0xFF;
   }
 
-  Serial.println("Input client id");
+  Serial.println("Input card id");
   while(serialInfo == ""){
     serialInfo= Serial.readString();// read the incoming data as string
   }
@@ -59,6 +59,8 @@ void loop() {
    {
      Serial.write(readBlockData[j]);
    }
+   mfrc522.PICC_HaltA(); // halt PICC
+   mfrc522.PCD_StopCrypto1(); // stop encryption on PCD
 }
 
 void WriteDataToBlock(int blockNum, byte blockData[]) 

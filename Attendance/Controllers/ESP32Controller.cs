@@ -34,25 +34,19 @@ namespace AttendanceAPI.Controllers
             var card = await _cards.GetCard(esp32.CardId);
             if (card == null) 
             {
-                return NotFound(new { message = "Card not found" });    
+                return NotFound("Card not found");    
             }
             if(!card.isActive) {
-                return NotFound(new
-                {
-                    message = "Card not active"
-                });
+                return NotFound("Card not active");
             }
 
             var scanner_course = await _scanner_courses.GetScanner_CourseByScannerId(esp32.ScannerId);
             if (scanner_course == null)
             {
-                return NotFound(new { message = "Scanner not found" });
+                return NotFound("Scanner not found");
             }
             if(!scanner_course.isActive) {
-                return NotFound(new
-                {
-                    message = "Scanner not active"
-                });
+                return NotFound("Scanner not active");
             }
             var entry = await _entries.AddEntry(new Attendance
             {

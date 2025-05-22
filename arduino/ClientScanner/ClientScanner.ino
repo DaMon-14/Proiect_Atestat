@@ -114,9 +114,6 @@ void loop() {
           lcd.print("Succes");
           tone(buzzer, 1000,500);
         }else{
-          payload = payload.substring(12);
-          payload[payload.length()-1]=32;
-          payload[payload.length()-2]=32;
           payload.trim();
           Serial.println(payload);
           lcd.setCursor(0,0);
